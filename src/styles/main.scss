@@ -1,0 +1,9 @@
+@import 'abstracts/tokens';
+@import 'abstracts/breakpoints';
+
+body {
+  margin: 0;
+  background-color: $color-bg;
+  color: $color-text;
+  font-family: $font-family-main;
+}
