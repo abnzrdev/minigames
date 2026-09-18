@@ -1,7 +1,82 @@
-// Design tokens
-$color-primary: #1e293b;
-$color-accent: #3b82f6;
-$color-bg: #0f172a;
-$color-text: #f8fafc;
+// --- Color Tokens ---
+$color-primary: #ffd02b;
+$color-primary-low: #fde047;
+$color-primary-high: #e5bb00;
+$color-on-primary: #242145;
+$color-secondary: #f0eeff;
+$color-tertiary: #3a2ebf;
+$color-like: #ff4848;
+$color-error: #b3261e;
+$color-price-free: #088a8f;
 
-$font-family-main: 'Inter', system-ui, sans-serif;
+// Borders
+$color-outline: #e5e7eb;
+$color-outline-variant: #d2d2d2;
+
+// Avatar Backgrounds
+$color-avatar-1: #e9eef6;
+$color-avatar-2: #a3e2c9;
+$color-avatar-3: #bce3ff;
+$color-avatar-4: #ffc6ff;
+$color-avatar-5: #e8dff5;
+
+// Spacing & Size Tokens
+$size-025: 2px;
+$size-05: 4px;
+$size-1: 8px;
+$size-2: 16px;
+$size-3: 24px;
+$size-4: 32px;
+$size-5: 40px;
+$size-6: 48px;
+$size-7: 56px;
+$size-8: 64px;
+$size-9: 72px;
+$size-10: 80px;
+$size-11: 88px;
+$size-12: 96px;
+$size-13: 104px;
+$size-14: 112px;
+$size-15: 120px;
+
+// Typography: Font Sizes
+$font-display-large: 56px;
+$font-display-medium: 36px;
+$font-display-small: 24px;
+$font-headline-large: 32px;
+$font-headline-medium: 24px;
+$font-headline-small: 20px;
+$font-body-large: 18px;
+$font-body-medium: 16px;
+$font-body-small: 14px;
+$font-label-extra-large: 16px;
+$font-label-large: 14px;
+$font-label-medium: 12px;
+$font-label-small: 10px;
+
+// Typography: Font Weights
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-bold: 700;
+$font-weight-extra-bold: 800;
+
+// Typography: Font Family
+$font-family-main: 'Inter', 'Roboto', sans-serif;
+
+// Corner Tokens (Border Radius)
+$corner-extra-small: 4px;
+$corner-small: 8px;
+$corner-medium: 12px;
+$corner-large: 16px;
+$corner-extra-large: 24px;
+$corner-full: 9999px;
+
+// Shadow Tokens
+$shadow-level-1: 4px 4px $color-on-primary;
+$shadow-level-2: 6px 6px $color-on-primary;
+$shadow-level-3: 8px 8px $color-on-primary;
+
+// Line Height Tokens
+$line-height-tight: 1.2;
+$line-height-normal: 1.5;
+$line-height-relaxed: 1.6;

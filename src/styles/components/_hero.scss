@@ -1,0 +1,62 @@
+@use '../abstracts/tokens' as *;
+@use '../abstracts/breakpoints' as *;
+
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $size-4;
+  padding: $size-6 $size-3;
+  background-color: $color-secondary;
+  color: $color-on-primary;
+
+  // resposive styles
+  @include respond-to('tablet') {
+    flex-direction: column-reverse;
+    text-align: center;
+    padding: $size-3 $size-2;
+  }
+
+  &__description {
+    font-size: $font-body-large;
+    color: $color-on-primary;
+    margin-bottom: $size-4;
+    line-height: $line-height-relaxed;
+
+    @include respond-to('tablet') {
+      font-size: $font-body-medium;
+    }
+  }
+
+  &__cta {
+    display: inline-block;
+    padding: $size-2 $size-4;
+    background-color: $color-primary;
+    color: $color-on-primary;
+    font-size: $font-label-extra-large;
+    font-weight: $font-weight-bold;
+    text-decoration: none;
+    border-radius: $corner-small;
+    transition:
+      background-color 0.2s ease,
+      transform 0.2s ease;
+
+    &:hover {
+      background-color: $color-primary-high;
+      transform: translateY(-$size-025);
+    }
+
+    @include respond-to('tablet') {
+      display: block;
+      width: 100%;
+    }
+  }
+
+  &__media {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: $size-7;
+  }
+}

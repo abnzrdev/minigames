@@ -1,0 +1,80 @@
+@use '../abstracts/tokens' as *;
+@use '../abstracts/breakpoints' as *;
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $size-2 $size-3;
+  background-color: $color-primary;
+  color: $color-secondary;
+  position: relative;
+
+  &__logo {
+    font-size: $font-headline-medium;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+    text-decoration: none;
+  }
+
+  &__nav {
+    display: flex;
+    align-items: center;
+    gap: $size-3;
+
+    @include respond-to('tablet') {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      flex-direction: column;
+      background-color: $color-primary;
+      padding: $size-2 0;
+
+      &--open {
+        display: flex;
+      }
+    }
+  }
+
+  &__link {
+    color: $color-secondary;
+    text-decoration: none;
+    font-size: $font-body-medium;
+    font-weight: $font-weight-medium;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: $color-primary;
+    }
+  }
+
+  &__burger {
+    display: none;
+    background: none;
+    border: none;
+    color: $color-secondary;
+    font-size: $font-headline-medium;
+    cursor: pointer;
+
+    @include respond-to('tablet') {
+      display: block;
+    }
+  }
+
+  &__auth-btn {
+    padding: $size-1 $size-2;
+    background-color: $color-primary;
+    color: $color-on-primary;
+    border: none;
+    border-radius: $corner-extra-small;
+    font-size: $font-label-large;
+    font-weight: $font-weight-bold;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $color-primary-high;
+    }
+  }
+}

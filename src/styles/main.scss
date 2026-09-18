@@ -1,9 +1,19 @@
-@import 'abstracts/tokens';
-@import 'abstracts/breakpoints';
+@use 'abstracts/tokens' as *;
+@use 'abstracts/breakpoints' as *;
+@use 'components/header';
+@use 'components/hero';
+
+// --- Global Base Styles --- \
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 body {
-  margin: 0;
-  background-color: $color-bg;
-  color: $color-text;
   font-family: $font-family-main;
+  background-color: $color-on-primary;
+  color: $color-secondary;
+  line-height: $line-height-normal;
+  min-height: 100vh;
 }
