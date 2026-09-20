@@ -23,8 +23,45 @@
     text-decoration: none;
   }
 
-  &__logo--menu img {
-    filter: brightness(0) invert(1);
+  &__logo--bar {
+    @include respond-to('tablet') {
+      img {
+        width: 150px;
+        height: auto;
+      }
+    }
+  }
+
+  &__logo--menu {
+    align-items: center;
+    gap: $size-1;
+
+    img {
+      filter: none;
+    }
+  }
+
+  &__logo-mark {
+    display: block;
+    width: $size-4;
+    height: $size-4;
+    overflow: hidden;
+    flex-shrink: 0;
+    border-radius: $corner-extra-small;
+
+    img {
+      display: block;
+      width: 172px;
+      max-width: none;
+      height: $size-4;
+    }
+  }
+
+  &__logo-text {
+    font-size: $font-headline-small;
+    font-weight: $font-weight-bold;
+    color: $color-surface;
+    line-height: 1;
   }
 
   &__nav {
@@ -143,10 +180,21 @@
     }
   }
 
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: $size-2;
+    flex-shrink: 0;
+  }
+
   &__toolbar {
     display: flex;
     align-items: center;
     gap: $size-2;
+
+    @media (max-width: ($breakpoint-tablet - 1px)) {
+      display: none;
+    }
   }
 
   &__auth {
@@ -186,6 +234,12 @@
       color: $color-on-primary;
       border: 2px solid $color-on-primary;
       box-shadow: $shadow-level-1;
+
+      @include respond-to('tablet') {
+        font-size: $font-label-large;
+        padding: $size-1 $size-2;
+        box-shadow: none;
+      }
 
       &:hover {
         background-color: $color-primary-high;
@@ -238,8 +292,7 @@
   }
 }
 
-body.menu-open .header__burger,
-body.menu-open .header__logo--bar,
-body.menu-open .header__toolbar {
+body.menu-open .header__actions,
+body.menu-open .header__logo--bar {
   visibility: hidden;
 }

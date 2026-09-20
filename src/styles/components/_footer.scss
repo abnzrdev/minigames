@@ -2,9 +2,13 @@
 @use '../abstracts/breakpoints' as *;
 
 .footer {
-  padding-block: $size-6 $size-4;
-  background-color: $color-on-primary;
-  color: $color-nav-muted;
+  padding-block: $size-4;
+  background-color: $color-footer-bg;
+  color: $color-footer-muted;
+
+  @media (min-width: $breakpoint-desktop) {
+    padding-block: $size-5 $size-4;
+  }
 
   &__shell {
     display: flex;
@@ -13,10 +17,12 @@
   }
 
   &__top {
-    display: grid;
-    gap: $size-5;
+    display: flex;
+    flex-direction: column;
+    gap: $size-3;
 
     @media (min-width: $breakpoint-desktop) {
+      display: grid;
       grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
       align-items: start;
       gap: $size-10;
@@ -24,16 +30,41 @@
   }
 
   &__brand {
-    max-width: 36ch;
+    max-width: none;
   }
 
   &__logo {
     display: inline-flex;
-    line-height: 0;
+    align-items: center;
+    gap: $size-1;
     margin-bottom: $size-2;
+    text-decoration: none;
+    line-height: 0;
+  }
+
+  &__logo-mark {
+    display: block;
+    width: $size-4;
+    height: $size-4;
+    overflow: hidden;
+    border-radius: $corner-extra-small;
 
     img {
-      filter: brightness(0) invert(1);
+      display: block;
+      width: 172px;
+      max-width: none;
+      height: $size-4;
+    }
+  }
+
+  &__logo-text {
+    font-size: $font-headline-small;
+    font-weight: $font-weight-bold;
+    color: $color-surface;
+    line-height: 1;
+
+    @media (min-width: $breakpoint-desktop) {
+      font-size: $font-headline-medium;
     }
   }
 
@@ -41,16 +72,25 @@
     margin: 0;
     font-size: $font-body-small;
     line-height: $line-height-relaxed;
-    color: $color-nav-muted;
+    color: $color-footer-muted;
   }
 
   &__nav {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: $size-4;
+    gap: $size-3 $size-5;
 
-    @media (min-width: $breakpoint-tablet) {
+    @media (min-width: $breakpoint-desktop) {
       grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: $size-4;
+    }
+  }
+
+  &__col:last-child {
+    grid-column: 1 / -1;
+
+    @media (min-width: $breakpoint-desktop) {
+      grid-column: auto;
     }
   }
 
@@ -70,7 +110,7 @@
     gap: $size-1;
 
     a {
-      color: $color-nav-muted;
+      color: $color-footer-muted;
       text-decoration: none;
       font-size: $font-body-small;
 
@@ -82,44 +122,71 @@
 
   &__social {
     display: flex;
-    gap: $size-1;
+    gap: $size-2;
   }
 
   &__social-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: $size-5;
-    height: $size-5;
+    width: $size-4;
+    height: $size-4;
     border-radius: $corner-full;
-    border: 1.5px solid $color-nav-muted;
-    color: $color-nav-muted;
+    border: none;
+    background-color: $color-footer-icon-bg;
+    color: $color-footer-muted;
+
+    @media (min-width: $breakpoint-desktop) {
+      width: $size-5;
+      height: $size-5;
+    }
 
     &:hover {
       color: $color-surface;
-      border-color: $color-surface;
     }
   }
 
   &__bar {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: $size-3 $size-5;
-    padding-top: $size-4;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $size-1;
+    padding-top: $size-3;
     border-top: 1px solid rgb(255 255 255 / 12%);
 
     @media (min-width: $breakpoint-desktop) {
+      flex-direction: row;
+      align-items: center;
       justify-content: space-between;
+      gap: $size-3 $size-5;
+      padding-top: $size-4;
     }
+  }
+
+  &__credits {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $size-2;
   }
 
   &__copy,
   &__note {
     margin: 0;
-    font-size: $font-body-small;
-    color: $color-nav-muted;
+    font-size: $font-label-medium;
+    color: $color-footer-muted;
+
+    @media (min-width: $breakpoint-desktop) {
+      font-size: $font-body-small;
+    }
+  }
+
+  &__note {
+    display: none;
+
+    @media (min-width: $breakpoint-desktop) {
+      display: block;
+    }
   }
 
   &__rs-link {
@@ -133,7 +200,7 @@
     gap: $size-1;
     font-size: $font-body-small;
     font-weight: $font-weight-medium;
-    color: $color-nav-muted;
+    color: $color-footer-muted;
     text-decoration: none;
 
     &:hover {
@@ -145,9 +212,9 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: $size-4;
-    height: $size-4;
-    border-radius: $corner-full;
+    width: $size-3;
+    height: $size-3;
+    border-radius: $corner-medium;
     background-color: $color-surface;
   }
 
