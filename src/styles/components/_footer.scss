@@ -1,0 +1,224 @@
+@use '../abstracts/tokens' as *;
+@use '../abstracts/breakpoints' as *;
+
+.footer {
+  padding-block: $size-4;
+  background-color: $color-footer-bg;
+  color: $color-footer-muted;
+
+  @media (min-width: $breakpoint-desktop) {
+    padding-block: $size-5 $size-4;
+  }
+
+  &__shell {
+    display: flex;
+    flex-direction: column;
+    gap: $size-5;
+  }
+
+  &__top {
+    display: flex;
+    flex-direction: column;
+    gap: $size-3;
+
+    @media (min-width: $breakpoint-desktop) {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      align-items: start;
+      gap: $size-10;
+    }
+  }
+
+  &__brand {
+    max-width: none;
+  }
+
+  &__logo {
+    display: inline-flex;
+    align-items: center;
+    gap: $size-1;
+    margin-bottom: $size-2;
+    text-decoration: none;
+    line-height: 0;
+  }
+
+  &__logo-mark {
+    display: block;
+    width: $size-4;
+    height: $size-4;
+    overflow: hidden;
+    border-radius: $corner-extra-small;
+
+    img {
+      display: block;
+      width: 172px;
+      max-width: none;
+      height: $size-4;
+    }
+  }
+
+  &__logo-text {
+    font-size: $font-headline-small;
+    font-weight: $font-weight-bold;
+    color: $color-surface;
+    line-height: 1;
+
+    @media (min-width: $breakpoint-desktop) {
+      font-size: $font-headline-medium;
+    }
+  }
+
+  &__tagline {
+    margin: 0;
+    font-size: $font-body-small;
+    line-height: $line-height-relaxed;
+    color: $color-footer-muted;
+  }
+
+  &__nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: $size-3 $size-5;
+
+    @media (min-width: $breakpoint-desktop) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: $size-4;
+    }
+  }
+
+  &__col:last-child {
+    grid-column: 1 / -1;
+
+    @media (min-width: $breakpoint-desktop) {
+      grid-column: auto;
+    }
+  }
+
+  &__col-title {
+    margin: 0 0 $size-2;
+    font-size: $font-label-extra-large;
+    font-weight: $font-weight-bold;
+    color: $color-surface;
+  }
+
+  &__col-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $size-1;
+
+    a {
+      color: $color-footer-muted;
+      text-decoration: none;
+      font-size: $font-body-small;
+
+      &:hover {
+        color: $color-surface;
+      }
+    }
+  }
+
+  &__social {
+    display: flex;
+    gap: $size-2;
+  }
+
+  &__social-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: $size-4;
+    height: $size-4;
+    border-radius: $corner-full;
+    border: none;
+    background-color: $color-footer-icon-bg;
+    color: $color-footer-muted;
+
+    @media (min-width: $breakpoint-desktop) {
+      width: $size-5;
+      height: $size-5;
+    }
+
+    &:hover {
+      color: $color-surface;
+    }
+  }
+
+  &__bar {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $size-1;
+    padding-top: $size-3;
+    border-top: 1px solid rgb(255 255 255 / 12%);
+
+    @media (min-width: $breakpoint-desktop) {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: $size-3 $size-5;
+      padding-top: $size-4;
+    }
+  }
+
+  &__credits {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: $size-2;
+  }
+
+  &__copy,
+  &__note {
+    margin: 0;
+    font-size: $font-label-medium;
+    color: $color-footer-muted;
+
+    @media (min-width: $breakpoint-desktop) {
+      font-size: $font-body-small;
+    }
+  }
+
+  &__note {
+    display: none;
+
+    @media (min-width: $breakpoint-desktop) {
+      display: block;
+    }
+  }
+
+  &__rs-link {
+    display: inline-flex;
+    line-height: 0;
+  }
+
+  &__github {
+    display: inline-flex;
+    align-items: center;
+    gap: $size-1;
+    font-size: $font-body-small;
+    font-weight: $font-weight-medium;
+    color: $color-footer-muted;
+    text-decoration: none;
+
+    &:hover {
+      color: $color-surface;
+    }
+  }
+
+  &__github-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: $size-3;
+    height: $size-3;
+    border-radius: $corner-medium;
+    background-color: $color-surface;
+  }
+
+  &__github-icon {
+    display: block;
+  }
+}

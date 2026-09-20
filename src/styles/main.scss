@@ -1,0 +1,44 @@
+@use 'abstracts/tokens' as *;
+@use 'abstracts/breakpoints' as *;
+@use 'components/header';
+@use 'components/hero';
+@use 'components/carousel';
+@use 'components/leaderboard';
+@use 'components/game-dev';
+@use 'components/footer';
+@use 'components/auth-dialog';
+
+// --- Global Base Styles ---
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: $font-family-main;
+  background-color: $color-bg;
+  color: $color-on-primary;
+  line-height: $line-height-normal;
+  min-height: 100vh;
+}
+
+body.menu-open,
+body.auth-open {
+  overflow: hidden;
+}
+
+.layout-container {
+  width: 100%;
+  max-width: 1920px;
+  margin-inline: auto;
+  padding-inline: $size-2;
+
+  @media (min-width: 768px) {
+    padding-inline: $size-5;
+  }
+
+  @media (min-width: 1024px) {
+    padding-inline: $size-10;
+  }
+}

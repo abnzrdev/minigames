@@ -1,0 +1,298 @@
+@use '../abstracts/tokens' as *;
+@use '../abstracts/breakpoints' as *;
+
+.header {
+  background-color: $color-bg;
+  border-bottom: 2px solid $color-on-primary;
+  position: relative;
+  z-index: 10;
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $size-3;
+    min-height: calc($size-9 + $size-1 + $size-05);
+    padding-block: $size-3;
+  }
+
+  &__logo {
+    display: inline-flex;
+    flex-shrink: 0;
+    line-height: 0;
+    text-decoration: none;
+  }
+
+  &__logo--bar {
+    @include respond-to('tablet') {
+      img {
+        width: 150px;
+        height: auto;
+      }
+    }
+  }
+
+  &__logo--menu {
+    align-items: center;
+    gap: $size-1;
+
+    img {
+      filter: none;
+    }
+  }
+
+  &__logo-mark {
+    display: block;
+    width: $size-4;
+    height: $size-4;
+    overflow: hidden;
+    flex-shrink: 0;
+    border-radius: $corner-extra-small;
+
+    img {
+      display: block;
+      width: 172px;
+      max-width: none;
+      height: $size-4;
+    }
+  }
+
+  &__logo-text {
+    font-size: $font-headline-small;
+    font-weight: $font-weight-bold;
+    color: $color-surface;
+    line-height: 1;
+  }
+
+  &__nav {
+    display: flex;
+    align-items: center;
+    gap: $size-4;
+    margin-left: auto;
+
+    @include respond-to('tablet') {
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      gap: $size-5;
+      margin: 0;
+      padding: $size-3 $size-4 $size-5;
+      background-color: $color-on-primary;
+      transition:
+        opacity 0.25s ease,
+        visibility 0.25s ease;
+
+      &--open {
+        visibility: visible;
+        opacity: 1;
+        pointer-events: auto;
+      }
+    }
+  }
+
+  &__menu-bar {
+    display: none;
+
+    @include respond-to('tablet') {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: $size-3;
+    }
+  }
+
+  &__menu-close {
+    display: none;
+
+    @include respond-to('tablet') {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: $size-5;
+      height: $size-5;
+      border: 2px solid $color-surface;
+      border-radius: $corner-medium;
+      background-color: $color-on-primary;
+      color: $color-surface;
+      font-size: $font-headline-large;
+      line-height: 1;
+      cursor: pointer;
+    }
+  }
+
+  &__nav-links {
+    display: flex;
+    align-items: center;
+    gap: $size-4;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    @include respond-to('tablet') {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: $size-3;
+      margin-top: $size-2;
+    }
+  }
+
+  &__link {
+    color: $color-on-primary;
+    text-decoration: none;
+    font-size: $font-body-medium;
+    font-weight: $font-weight-medium;
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: $color-tertiary;
+    }
+
+    &--active {
+      font-weight: $font-weight-bold;
+    }
+
+    &--muted {
+      color: $color-nav-muted;
+    }
+
+    @include respond-to('tablet') {
+      font-size: $font-headline-small;
+      color: $color-nav-muted;
+
+      &--active {
+        color: $color-primary;
+      }
+
+      &--muted {
+        color: $color-nav-muted;
+      }
+
+      &:hover {
+        color: $color-surface;
+      }
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: $size-2;
+    flex-shrink: 0;
+  }
+
+  &__toolbar {
+    display: flex;
+    align-items: center;
+    gap: $size-2;
+
+    @media (max-width: ($breakpoint-tablet - 1px)) {
+      display: none;
+    }
+  }
+
+  &__auth {
+    display: none;
+
+    @include respond-to('tablet') {
+      display: flex;
+      flex-direction: column;
+      gap: $size-2;
+      width: 100%;
+      margin-top: auto;
+    }
+  }
+
+  &__auth-btn {
+    padding: $size-1 $size-3;
+    font-size: $font-label-extra-large;
+    font-weight: $font-weight-bold;
+    border-radius: $corner-small;
+    cursor: pointer;
+    transition:
+      background-color 0.2s ease,
+      transform 0.2s ease;
+
+    &--login {
+      background-color: $color-surface;
+      color: $color-on-primary;
+      border: 2px solid $color-on-primary;
+
+      &:hover {
+        background-color: $color-bg;
+      }
+    }
+
+    &--signup {
+      background-color: $color-primary;
+      color: $color-on-primary;
+      border: 2px solid $color-on-primary;
+      box-shadow: $shadow-level-1;
+
+      @include respond-to('tablet') {
+        font-size: $font-label-large;
+        padding: $size-1 $size-2;
+        box-shadow: none;
+      }
+
+      &:hover {
+        background-color: $color-primary-high;
+      }
+
+      &:active {
+        transform: translate($size-025, $size-025);
+        box-shadow: none;
+      }
+    }
+
+    &--desktop {
+      @include respond-to('tablet') {
+        display: none;
+      }
+    }
+  }
+
+  &__auth--menu &__auth-btn {
+    width: 100%;
+    min-height: $size-6;
+    border-radius: $corner-medium;
+    box-shadow: none;
+  }
+
+  &__auth--menu &__auth-btn--login {
+    background-color: transparent;
+    color: $color-surface;
+    border-color: $color-surface;
+
+    &:hover {
+      background-color: transparent;
+      color: $color-primary;
+    }
+  }
+
+  &__burger {
+    display: none;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    line-height: 0;
+    position: relative;
+    z-index: 30;
+
+    @include respond-to('tablet') {
+      display: inline-flex;
+    }
+  }
+}
+
+body.menu-open .header__actions,
+body.menu-open .header__logo--bar {
+  visibility: hidden;
+}
