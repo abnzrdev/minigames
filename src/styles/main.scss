@@ -2,6 +2,7 @@
 @use 'abstracts/breakpoints' as *;
 @use 'components/header';
 @use 'components/hero';
+@use 'components/carousel';
 
 // --- Global Base Styles ---
 * {
