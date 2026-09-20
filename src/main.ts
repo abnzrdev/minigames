@@ -5,6 +5,8 @@ import { renderCarousel } from './components/Carousel';
 import { renderLeaderboard } from './components/Leaderboard';
 import { renderGameDev } from './components/GameDev';
 import { renderFooter } from './components/Footer';
+import { renderAuthDialog } from './components/AuthDialog';
+import { initAuthDialog } from './utils/authDialog';
 
 const app = document.getElementById('app');
 if (app) {
@@ -15,4 +17,6 @@ if (app) {
   app.appendChild(renderLeaderboard());
   app.appendChild(renderGameDev());
   app.appendChild(renderFooter());
+  app.appendChild(renderAuthDialog());
+  initAuthDialog();
 }
