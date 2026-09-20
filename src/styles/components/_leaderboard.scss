@@ -1,0 +1,226 @@
+@use '../abstracts/tokens' as *;
+@use '../abstracts/breakpoints' as *;
+
+.leaderboard {
+  padding-block: $size-6;
+  background-color: $color-bg;
+
+  &__header {
+    margin-bottom: $size-4;
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: $size-2;
+  }
+
+  &__heading {
+    font-size: $font-headline-medium;
+    font-weight: $font-weight-extra-bold;
+    color: $color-on-primary;
+  }
+
+  &__heading-rest {
+    @include respond-to('tablet') {
+      display: none;
+    }
+  }
+
+  &__table-wrap {
+    border: 2px solid $color-on-primary;
+    border-radius: $corner-large;
+    overflow: hidden;
+    background-color: $color-bg;
+    box-shadow: $shadow-level-1;
+  }
+
+  &__caption {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  &__table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    font-size: $font-body-medium;
+
+    thead {
+      background-color: $color-on-primary;
+      color: $color-surface;
+      border-bottom: 2px solid $color-on-primary;
+    }
+
+    th {
+      padding: $size-3 $size-3;
+      text-align: left;
+      font-weight: $font-weight-bold;
+      font-size: $font-label-medium;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+
+    tbody tr {
+      border-top: 1px solid $color-outline;
+      background-color: $color-bg;
+    }
+
+    td {
+      padding: $size-3 $size-3;
+      vertical-align: middle;
+    }
+  }
+
+  &__cell--rank {
+    width: $size-7;
+    text-align: center;
+  }
+
+  &__rank {
+    font-weight: $font-weight-bold;
+    color: $color-on-primary;
+
+    &--top {
+      color: $color-primary-high;
+    }
+  }
+
+  &__player {
+    display: flex;
+    align-items: center;
+    gap: $size-2;
+    min-width: 0;
+  }
+
+  &__avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: calc($size-5 - $size-05);
+    height: calc($size-5 - $size-05);
+    border-radius: $corner-full;
+    font-size: $font-label-medium;
+    font-weight: $font-weight-bold;
+    color: $color-on-primary;
+    border: 1.5px solid $color-on-primary;
+
+    &--gold {
+      background-color: $color-primary;
+    }
+
+    &--2 {
+      background-color: $color-avatar-2;
+    }
+
+    &--3 {
+      background-color: $color-avatar-3;
+    }
+
+    &--4 {
+      background-color: $color-avatar-4;
+    }
+
+    &--5 {
+      background-color: $color-avatar-5;
+    }
+  }
+
+  &__name {
+    font-weight: $font-weight-medium;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__cell--numeric {
+    text-align: center;
+  }
+
+  &__streak {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: $size-05;
+    font-weight: $font-weight-medium;
+  }
+
+  &__streak-icon {
+    line-height: 1;
+  }
+
+  &__game-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: $size-05 $size-2;
+    border-radius: $corner-full;
+    background-color: $color-bg;
+    border: 1.5px solid $color-on-primary;
+    font-size: $font-label-large;
+    font-weight: $font-weight-medium;
+    color: $color-on-primary;
+    white-space: nowrap;
+  }
+
+  &__score--compact,
+  &__streak-unit--short {
+    display: none;
+  }
+
+  @include respond-to('tablet') {
+    &__heading {
+      font-size: $font-headline-small;
+    }
+
+    &__table {
+      font-size: $font-label-large;
+
+      th,
+      td {
+        padding: $size-2 $size-1;
+      }
+    }
+
+    &__cell--desktop {
+      display: none;
+    }
+
+    &__score--full,
+    &__streak-unit--full {
+      display: none;
+    }
+
+    &__score--compact,
+    &__streak-unit--short {
+      display: inline;
+    }
+
+    &__table tbody tr:nth-child(n + 4) {
+      display: none;
+    }
+
+    &__name {
+      max-width: 12ch;
+    }
+
+    &__avatar {
+      width: $size-4;
+      height: $size-4;
+      font-size: $font-label-small;
+    }
+
+    &__player {
+      gap: $size-1;
+    }
+  }
+}
