@@ -2,8 +2,8 @@
 @use '../abstracts/breakpoints' as *;
 
 .header {
-  background-color: $color-surface;
-  border-bottom: 2px solid $color-outline;
+  background-color: $color-bg;
+  border-bottom: 2px solid $color-on-primary;
   position: relative;
   z-index: 10;
 
@@ -23,6 +23,10 @@
     text-decoration: none;
   }
 
+  &__logo--menu img {
+    filter: brightness(0) invert(1);
+  }
+
   &__nav {
     display: flex;
     align-items: center;
@@ -30,21 +34,74 @@
     margin-left: auto;
 
     @include respond-to('tablet') {
-      display: none;
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
       position: fixed;
       inset: 0;
       z-index: 20;
       flex-direction: column;
       align-items: stretch;
-      justify-content: center;
-      gap: $size-3;
+      justify-content: flex-start;
+      gap: $size-5;
       margin: 0;
-      padding: $size-6 $size-3;
-      background-color: $color-surface;
+      padding: $size-3 $size-4 $size-5;
+      background-color: $color-on-primary;
+      transition:
+        opacity 0.25s ease,
+        visibility 0.25s ease;
 
       &--open {
-        display: flex;
+        visibility: visible;
+        opacity: 1;
+        pointer-events: auto;
       }
+    }
+  }
+
+  &__menu-bar {
+    display: none;
+
+    @include respond-to('tablet') {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: $size-3;
+    }
+  }
+
+  &__menu-close {
+    display: none;
+
+    @include respond-to('tablet') {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: $size-5;
+      height: $size-5;
+      border: 2px solid $color-surface;
+      border-radius: $corner-medium;
+      background-color: $color-on-primary;
+      color: $color-surface;
+      font-size: $font-headline-large;
+      line-height: 1;
+      cursor: pointer;
+    }
+  }
+
+  &__nav-links {
+    display: flex;
+    align-items: center;
+    gap: $size-4;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    @include respond-to('tablet') {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: $size-3;
+      margin-top: $size-2;
     }
   }
 
@@ -59,29 +116,109 @@
     &:hover {
       color: $color-tertiary;
     }
+
+    &--active {
+      font-weight: $font-weight-bold;
+    }
+
+    &--muted {
+      color: $color-nav-muted;
+    }
+
+    @include respond-to('tablet') {
+      font-size: $font-headline-small;
+      color: $color-nav-muted;
+
+      &--active {
+        color: $color-primary;
+      }
+
+      &--muted {
+        color: $color-nav-muted;
+      }
+
+      &:hover {
+        color: $color-surface;
+      }
+    }
+  }
+
+  &__toolbar {
+    display: flex;
+    align-items: center;
+    gap: $size-2;
+  }
+
+  &__auth {
+    display: none;
+
+    @include respond-to('tablet') {
+      display: flex;
+      flex-direction: column;
+      gap: $size-2;
+      width: 100%;
+      margin-top: auto;
+    }
   }
 
   &__auth-btn {
     padding: $size-1 $size-3;
-    background-color: $color-primary;
-    color: $color-on-primary;
-    border: 2px solid $color-on-primary;
-    border-radius: $corner-small;
     font-size: $font-label-extra-large;
     font-weight: $font-weight-bold;
+    border-radius: $corner-small;
     cursor: pointer;
-    box-shadow: $shadow-level-1;
     transition:
       background-color 0.2s ease,
       transform 0.2s ease;
 
-    &:hover {
-      background-color: $color-primary-high;
+    &--login {
+      background-color: $color-surface;
+      color: $color-on-primary;
+      border: 2px solid $color-on-primary;
+
+      &:hover {
+        background-color: $color-bg;
+      }
     }
 
-    &:active {
-      transform: translate($size-025, $size-025);
-      box-shadow: none;
+    &--signup {
+      background-color: $color-primary;
+      color: $color-on-primary;
+      border: 2px solid $color-on-primary;
+      box-shadow: $shadow-level-1;
+
+      &:hover {
+        background-color: $color-primary-high;
+      }
+
+      &:active {
+        transform: translate($size-025, $size-025);
+        box-shadow: none;
+      }
+    }
+
+    &--desktop {
+      @include respond-to('tablet') {
+        display: none;
+      }
+    }
+  }
+
+  &__auth--menu &__auth-btn {
+    width: 100%;
+    min-height: $size-6;
+    border-radius: $corner-medium;
+    box-shadow: none;
+  }
+
+  &__auth--menu &__auth-btn--login {
+    background-color: transparent;
+    color: $color-surface;
+    border-color: $color-surface;
+
+    &:hover {
+      background-color: transparent;
+      color: $color-primary;
     }
   }
 
@@ -92,9 +229,17 @@
     border: none;
     cursor: pointer;
     line-height: 0;
+    position: relative;
+    z-index: 30;
 
     @include respond-to('tablet') {
       display: inline-flex;
     }
   }
+}
+
+body.menu-open .header__burger,
+body.menu-open .header__logo--bar,
+body.menu-open .header__toolbar {
+  visibility: hidden;
 }

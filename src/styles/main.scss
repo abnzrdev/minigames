@@ -3,7 +3,7 @@
 @use 'components/header';
 @use 'components/hero';
 
-// --- Global Base Styles --- \
+// --- Global Base Styles ---
 * {
   box-sizing: border-box;
   margin: 0;
@@ -12,10 +12,15 @@
 
 body {
   font-family: $font-family-main;
-  background-color: $color-on-primary;
-  color: $color-secondary;
+  background-color: $color-bg;
+  color: $color-on-primary;
   line-height: $line-height-normal;
   min-height: 100vh;
+}
+
+body.menu-open,
+body.auth-open {
+  overflow: hidden;
 }
 
 .layout-container {
