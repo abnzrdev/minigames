@@ -2,16 +2,113 @@
 @use '../abstracts/breakpoints' as *;
 
 .footer {
-  padding-block: $size-4;
+  padding-block: $size-6 $size-4;
   background-color: $color-on-primary;
   color: $color-nav-muted;
 
-  &__inner {
+  &__shell {
+    display: flex;
+    flex-direction: column;
+    gap: $size-5;
+  }
+
+  &__top {
+    display: grid;
+    gap: $size-5;
+
+    @media (min-width: $breakpoint-desktop) {
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      align-items: start;
+      gap: $size-10;
+    }
+  }
+
+  &__brand {
+    max-width: 36ch;
+  }
+
+  &__logo {
+    display: inline-flex;
+    line-height: 0;
+    margin-bottom: $size-2;
+
+    img {
+      filter: brightness(0) invert(1);
+    }
+  }
+
+  &__tagline {
+    margin: 0;
+    font-size: $font-body-small;
+    line-height: $line-height-relaxed;
+    color: $color-nav-muted;
+  }
+
+  &__nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: $size-4;
+
+    @media (min-width: $breakpoint-tablet) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  &__col-title {
+    margin: 0 0 $size-2;
+    font-size: $font-label-extra-large;
+    font-weight: $font-weight-bold;
+    color: $color-surface;
+  }
+
+  &__col-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $size-1;
+
+    a {
+      color: $color-nav-muted;
+      text-decoration: none;
+      font-size: $font-body-small;
+
+      &:hover {
+        color: $color-surface;
+      }
+    }
+  }
+
+  &__social {
+    display: flex;
+    gap: $size-1;
+  }
+
+  &__social-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: $size-5;
+    height: $size-5;
+    border-radius: $corner-full;
+    border: 1.5px solid $color-nav-muted;
+    color: $color-nav-muted;
+
+    &:hover {
+      color: $color-surface;
+      border-color: $color-surface;
+    }
+  }
+
+  &__bar {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
     gap: $size-3 $size-5;
+    padding-top: $size-4;
+    border-top: 1px solid rgb(255 255 255 / 12%);
 
     @media (min-width: $breakpoint-desktop) {
       justify-content: space-between;
