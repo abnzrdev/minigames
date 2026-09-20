@@ -1,45 +1,46 @@
 interface GameCard {
-    id: string
-    title: string;
-    category: string;
-    description: string;
-    icon: string;
+  id: string;
+  title: string;
+  category: string;
+  description: string;
+  icon: string;
 }
 
-const CAROUSEL_GAMES: GameCard[] = [ 
-    { 
-        id: 'tic-tac-toe', 
-        title: 'Tic-Tac-Toe', 
-        category: 'Puzzle',
-        description: 'Classic 3x3 strategy game. Play solo against the AI or challenge a friend locally!', 
-        icon: '❌⭕',
-    },
+const CAROUSEL_GAMES: GameCard[] = [
+  {
+    id: 'tic-tac-toe',
+    title: 'Tic-Tac-Toe',
+    category: 'Puzzle',
+    description:
+      'Classic 3x3 strategy game. Play solo against the AI or challenge a friend locally!',
+    icon: '❌⭕',
+  },
 
-    { 
-        id: 'memory-matrix', 
-        title: 'Memory Cards',
-        category: 'Memory',
-        description: 'Test your cognitive recall by matching hidden card pairs in the shortest time.',
-        icon: '🃏',
-    },
+  {
+    id: 'memory-matrix',
+    title: 'Memory Cards',
+    category: 'Memory',
+    description: 'Test your cognitive recall by matching hidden card pairs in the shortest time.',
+    icon: '🃏',
+  },
 
-    { 
-        id: 'snake', 
-        title: 'Snake Retro',
-        category: 'Arcade', 
-        description: 'Guide the snake, devour apples, and grow without crashing into the borders!',
-        icon: '🐍',
-    },
+  {
+    id: 'snake',
+    title: 'Snake Retro',
+    category: 'Arcade',
+    description: 'Guide the snake, devour apples, and grow without crashing into the borders!',
+    icon: '🐍',
+  },
 ];
 
 export function renderCarousel(): HTMLElement {
-    const section = document.createElement('section');
-  
-    section.className = 'carousel';
-    section.id = 'carousel';
-  
-    const cardsHtml = CAROUSEL_GAMES.map(
-      (game) => `
+  const section = document.createElement('section');
+
+  section.className = 'carousel';
+  section.id = 'carousel';
+
+  const cardsHtml = CAROUSEL_GAMES.map(
+    (game) => `
         <article>
           <div>
             <div>
@@ -53,10 +54,10 @@ export function renderCarousel(): HTMLElement {
   
           <a href="#play-${game.id}">Play Now</a>
         </article>
-      `,
-    ).join('');
-  
-    section.innerHTML = `
+      `
+  ).join('');
+
+  section.innerHTML = `
       <div>
         <h2>Featured Games</h2>
         <div></div>
@@ -66,6 +67,6 @@ export function renderCarousel(): HTMLElement {
         ${cardsHtml}
       </div>
     `;
-  
-    return section;
+
+  return section;
 }

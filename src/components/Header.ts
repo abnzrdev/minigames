@@ -13,7 +13,7 @@ export function renderHeader(): HTMLElement {
   header.className = 'header';
 
   const navLinks = NAV_LINKS.map(
-    ({ label, href }) => `<a href="${href}" class="header__link">${label}</a>`,
+    ({ label, href }) => `<a href="${href}" class="header__link">${label}</a>`
   ).join('');
 
   header.innerHTML = `
