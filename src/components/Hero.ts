@@ -1,18 +1,25 @@
+﻿import heroRoomArt from '../assets/games/hero-bg.jpg';
+
 export function renderHero(): HTMLElement {
   const section = document.createElement('section');
   section.className = 'hero';
+
   section.innerHTML = `
-        <div class="hero__content">
-            <h1 class="hero__title">Discover & Play Fun Mini Games</h1>
-            <p class="hero__description">
-                Challenge yourself with an exciting collection of casual web games.
-                Track your scores, climb the leaderborad, and compete with  players worldwide!
-            </p>
-            <a href="#games" class="hero__cta">Explore Games</a>
+    <div class="hero__bleed">
+      <img class="hero__backdrop" src="${heroRoomArt}" alt="" />
+      <div class="hero__scrim" aria-hidden="true"></div>
+      <div class="layout-container hero__content">
+        <div class="hero__panel">
+          <h1 class="hero__title">Take a Short Break &amp; Have Fun</h1>
+          <p class="hero__description">
+            Discover hundreds of curated casual mini-games. Play instantly in your browser —
+            puzzle, match 3, farm, and board classics.
+          </p>
+          <button type="button" class="hero__cta">Browse Library</button>
         </div>
-        <div class="hero__media">
-            <span role="img" aria-label="Gaming Controller" class="hero__icon">🎮</span>
-        </div>
-    `;
+      </div>
+    </div>
+  `;
+
   return section;
 }

@@ -1,62 +1,118 @@
-@use '../abstracts/tokens' as *;
+﻿@use '../abstracts/tokens' as *;
 @use '../abstracts/breakpoints' as *;
 
 .hero {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: $size-4;
-  padding: $size-6 $size-3;
-  background-color: $color-secondary;
-  color: $color-on-primary;
+  background-color: $color-bg;
 
-  // resposive styles
-  @include respond-to('tablet') {
-    flex-direction: column-reverse;
-    text-align: center;
-    padding: $size-3 $size-2;
+  &__bleed {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-block: 2px solid $color-on-primary;
+    min-height: calc($size-15 * 4);
+
+    @media (min-width: $breakpoint-desktop) {
+      min-height: calc($size-15 * 5 + $size-3);
+    }
+  }
+
+  &__backdrop {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    pointer-events: none;
+  }
+
+  &__scrim {
+    position: absolute;
+    inset: 0;
+    background: rgb(36 33 69 / 45%);
+    pointer-events: none;
+  }
+
+  &__content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    min-height: inherit;
+    padding-block: $size-5;
+
+    @media (min-width: 1024px) {
+      padding-block: $size-8;
+    }
+  }
+
+  &__panel {
+    max-width: calc($size-15 * 5 + $size-5);
+    padding: $size-4;
+    background-color: $color-surface;
+    border: 2px solid $color-on-primary;
+    border-radius: $corner-extra-large;
+    box-shadow: $shadow-level-2;
+
+    @media (min-width: 1024px) {
+      padding: $size-5;
+    }
+  }
+
+  &__title {
+    font-size: $font-display-small;
+    font-weight: $font-weight-extra-bold;
+    color: $color-on-primary;
+    line-height: $line-height-tight;
+    margin-bottom: $size-2;
+
+    @include respond-to('tablet') {
+      font-size: $font-headline-medium;
+    }
   }
 
   &__description {
-    font-size: $font-body-large;
+    font-size: $font-body-medium;
     color: $color-on-primary;
-    margin-bottom: $size-4;
     line-height: $line-height-relaxed;
+    margin-bottom: $size-4;
 
     @include respond-to('tablet') {
-      font-size: $font-body-medium;
+      font-size: $font-body-small;
     }
   }
 
   &__cta {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     padding: $size-2 $size-4;
     background-color: $color-primary;
     color: $color-on-primary;
+    font-family: inherit;
     font-size: $font-label-extra-large;
     font-weight: $font-weight-bold;
-    text-decoration: none;
+    border: 2px solid $color-on-primary;
     border-radius: $corner-small;
+    box-shadow: $shadow-level-1;
+    cursor: pointer;
     transition:
       background-color 0.2s ease,
       transform 0.2s ease;
 
     &:hover {
       background-color: $color-primary-high;
-      transform: translateY(-$size-025);
+    }
+
+    &:active {
+      transform: translate($size-025, $size-025);
+      box-shadow: none;
     }
 
     @include respond-to('tablet') {
       display: block;
       width: 100%;
+      text-align: center;
     }
-  }
-
-  &__media {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: $size-7;
   }
 }
