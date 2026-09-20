@@ -24,12 +24,13 @@
     object-fit: cover;
     object-position: center;
     pointer-events: none;
+    opacity: 0.55;
   }
 
   &__scrim {
     position: absolute;
     inset: 0;
-    background: rgb(36 33 69 / 45%);
+    background: rgb(30 27 58 / 58%);
     pointer-events: none;
   }
 
@@ -49,10 +50,25 @@
   &__panel {
     max-width: calc($size-15 * 5 + $size-5);
     padding: $size-4;
-    background-color: $color-surface;
+    background-color: $color-bg;
     border: 2px solid $color-on-primary;
     border-radius: $corner-extra-large;
     box-shadow: $shadow-level-2;
+
+    @include respond-to('tablet') {
+      width: min(480px, 100%);
+      max-width: none;
+      padding: $size-3;
+      border-radius: $corner-large;
+    }
+
+    @media (max-width: ($breakpoint-tablet - 1px)) {
+      width: 100%;
+      max-width: none;
+      padding: $size-3;
+      border-radius: $corner-medium;
+      box-shadow: $shadow-level-1;
+    }
 
     @media (min-width: 1024px) {
       padding: $size-5;
@@ -67,7 +83,14 @@
     margin-bottom: $size-2;
 
     @include respond-to('tablet') {
-      font-size: $font-headline-medium;
+      font-size: $font-display-small;
+      font-weight: $font-weight-bold;
+      line-height: $line-height-tight;
+    }
+
+    @media (min-width: $breakpoint-tablet) and (max-width: ($breakpoint-desktop - 1px)) {
+      font-size: $font-display-medium;
+      line-height: 1.15;
     }
   }
 
@@ -78,6 +101,14 @@
     margin-bottom: $size-4;
 
     @include respond-to('tablet') {
+      font-size: $font-label-medium;
+      font-weight: $font-weight-medium;
+      color: $color-on-bg;
+      line-height: 1.4;
+      margin-bottom: $size-2;
+    }
+
+    @media (min-width: $breakpoint-tablet) and (max-width: ($breakpoint-desktop - 1px)) {
       font-size: $font-body-small;
     }
   }
@@ -110,9 +141,15 @@
     }
 
     @include respond-to('tablet') {
-      display: block;
-      width: 100%;
-      text-align: center;
+      width: auto;
+      padding: $size-1 $size-2;
+      font-size: $font-label-medium;
+      box-shadow: none;
+    }
+
+    @media (min-width: $breakpoint-tablet) and (max-width: ($breakpoint-desktop - 1px)) {
+      padding: 10px 20px;
+      font-size: $font-body-small;
     }
   }
 }

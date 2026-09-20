@@ -9,9 +9,20 @@ const NAV_LINKS: { label: string; href: string; active?: boolean }[] = [
   { label: 'Community', href: '#' },
 ];
 
-function logoMarkup(extraClass = ''): string {
+function logoMarkup(variant: 'bar' | 'menu'): string {
+  if (variant === 'menu') {
+    return `
+      <a href="#" class="header__logo header__logo--menu">
+        <span class="header__logo-mark" aria-hidden="true">
+          <img src="${brandLogo}" width="32" height="32" alt="" />
+        </span>
+        <span class="header__logo-text">MiniGames</span>
+      </a>
+    `;
+  }
+
   return `
-    <a href="#" class="header__logo${extraClass}">
+    <a href="#" class="header__logo header__logo--bar">
       <img src="${brandLogo}" width="172" height="32" alt="MiniGames" />
     </a>
   `;
@@ -28,10 +39,10 @@ export function renderHeader(): HTMLElement {
 
   header.innerHTML = `
     <div class="header__inner layout-container">
-      ${logoMarkup(' header__logo--bar')}
+      ${logoMarkup('bar')}
       <nav class="header__nav" id="site-nav" aria-label="Main navigation">
         <div class="header__menu-bar">
-          ${logoMarkup(' header__logo--menu')}
+          ${logoMarkup('menu')}
           <button type="button" class="header__menu-close" id="menu-close-btn" aria-label="Close menu">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -48,24 +59,26 @@ export function renderHeader(): HTMLElement {
           </button>
         </div>
       </nav>
-      <div class="header__toolbar">
-        <button type="button" class="header__auth-btn header__auth-btn--login header__auth-btn--desktop" id="auth-login-btn">
-          Log In
-        </button>
-        <button type="button" class="header__auth-btn header__auth-btn--signup" id="auth-signup-btn">
-          Sign Up
+      <div class="header__actions">
+        <div class="header__toolbar">
+          <button type="button" class="header__auth-btn header__auth-btn--login header__auth-btn--desktop" id="auth-login-btn">
+            Log In
+          </button>
+          <button type="button" class="header__auth-btn header__auth-btn--signup" id="auth-signup-btn">
+            Sign Up
+          </button>
+        </div>
+        <button
+          type="button"
+          class="header__burger"
+          id="burger-btn"
+          aria-label="Open menu"
+          aria-expanded="false"
+          aria-controls="site-nav"
+        >
+          <img src="${hamburgerIcon}" width="32" height="32" alt="" />
         </button>
       </div>
-      <button
-        type="button"
-        class="header__burger"
-        id="burger-btn"
-        aria-label="Open menu"
-        aria-expanded="false"
-        aria-controls="site-nav"
-      >
-        <img src="${hamburgerIcon}" width="32" height="32" alt="" />
-      </button>
     </div>
   `;
 

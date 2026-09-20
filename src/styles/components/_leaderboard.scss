@@ -19,10 +19,14 @@
     font-size: $font-headline-medium;
     font-weight: $font-weight-extra-bold;
     color: $color-on-primary;
+
+    @media (min-width: $breakpoint-desktop) {
+      font-size: $font-headline-large;
+    }
   }
 
   &__heading-rest {
-    @include respond-to('tablet') {
+    @media (max-width: ($breakpoint-desktop - 1px)) {
       display: none;
     }
   }
@@ -30,9 +34,9 @@
   &__table-wrap {
     border: 2px solid $color-on-primary;
     border-radius: $corner-large;
-    overflow: hidden;
-    background-color: $color-bg;
-    box-shadow: $shadow-level-1;
+    overflow-x: auto;
+    background-color: $color-surface;
+    box-shadow: $shadow-level-2;
   }
 
   &__caption {
@@ -49,21 +53,25 @@
 
   &__table {
     width: 100%;
-    table-layout: fixed;
+    table-layout: auto;
     border-collapse: collapse;
     font-size: $font-body-medium;
 
+    @media (min-width: $breakpoint-desktop) {
+      table-layout: fixed;
+    }
+
     thead {
-      background-color: $color-on-primary;
+      background-color: $color-tertiary;
       color: $color-surface;
       border-bottom: 2px solid $color-on-primary;
     }
 
     th {
-      padding: $size-3 $size-3;
-      text-align: left;
-      font-weight: $font-weight-bold;
-      font-size: $font-label-medium;
+      padding: $size-3 $size-2;
+      text-align: center;
+      font-weight: $font-weight-extra-bold;
+      font-size: $font-body-small;
       text-transform: uppercase;
       letter-spacing: 0.04em;
       white-space: nowrap;
@@ -72,6 +80,10 @@
     tbody tr {
       border-top: 1px solid $color-outline;
       background-color: $color-bg;
+
+      &:nth-child(even) {
+        background-color: $color-surface;
+      }
     }
 
     td {
@@ -90,7 +102,7 @@
     color: $color-on-primary;
 
     &--top {
-      color: $color-primary-high;
+      color: $color-tertiary;
     }
   }
 
@@ -136,7 +148,7 @@
   }
 
   &__name {
-    font-weight: $font-weight-medium;
+    font-weight: $font-weight-bold;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -177,13 +189,13 @@
     display: none;
   }
 
-  @include respond-to('tablet') {
+  @media (max-width: ($breakpoint-desktop - 1px)) {
     &__heading {
       font-size: $font-headline-small;
     }
 
     &__table {
-      font-size: $font-label-large;
+      font-size: $font-body-small;
 
       th,
       td {
@@ -210,17 +222,28 @@
     }
 
     &__name {
-      max-width: 12ch;
+      max-width: none;
     }
 
     &__avatar {
-      width: $size-4;
-      height: $size-4;
+      width: $size-3;
+      height: $size-3;
       font-size: $font-label-small;
+      border-radius: $corner-medium;
     }
 
     &__player {
       gap: $size-1;
+    }
+
+    &__cell--rank {
+      width: $size-5;
+    }
+  }
+
+  @include respond-to('tablet') {
+    &__heading {
+      font-size: $font-headline-medium;
     }
   }
 }
