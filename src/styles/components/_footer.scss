@@ -1,0 +1,60 @@
+@use '../abstracts/tokens' as *;
+@use '../abstracts/breakpoints' as *;
+
+.footer {
+  padding-block: $size-4;
+  background-color: $color-on-primary;
+  color: $color-nav-muted;
+
+  &__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: $size-3 $size-5;
+
+    @media (min-width: $breakpoint-desktop) {
+      justify-content: space-between;
+    }
+  }
+
+  &__copy,
+  &__note {
+    margin: 0;
+    font-size: $font-body-small;
+    color: $color-nav-muted;
+  }
+
+  &__rs-link {
+    display: inline-flex;
+    line-height: 0;
+  }
+
+  &__github {
+    display: inline-flex;
+    align-items: center;
+    gap: $size-1;
+    font-size: $font-body-small;
+    font-weight: $font-weight-medium;
+    color: $color-nav-muted;
+    text-decoration: none;
+
+    &:hover {
+      color: $color-surface;
+    }
+  }
+
+  &__github-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: $size-4;
+    height: $size-4;
+    border-radius: $corner-full;
+    background-color: $color-surface;
+  }
+
+  &__github-icon {
+    display: block;
+  }
+}
