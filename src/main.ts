@@ -4,6 +4,7 @@ import { renderHero } from './components/Hero';
 import { renderCarousel } from './components/Carousel';
 import { renderLeaderboard } from './components/Leaderboard';
 import { renderGameDev } from './components/GameDev';
+import { renderFooter } from './components/Footer';
 
 const app = document.getElementById('app');
 if (app) {
@@ -13,4 +14,5 @@ if (app) {
   app.appendChild(renderCarousel());
   app.appendChild(renderLeaderboard());
   app.appendChild(renderGameDev());
+  app.appendChild(renderFooter());
 }
