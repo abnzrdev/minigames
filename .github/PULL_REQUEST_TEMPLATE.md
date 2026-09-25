@@ -1,62 +1,31 @@
-# 📝 Pull Request: MiniGames Story 1
+<!--
+  Base structure: https://rs.school/docs/mentoring/pull-request-review-process#pull-request-requirements-pr
+  (RSS-QS-1-1-3 — do not remove sections 1–5; you may add sections below section 5.)
+-->
 
-## 🚀 Story / Task
-- **Task Link:** [MiniGames Story 1](https://github.com/rolling-scopes-school/qualifying-stage/blob/main/tasks/minigames/story-1.md)
-- **Target Branch:** `main`
-- **Feature Branch:** `feat/story-1`
+1. Task: <!-- link to the exact task .md on qualifying-stage, e.g. https://github.com/rolling-scopes-school/qualifying-stage/blob/main/tasks/minigames/tasks/story-2/RSS-QS-2-1-1-library-header-unauthenticated.md -->
 
----
+2. Screenshot:
+   <!-- Drag-and-drop screenshot(s) here (375 / 768 / 1920 if layout task). -->
 
-## 📝 Summary of Changes
-- **Environment & Tooling Setup:** Configured Vite bundler with Vanilla TypeScript, ESLint, Prettier, Husky Git hooks, Sass (design tokens & breakpoints), and Single Page Application (SPA) architecture.
-- **Adaptive Home Page Layout:** Implemented responsive Home page across Mobile (≤768px), Tablet, and Desktop viewports (Header, Burger menu, Hero section, static Game Carousel, Leaderboard table, Game Dev promo, and Footer).
-- **Auth Dialog Modal:** Created accessible Auth Modal dialog with open/close triggers, backdrop overlay, smooth transitions, Login/Registration tab switcher, and semantic form markup.
+3. Deployment: <!-- public URL; naming: GitHubUsername-task-name (Netlify, GitHub Pages, etc.) -->
 
----
+4. Done __.__.____ / deadline __.__.____
 
-## 🧪 Self-Evaluation Checklist (+294 / +294)
+5. Score: __ / __
 
-### 1. Repository Setup (25/25 pts)
-- [x] GitHub repository set up with `README.md`, `.gitignore`, and required dependencies (+10)
-- [x] Scalable, modular folder structure created (`src/assets`, `src/components`, `src/pages`, `src/styles`, `src/utils`) (+10)
-- [x] Pull Request template created under `.github/PULL_REQUEST_TEMPLATE.md` (+5)
+<!-- Self-check: list acceptance criteria from the task; use [x] / [ ] / [±]. Example:
 
-### 2. Development Environment & Scripts (73/73 pts)
-- [x] Bundler configured supporting dev & production build modes (`npm run dev`, `npm run build`) (+10)
-- [x] TypeScript configured with strict typing (`tsconfig.json`) (+5)
-- [x] ESLint configured (`.eslintrc.json`) (+5)
-- [x] Prettier configured (`.prettierrc`, `.prettierignore`) (+5)
-- [x] Husky Git hooks initialized for pre-commit linting & formatting checks (+8)
-- [x] Sass initialized with design tokens, breakpoints, and shared mixins (+10)
-- [x] SPA architecture implemented (+20)
-- [x] NPM script for ESLint (`npm run lint`) (+5)
-- [x] NPM script for Prettier (`npm run format`) (+5)
+- [x] Criterion from task spec
+- [ ] Another criterion
 
-### 3. Adaptive Layout: Home Page (130/130 pts)
-- [x] Unauthenticated Site Header (+15)
-- [x] Mobile Burger Menu (≤768px) (+25)
-- [x] Hero Section (+15)
-- [x] Static Layout of Carousel/Slider Section (+25)
-- [x] Leaderboard Table Section (+15)
-- [x] "Are You a Game Developer?" Section (+15)
-- [x] Footer (+20)
+Penalties (if self-checking): no console.log, no prohibited libraries, ESLint/Prettier clean, PR stays open for cross-check, etc.
+-->
 
-### 4. Auth Dialog Layout (50/50 pts)
-- [x] Auth dialog trigger, fixed position, and backdrop overlay (+10)
-- [x] Open/close animations and dismiss handlers (+10)
-- [x] Login/Registration tab switcher with block transitions (+10)
-- [x] Semantic form markup and input types (+10)
-- [x] Responsive visual quality and interactive UI states (+10)
+## Summary of changes
 
-### 5. Global Layout & Quality Checks (16/16 pts)
-- [x] Global semantic and layout validation (+12)
-- [x] Favicon added (+4)
+<!-- Optional: short bullet list of what this PR implements. -->
 
----
+## Target branch
 
-## 🛡️ Code Quality & Penalty Verification
-- [x] PR remains **OPEN** (not merged) for cross-check review
-- [x] No `console.log` statements present in production code
-- [x] No explicit `any` types used in TypeScript
-- [x] Zero ESLint and Prettier errors (`npm run lint` & `npm run format:check` pass cleanly)
-- [x] All styling relies on design tokens / constants (no magic values)
+<!-- e.g. story-2 for task PRs; story-1 for final Story 2 cross-check PR. -->
