@@ -1,19 +1,40 @@
 @use '../abstracts/tokens' as *;
 @use '../abstracts/breakpoints' as *;
 
+$header-height-mobile: $size-8;
+$header-height-tablet: $size-9;
+$signup-width-tablet: 85px;
+$signup-height-tablet: 33px;
+
 .header {
   background-color: $color-bg;
-  border-bottom: 2px solid $color-on-primary;
+  border-bottom: $size-025 solid $color-on-primary;
+  box-sizing: border-box;
+  height: $header-height-mobile;
   position: relative;
   z-index: 10;
+
+  @media (min-width: $breakpoint-tablet) {
+    height: $header-height-tablet;
+  }
+
+  @include respond-to('desktop') {
+    height: $size-header-height;
+  }
 
   &__inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: $size-3;
-    min-height: calc($size-9 + $size-1 + $size-05);
-    padding-block: $size-3;
+    gap: $size-2;
+    height: 100%;
+    min-height: 0;
+    padding-block: $size-2;
+
+    @include respond-to('desktop') {
+      gap: $size-4;
+      padding-block: $size-3;
+    }
   }
 
   &__logo {
@@ -23,12 +44,14 @@
     text-decoration: none;
   }
 
-  &__logo--bar {
-    @include respond-to('tablet') {
-      img {
-        width: 150px;
-        height: auto;
-      }
+  &__logo--bar img {
+    display: block;
+    width: $size-brand-logo-bar-width-compact;
+    height: auto;
+
+    @include respond-to('desktop') {
+      width: $size-brand-logo-bar-width;
+      height: $size-brand-logo-bar-height;
     }
   }
 
@@ -51,7 +74,7 @@
 
     img {
       display: block;
-      width: 172px;
+      width: $size-brand-logo-source-width;
       max-width: none;
       height: $size-4;
     }
@@ -65,117 +88,138 @@
   }
 
   &__nav {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: 20;
     display: flex;
-    align-items: center;
-    gap: $size-4;
-    margin-left: auto;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: $size-5;
+    margin: 0;
+    padding: $size-3 $size-4 $size-5;
+    min-width: 0;
+    background-color: $color-on-primary;
+    transition:
+      opacity 0.25s ease,
+      visibility 0.25s ease;
 
-    @include respond-to('tablet') {
-      visibility: hidden;
-      opacity: 0;
-      pointer-events: none;
-      position: fixed;
-      inset: 0;
-      z-index: 20;
-      flex-direction: column;
-      align-items: stretch;
-      justify-content: flex-start;
-      gap: $size-5;
-      margin: 0;
-      padding: $size-3 $size-4 $size-5;
-      background-color: $color-on-primary;
-      transition:
-        opacity 0.25s ease,
-        visibility 0.25s ease;
+    &--open {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    @include respond-to('desktop') {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
+      position: static;
+      inset: auto;
+      z-index: auto;
+      flex-direction: row;
+      align-items: center;
+      gap: $size-4;
+      margin-left: auto;
+      padding: 0;
+      background-color: transparent;
+      transition: none;
 
       &--open {
-        visibility: visible;
-        opacity: 1;
         pointer-events: auto;
       }
     }
   }
 
   &__menu-bar {
-    display: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $size-3;
 
-    @include respond-to('tablet') {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: $size-3;
+    @include respond-to('desktop') {
+      display: none;
     }
   }
 
   &__menu-close {
-    display: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: $size-5;
+    height: $size-5;
+    border: $size-025 solid $color-surface;
+    border-radius: $corner-medium;
+    background-color: $color-on-primary;
+    color: $color-surface;
+    font-size: $font-headline-large;
+    line-height: 1;
+    cursor: pointer;
 
-    @include respond-to('tablet') {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: $size-5;
-      height: $size-5;
-      border: 2px solid $color-surface;
-      border-radius: $corner-medium;
-      background-color: $color-on-primary;
-      color: $color-surface;
-      font-size: $font-headline-large;
-      line-height: 1;
-      cursor: pointer;
+    @include respond-to('desktop') {
+      display: none;
     }
   }
 
   &__nav-links {
     display: flex;
-    align-items: center;
-    gap: $size-4;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $size-3;
     list-style: none;
-    margin: 0;
+    margin: $size-2 0 0;
     padding: 0;
+    flex-shrink: 1;
+    min-width: 0;
 
-    @include respond-to('tablet') {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: $size-3;
-      margin-top: $size-2;
+    @include respond-to('desktop') {
+      flex-direction: row;
+      align-items: center;
+      gap: $size-5;
+      margin: 0;
     }
   }
 
   &__link {
-    color: $color-on-primary;
+    color: $color-nav-muted;
     text-decoration: none;
-    font-size: $font-body-medium;
+    font-size: $font-headline-small;
     font-weight: $font-weight-medium;
+    line-height: $line-height-tight;
     cursor: pointer;
+    white-space: nowrap;
     transition: color 0.2s ease;
 
     &:hover {
-      color: $color-tertiary;
+      color: $color-surface;
     }
 
     &--active {
       font-weight: $font-weight-bold;
+      color: $color-primary;
     }
 
     &--muted {
       color: $color-nav-muted;
     }
 
-    @include respond-to('tablet') {
-      font-size: $font-headline-small;
-      color: $color-nav-muted;
+    @include respond-to('desktop') {
+      color: $color-on-primary;
+      font-size: $font-body-medium;
+
+      &:hover {
+        color: $color-tertiary;
+      }
 
       &--active {
-        color: $color-primary;
+        color: $color-on-primary;
       }
 
       &--muted {
-        color: $color-nav-muted;
-      }
-
-      &:hover {
-        color: $color-surface;
+        color: $color-on-bg;
       }
     }
   }
@@ -188,31 +232,41 @@
   }
 
   &__toolbar {
-    display: flex;
+    display: none;
     align-items: center;
     gap: $size-2;
+    flex-shrink: 0;
 
-    @media (max-width: ($breakpoint-tablet - 1px)) {
-      display: none;
+    @media (min-width: $breakpoint-tablet) {
+      display: flex;
     }
   }
 
   &__auth {
-    display: none;
+    display: flex;
+    flex-direction: column;
+    gap: $size-2;
+    width: 100%;
+    margin-top: auto;
 
-    @include respond-to('tablet') {
-      display: flex;
-      flex-direction: column;
-      gap: $size-2;
-      width: 100%;
-      margin-top: auto;
+    @include respond-to('desktop') {
+      display: none;
     }
   }
 
   &__auth-btn {
-    padding: $size-1 $size-3;
-    font-size: $font-label-extra-large;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    height: $size-auth-btn-height;
+    padding: $size-btn-medium-y $size-1;
+    font-family: $font-family-main;
+    font-size: $font-label-large;
     font-weight: $font-weight-bold;
+    line-height: 1;
+    white-space: nowrap;
     border-radius: $corner-small;
     cursor: pointer;
     transition:
@@ -220,9 +274,10 @@
       transform 0.2s ease;
 
     &--login {
+      width: $size-auth-btn-login-width;
       background-color: $color-surface;
       color: $color-on-primary;
-      border: 2px solid $color-on-primary;
+      border: $size-025 solid $color-on-primary;
 
       &:hover {
         background-color: $color-bg;
@@ -230,15 +285,17 @@
     }
 
     &--signup {
+      width: $signup-width-tablet;
+      height: $signup-height-tablet;
+      padding: $size-1 $size-2;
       background-color: $color-primary;
       color: $color-on-primary;
-      border: 2px solid $color-on-primary;
-      box-shadow: $shadow-level-1;
+      border: $size-025 solid $color-on-primary;
 
-      @include respond-to('tablet') {
-        font-size: $font-label-large;
-        padding: $size-1 $size-2;
-        box-shadow: none;
+      @include respond-to('desktop') {
+        width: $size-auth-btn-signup-width;
+        height: $size-auth-btn-height;
+        padding: $size-btn-medium-y $size-1;
       }
 
       &:hover {
@@ -247,20 +304,23 @@
 
       &:active {
         transform: translate($size-025, $size-025);
-        box-shadow: none;
       }
     }
 
     &--desktop {
-      @include respond-to('tablet') {
-        display: none;
+      display: none;
+
+      @include respond-to('desktop') {
+        display: inline-flex;
       }
     }
   }
 
   &__auth--menu &__auth-btn {
     width: 100%;
+    height: auto;
     min-height: $size-6;
+    white-space: nowrap;
     border-radius: $corner-medium;
     box-shadow: none;
   }
@@ -277,7 +337,7 @@
   }
 
   &__burger {
-    display: none;
+    display: inline-flex;
     padding: 0;
     background: none;
     border: none;
@@ -286,8 +346,14 @@
     position: relative;
     z-index: 30;
 
-    @include respond-to('tablet') {
-      display: inline-flex;
+    img {
+      display: block;
+      width: $size-4;
+      height: $size-4;
+    }
+
+    @include respond-to('desktop') {
+      display: none;
     }
   }
 }
