@@ -47,6 +47,21 @@ $size-13: 104px;
 $size-14: 112px;
 $size-15: 120px;
 
+// Header / brand sizes (Figma)
+$size-brand-logo-bar-width: 172px;
+$size-brand-logo-bar-height: $size-4;
+$size-brand-logo-bar-width-compact: 150px;
+$size-brand-logo-source-width: 172px;
+
+// Header bar (Figma 25:2458)
+$size-header-height: 85px;
+
+// Auth buttons (Figma 25:2470 / 25:2472)
+$size-auth-btn-height: 37px;
+$size-auth-btn-login-width: 82px;
+$size-auth-btn-signup-width: 93px;
+$size-btn-medium-y: calc($size-1 + $size-025);
+
 // Layout
 $size-layout-max: 1920px;
 

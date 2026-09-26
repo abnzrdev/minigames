@@ -1,5 +1,6 @@
 @use 'abstracts/tokens' as *;
 @use 'abstracts/breakpoints' as *;
+@use 'components/header';
 
 * {
   box-sizing: border-box;
@@ -13,6 +14,10 @@ body {
   color: $color-on-primary;
   line-height: $line-height-normal;
   min-height: 100vh;
+}
+
+body.menu-open {
+  overflow: hidden;
 }
 
 .layout-container {
