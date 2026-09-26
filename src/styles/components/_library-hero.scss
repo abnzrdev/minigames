@@ -1,0 +1,58 @@
+@use '../abstracts/tokens' as *;
+@use '../abstracts/breakpoints' as *;
+
+.library-hero {
+  background-color: $color-bg;
+
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $size-1;
+    max-width: $size-layout-max;
+    margin-inline: auto;
+    padding: $size-2;
+
+    @media (min-width: $breakpoint-tablet) {
+      padding: $size-3 $size-5;
+    }
+
+    @include respond-to('desktop') {
+      padding: $size-5 $size-15;
+    }
+  }
+
+  &__title {
+    margin: 0;
+    color: $color-on-primary;
+    font-size: $font-display-small;
+    font-weight: $font-weight-bold;
+    line-height: $line-height-tight;
+
+    @media (min-width: $breakpoint-tablet) {
+      font-size: $font-display-medium;
+    }
+
+    @include respond-to('desktop') {
+      font-size: $font-display-large;
+      white-space: nowrap;
+    }
+  }
+
+  &__subtitle {
+    margin: 0;
+    color: $color-on-bg;
+    font-size: $font-body-small;
+    font-weight: $font-weight-medium;
+    line-height: $line-height-tight;
+
+    @media (min-width: $breakpoint-tablet) {
+      font-size: $font-body-medium;
+    }
+
+    @include respond-to('desktop') {
+      font-size: $font-body-large;
+      white-space: nowrap;
+    }
+  }
+}

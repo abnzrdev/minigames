@@ -3,8 +3,8 @@ import hamburgerIcon from '../assets/games/Hamburger Button.svg';
 import { closeMobileMenu, openAuthDialog, toggleMobileMenu } from '../utils/authDialog';
 
 const NAV_LINKS: { label: string; href: string; active?: boolean }[] = [
-  { label: 'Home', href: '#', active: true },
-  { label: 'Library', href: '#' },
+  { label: 'Home', href: '#' },
+  { label: 'Library', href: '#', active: true },
   { label: 'Tournaments', href: '#' },
   { label: 'Community', href: '#' },
 ];
