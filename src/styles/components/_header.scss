@@ -115,105 +115,97 @@ $signup-height-tablet: 33px;
   }
 
   &__nav {
-    visibility: hidden;
-    opacity: 0;
-    pointer-events: none;
-    position: fixed;
-    inset: 0;
-    z-index: 20;
     display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: flex-start;
-    gap: $size-5;
-    margin: 0;
-    padding: $size-3 $size-4 $size-5;
+    flex-direction: row;
+    align-items: center;
+    gap: $size-4;
+    margin-left: auto;
     min-width: 0;
-    background-color: $color-on-primary;
-    transition:
-      opacity 0.25s ease,
-      visibility 0.25s ease;
+    padding: 0;
+    background-color: transparent;
 
-    &--open {
-      visibility: visible;
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    @include respond-to('desktop') {
-      visibility: visible;
-      opacity: 1;
-      pointer-events: auto;
-      position: static;
-      inset: auto;
-      z-index: auto;
-      flex-direction: row;
-      align-items: center;
-      gap: $size-4;
-      margin-left: auto;
-      padding: 0;
-      background-color: transparent;
-      transition: none;
+    @include respond-to('tablet') {
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      gap: $size-5;
+      margin: 0;
+      padding: $size-3 $size-4 $size-5;
+      background-color: $color-on-primary;
+      transition:
+        opacity 0.25s ease,
+        visibility 0.25s ease;
 
       &--open {
+        visibility: visible;
+        opacity: 1;
         pointer-events: auto;
       }
     }
   }
 
   &__menu-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: $size-3;
+    display: none;
 
-    @include respond-to('desktop') {
-      display: none;
+    @include respond-to('tablet') {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: $size-3;
     }
   }
 
   &__menu-close {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: $size-5;
-    height: $size-5;
-    border: $size-025 solid $color-surface;
-    border-radius: $corner-medium;
-    background-color: $color-on-primary;
-    color: $color-surface;
-    font-size: $font-headline-large;
-    line-height: 1;
-    cursor: pointer;
+    display: none;
 
-    @include respond-to('desktop') {
-      display: none;
+    @include respond-to('tablet') {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: $size-5;
+      height: $size-5;
+      border: $size-025 solid $color-surface;
+      border-radius: $corner-medium;
+      background-color: $color-on-primary;
+      color: $color-surface;
+      font-size: $font-headline-large;
+      line-height: 1;
+      cursor: pointer;
     }
   }
 
   &__nav-links {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: $size-3;
+    flex-direction: row;
+    align-items: center;
+    gap: $size-2;
     list-style: none;
-    margin: $size-2 0 0;
+    margin: 0;
     padding: 0;
-    flex-shrink: 1;
     min-width: 0;
 
     @include respond-to('desktop') {
-      flex-direction: row;
-      align-items: center;
       gap: $size-5;
-      margin: 0;
+    }
+
+    @include respond-to('tablet') {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: $size-3;
+      margin-top: $size-2;
     }
   }
 
   &__link {
-    color: $color-nav-muted;
+    color: $color-on-primary;
     text-decoration: none;
-    font-size: $font-headline-small;
+    font-size: $font-body-medium;
     font-weight: $font-weight-medium;
     line-height: $line-height-tight;
     cursor: pointer;
@@ -221,32 +213,32 @@ $signup-height-tablet: 33px;
     transition: color 0.2s ease;
 
     &:hover {
-      color: $color-surface;
+      color: $color-tertiary;
     }
 
     &--active {
       font-weight: $font-weight-bold;
-      color: $color-primary;
+      color: $color-on-primary;
     }
 
     &--muted {
-      color: $color-nav-muted;
+      color: $color-on-bg;
     }
 
-    @include respond-to('desktop') {
-      color: $color-on-primary;
-      font-size: $font-body-medium;
+    @include respond-to('tablet') {
+      font-size: $font-headline-small;
+      color: $color-nav-muted;
 
       &:hover {
-        color: $color-tertiary;
+        color: $color-surface;
       }
 
       &--active {
-        color: $color-on-primary;
+        color: $color-primary;
       }
 
       &--muted {
-        color: $color-on-bg;
+        color: $color-nav-muted;
       }
     }
   }
@@ -270,14 +262,14 @@ $signup-height-tablet: 33px;
   }
 
   &__auth {
-    display: flex;
-    flex-direction: column;
-    gap: $size-2;
-    width: 100%;
-    margin-top: auto;
+    display: none;
 
-    @include respond-to('desktop') {
-      display: none;
+    @include respond-to('tablet') {
+      display: flex;
+      flex-direction: column;
+      gap: $size-2;
+      width: 100%;
+      margin-top: auto;
     }
   }
 
@@ -335,10 +327,8 @@ $signup-height-tablet: 33px;
     }
 
     &--desktop {
-      display: none;
-
-      @include respond-to('desktop') {
-        display: inline-flex;
+      @include respond-to('tablet') {
+        display: none;
       }
     }
   }
@@ -364,7 +354,7 @@ $signup-height-tablet: 33px;
   }
 
   &__burger {
-    display: inline-flex;
+    display: none;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
@@ -384,8 +374,8 @@ $signup-height-tablet: 33px;
       height: $size-4;
     }
 
-    @include respond-to('desktop') {
-      display: none;
+    @include respond-to('tablet') {
+      display: inline-flex;
     }
   }
 }
