@@ -21,7 +21,7 @@ function cardMarkup(game: LibraryGame): string {
       <div class="game-card__body">
         <div class="game-card__top">
           <div class="game-card__heading">
-            <h3 class="game-card__title">${game.title}</h3>
+            <h2 class="game-card__title">${game.title}</h2>
             <span class="game-card__category">${game.category}</span>
           </div>
           <span class="game-card__price${priceClass(game.price)}">${game.price}</span>

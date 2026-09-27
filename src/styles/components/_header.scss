@@ -3,8 +3,6 @@
 
 $header-height-mobile: $size-8;
 $header-height-tablet: $size-9;
-$signup-width-tablet: 85px;
-$signup-height-tablet: 33px;
 
 .header {
   background-color: $color-bg;
@@ -309,8 +307,8 @@ $signup-height-tablet: 33px;
     }
 
     &--signup {
-      width: $signup-width-tablet;
-      height: $signup-height-tablet;
+      width: $size-signup-width-tablet;
+      height: $size-signup-height-tablet;
       padding: $size-1 $size-2;
       background-color: $color-primary;
       color: $color-on-primary;

@@ -10,7 +10,7 @@ const FILTER_CHIPS = [
 
 function chipMarkup(label: string, isActive: boolean): string {
   const activeClass = isActive ? ' library-filter-bar__chip--active' : '';
-  return `<button type="button" class="library-filter-bar__chip${activeClass}" role="tab" aria-selected="${isActive}">${label}</button>`;
+  return `<button type="button" class="library-filter-bar__chip${activeClass}" aria-pressed="${isActive}">${label}</button>`;
 }
 
 export function renderLibraryFilterBar(): HTMLElement {
@@ -23,7 +23,7 @@ export function renderLibraryFilterBar(): HTMLElement {
   section.innerHTML = `
     <div class="library-filter-bar__inner">
       <div class="library-filter-bar__chips-scroll">
-        <div class="library-filter-bar__chips" role="tablist" aria-label="Game categories">
+        <div class="library-filter-bar__chips" role="group" aria-label="Game categories">
           ${chips}
         </div>
       </div>
@@ -42,7 +42,7 @@ export function renderLibraryFilterBar(): HTMLElement {
       chipButtons.forEach((other) => {
         const isSelected = other === chip;
         other.classList.toggle('library-filter-bar__chip--active', isSelected);
-        other.setAttribute('aria-selected', String(isSelected));
+        other.setAttribute('aria-pressed', String(isSelected));
       });
     });
   });

@@ -1,9 +1,6 @@
 ﻿@use '../abstracts/tokens' as *;
 @use '../abstracts/breakpoints' as *;
 
-$hero-panel-tablet-max: 480px;
-$hero-cta-pad-y: 10px;
-
 .hero {
   background-color: $color-bg;
 
@@ -59,7 +56,7 @@ $hero-cta-pad-y: 10px;
     box-shadow: $shadow-level-2;
 
     @include respond-to('tablet') {
-      width: min($hero-panel-tablet-max, 100%);
+      width: min($size-hero-panel-tablet, 100%);
       max-width: none;
       padding: $size-3;
       border-radius: $corner-large;
@@ -151,7 +148,7 @@ $hero-cta-pad-y: 10px;
     }
 
     @media (min-width: $breakpoint-tablet) and (max-width: ($breakpoint-desktop - 1px)) {
-      padding: $hero-cta-pad-y $size-icon-medium;
+      padding: calc($size-1 + $size-025) $size-icon-medium;
       font-size: $font-body-small;
     }
   }
