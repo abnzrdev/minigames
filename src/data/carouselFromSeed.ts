@@ -29,13 +29,11 @@ const CARD_IMAGES: Record<string, string> = {
 };
 
 function formatLikesCount(count: number): string {
-  if (count >= 1000) {
-    const thousands = count / 1000;
-    const rounded = Math.round(thousands * 10) / 10;
-    const text = rounded % 1 === 0 ? String(rounded) : rounded.toFixed(1);
-    return `${text}K`;
+  if (count < 1000) {
+    return String(count);
   }
-  return String(count);
+  const tenths = Math.floor(count / 100) / 10;
+  return `${tenths.toFixed(1)}K`;
 }
 
 export function getNewGamesCarouselSlides(): NewGamesCarouselSlide[] {

@@ -37,7 +37,7 @@ const RECORDS = [
 
 function commentMarkup(comment: (typeof COMMENTS)[number]): string {
   return `
-    <article class="game-details__comment">
+    <div class="game-details__comment">
       <div class="game-details__comment-head">
         <div class="game-details__person">
           <span class="game-details__avatar game-details__avatar--${comment.tone}">${comment.initial}</span>
@@ -50,7 +50,7 @@ function commentMarkup(comment: (typeof COMMENTS)[number]): string {
         <img src="${favoriteIcon}" width="16" height="16" alt="" />
         <span>${comment.likes}</span>
       </button>
-    </article>
+    </div>
   `;
 }
 
@@ -132,6 +132,7 @@ function resetDialog(dialog: HTMLDialogElement): void {
   const textarea = dialog.querySelector('textarea');
   if (textarea) {
     textarea.value = '';
+    textarea.style.height = '';
   }
   dialog.querySelectorAll<HTMLButtonElement>('.game-details__like').forEach((button) => {
     button.classList.remove('game-details__like--active');
@@ -218,6 +219,15 @@ export function initGameDetails(): void {
       }
     });
   });
+
+  const textarea = dialog.querySelector('textarea');
+  if (textarea instanceof HTMLTextAreaElement) {
+    const fitComment = (): void => {
+      textarea.style.height = 'auto';
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    };
+    textarea.addEventListener('input', fitComment);
+  }
 
   dialog.querySelector('.game-details__composer')?.addEventListener('submit', (event) => {
     event.preventDefault();

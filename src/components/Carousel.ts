@@ -7,25 +7,50 @@ import { openGameDetailsDialog } from './GameDetails';
 import { getNewGamesCarouselSlides } from '../data/carouselFromSeed';
 
 const SLIDES = getNewGamesCarouselSlides();
+const COPIES = 3;
 const AUTOPLAY_MS = 4000;
-const SWIPE_PX = 48;
-const DESKTOP_QUERY = '(min-width: 1024px)';
 
-function wrapIndex(index: number): number {
-  const count = SLIDES.length;
-  return ((index % count) + count) % count;
+interface Frame {
+  center: number;
+  side: number;
+  peek: number;
+  gap: number;
+  desktop: boolean;
+  infoMin: number;
+  slideMs: number;
+  swipe: number;
 }
 
-function slotFor(index: number, active: number): number {
-  let distance = index - active;
-  const half = Math.floor(SLIDES.length / 2);
-  if (distance > half) {
-    distance -= SLIDES.length;
+function frameFor(section: HTMLElement, viewport: HTMLElement): Frame {
+  const styles = getComputedStyle(section);
+  const read = (name: string): number => Number.parseFloat(styles.getPropertyValue(name));
+  const peek = read('--carousel-peek');
+  const fit = read('--carousel-fit');
+  let center = read('--carousel-center');
+  if (fit > 0) {
+    center = Math.min(center, viewport.clientWidth - peek * fit - read('--carousel-gutter'));
   }
-  if (distance < -half) {
-    distance += SLIDES.length;
+  return {
+    center,
+    side: read('--carousel-side'),
+    peek,
+    gap: read('--carousel-gap'),
+    desktop: fit === 0,
+    infoMin: read('--carousel-info'),
+    slideMs: read('--carousel-ms'),
+    swipe: read('--carousel-swipe'),
+  };
+}
+
+function widthFor(distance: number, frame: Frame): number {
+  const steps = Math.abs(distance);
+  if (steps === 0) {
+    return frame.center;
   }
-  return distance;
+  if (steps === 1 && frame.desktop) {
+    return frame.side;
+  }
+  return frame.peek;
 }
 
 export function renderCarousel(): HTMLElement {
@@ -34,25 +59,27 @@ export function renderCarousel(): HTMLElement {
   section.id = 'new-games';
   section.setAttribute('aria-labelledby', 'new-games-heading');
 
-  const cardsHtml = SLIDES.map(
-    (slide, index) => `
-      <button type="button" class="carousel__card" data-index="${index}">
-        <img class="carousel__card-image" src="${slide.image}" alt="" draggable="false" />
-        <span class="carousel__card-overlay">
-          <span class="carousel__card-title">${slide.title}</span>
-          <span class="carousel__card-meta">
-            <span class="carousel__card-stat">
-              <img src="${starIcon}" width="24" height="24" alt="" />
-              ${slide.rating}
-            </span>
-            <span class="carousel__card-stat">
-              <img src="${favoriteIcon}" width="24" height="24" alt="" />
-              ${slide.likes}
+  const cardsHtml = Array.from({ length: COPIES }, (_, copy) =>
+    SLIDES.map(
+      (slide) => `
+        <button type="button" class="carousel__card" data-copy="${copy}">
+          <img class="carousel__card-image" src="${slide.image}" alt="" draggable="false" />
+          <span class="carousel__card-overlay">
+            <span class="carousel__card-title">${slide.title}</span>
+            <span class="carousel__card-meta">
+              <span class="carousel__card-stat">
+                <img src="${starIcon}" width="24" height="24" alt="" />
+                ${slide.rating}
+              </span>
+              <span class="carousel__card-stat">
+                <img src="${favoriteIcon}" width="24" height="24" alt="" />
+                ${slide.likes}
+              </span>
             </span>
           </span>
-        </span>
-      </button>
-    `
+        </button>
+      `
+    ).join('')
   ).join('');
 
   section.innerHTML = `
@@ -88,11 +115,19 @@ export function renderCarousel(): HTMLElement {
     </div>
   `;
 
-  const viewport = section.querySelector('.carousel__viewport');
+  const viewportNode = section.querySelector('.carousel__viewport');
+  const trackNode = section.querySelector('.carousel__track');
   const cards = [...section.querySelectorAll<HTMLButtonElement>('.carousel__card')];
   const dots = [...section.querySelectorAll<HTMLElement>('.carousel__dot')];
-  const desktopQuery = window.matchMedia(DESKTOP_QUERY);
-  let active = 0;
+  if (!(viewportNode instanceof HTMLElement) || !(trackNode instanceof HTMLElement)) {
+    return section;
+  }
+  const viewport = viewportNode;
+  const track = trackNode;
+
+  const count = SLIDES.length;
+  let cursor = count;
+  let moving = false;
   let remaining = AUTOPLAY_MS;
   let startedAt = 0;
   let timer = 0;
@@ -100,23 +135,48 @@ export function renderCarousel(): HTMLElement {
   let swiped = false;
   let pointerStartX = 0;
 
-  function visibleRadius(): number {
-    return desktopQuery.matches ? 2 : 1;
+  function logicalIndex(): number {
+    return ((cursor % count) + count) % count;
   }
 
-  function paint(): void {
-    const radius = visibleRadius();
+  let slideMs = 0;
+  let swipePx = 0;
+
+  function place(animate: boolean): void {
+    const frame = frameFor(section, viewport);
+    slideMs = frame.slideMs;
+    swipePx = frame.swipe;
+    track.classList.toggle('carousel__track--instant', !animate);
+    cards.forEach((card) => {
+      card.classList.toggle('carousel__card--instant', !animate);
+    });
+    let offset = 0;
+    let activeStart = 0;
+    let activeWidth = frame.center;
     cards.forEach((card, index) => {
-      const slot = slotFor(index, active);
-      const hidden = Math.abs(slot) > radius;
-      card.dataset.slot = String(slot);
-      card.toggleAttribute('data-hidden', hidden);
-      card.tabIndex = hidden ? -1 : 0;
-      card.setAttribute('aria-hidden', String(hidden));
+      const width = widthFor(index - cursor, frame);
+      card.style.width = `${width}px`;
+      card.style.marginRight = index === cards.length - 1 ? '0' : `${frame.gap}px`;
+      card.classList.toggle('carousel__card--info', width >= frame.infoMin);
+      card.tabIndex = Math.abs(index - cursor) > 2 ? -1 : 0;
+      if (index === cursor) {
+        activeStart = offset;
+        activeWidth = width;
+      }
+      offset += width + (index === cards.length - 1 ? 0 : frame.gap);
     });
+    const shift = viewport.clientWidth / 2 - (activeStart + activeWidth / 2);
+    track.style.transform = `translate3d(${shift}px, 0, 0)`;
     dots.forEach((dot, index) => {
-      dot.classList.toggle('carousel__dot--active', index === active % dots.length);
+      dot.classList.toggle('carousel__dot--active', index === logicalIndex() % dots.length);
     });
+  }
+
+  function snapToMiddle(): void {
+    if (cursor >= count * 2 || cursor < count) {
+      cursor = count + logicalIndex();
+      place(false);
+    }
   }
 
   function clearTimer(): void {
@@ -128,7 +188,7 @@ export function renderCarousel(): HTMLElement {
     remaining = delay;
     startedAt = performance.now();
     timer = window.setTimeout(() => {
-      go(1);
+      move(1);
     }, delay);
   }
 
@@ -137,22 +197,29 @@ export function renderCarousel(): HTMLElement {
     clearTimer();
   }
 
-  function go(step: number): void {
-    active = wrapIndex(active + step);
-    paint();
+  function move(step: number): void {
+    if (moving) {
+      return;
+    }
+    moving = true;
+    cursor += step;
+    place(true);
+    window.setTimeout(() => {
+      moving = false;
+      snapToMiddle();
+    }, slideMs);
     arm(AUTOPLAY_MS);
   }
 
   section.querySelectorAll<HTMLButtonElement>('[data-step]').forEach((button) => {
     button.addEventListener('click', () => {
-      const step = Number(button.dataset.step);
-      go(step);
+      move(Number(button.dataset.step));
     });
   });
 
   cards.forEach((card) => {
     card.addEventListener('click', () => {
-      if (swiped || card.hasAttribute('data-hidden')) {
+      if (swiped || moving) {
         swiped = false;
         return;
       }
@@ -160,60 +227,65 @@ export function renderCarousel(): HTMLElement {
     });
   });
 
-  if (viewport instanceof HTMLElement) {
-    viewport.addEventListener('pointerdown', (event) => {
-      if (event.button !== 0) {
-        return;
-      }
-      holding = true;
-      swiped = false;
-      pointerStartX = event.clientX;
-      pauseTimer();
-      viewport.setPointerCapture(event.pointerId);
-    });
+  viewport.addEventListener('pointerdown', (event) => {
+    if (event.button !== 0 || moving) {
+      return;
+    }
+    holding = true;
+    swiped = false;
+    pointerStartX = event.clientX;
+    pauseTimer();
+    viewport.setPointerCapture(event.pointerId);
+  });
 
-    viewport.addEventListener('pointerup', (event) => {
-      if (!holding) {
-        return;
-      }
-      holding = false;
-      const delta = event.clientX - pointerStartX;
-      if (Math.abs(delta) >= SWIPE_PX) {
-        swiped = true;
-        window.setTimeout(() => {
-          swiped = false;
-        }, 0);
-        go(delta < 0 ? 1 : -1);
-        return;
-      }
-      arm(remaining);
-    });
+  viewport.addEventListener('pointerup', (event) => {
+    if (!holding) {
+      return;
+    }
+    holding = false;
+    const delta = event.clientX - pointerStartX;
+    if (Math.abs(delta) >= swipePx) {
+      swiped = true;
+      window.setTimeout(() => {
+        swiped = false;
+      }, 0);
+      move(delta < 0 ? 1 : -1);
+      return;
+    }
+    arm(remaining);
+  });
 
-    viewport.addEventListener('pointercancel', () => {
-      if (!holding) {
-        return;
-      }
-      holding = false;
-      arm(remaining);
-    });
-  }
+  viewport.addEventListener('pointercancel', () => {
+    if (!holding) {
+      return;
+    }
+    holding = false;
+    arm(remaining);
+  });
 
-  desktopQuery.addEventListener('change', paint);
+  const onResize = (): void => {
+    place(false);
+  };
+  window.addEventListener('resize', onResize);
 
   const page = document.getElementById('page-content');
   if (page) {
     const observer = new MutationObserver(() => {
       if (!section.isConnected) {
         clearTimer();
-        desktopQuery.removeEventListener('change', paint);
+        window.removeEventListener('resize', onResize);
         observer.disconnect();
       }
     });
     observer.observe(page, { childList: true });
   }
 
-  paint();
-  arm(AUTOPLAY_MS);
-
+  requestAnimationFrame(() => {
+    if (!section.isConnected) {
+      return;
+    }
+    place(false);
+    arm(AUTOPLAY_MS);
+  });
   return section;
 }

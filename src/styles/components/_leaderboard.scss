@@ -1,10 +1,6 @@
 @use '../abstracts/tokens' as *;
 @use '../abstracts/breakpoints' as *;
 
-$sr-only-edge: 1px;
-$sr-only-shift: -1px;
-$rank-border: 1.5px;
-
 .leaderboard {
   padding-block: $size-6;
   background-color: $color-bg;
@@ -45,10 +41,10 @@ $rank-border: 1.5px;
 
   &__caption {
     position: absolute;
-    width: $sr-only-edge;
-    height: $sr-only-edge;
+    width: $size-hairline;
+    height: $size-hairline;
     padding: 0;
-    margin: $sr-only-shift;
+    margin: calc(-1 * $size-hairline);
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
@@ -82,7 +78,7 @@ $rank-border: 1.5px;
     }
 
     tbody tr {
-      border-top: $sr-only-edge solid $color-outline;
+      border-top: $size-hairline solid $color-outline;
       background-color: $color-bg;
 
       &:nth-child(even) {
@@ -128,7 +124,7 @@ $rank-border: 1.5px;
     font-size: $font-label-medium;
     font-weight: $font-weight-bold;
     color: $color-on-primary;
-    border: $rank-border solid $color-on-primary;
+    border: $size-stroke solid $color-on-primary;
 
     &--gold {
       background-color: $color-primary;
@@ -181,7 +177,7 @@ $rank-border: 1.5px;
     padding: $size-05 $size-2;
     border-radius: $corner-full;
     background-color: $color-bg;
-    border: $rank-border solid $color-on-primary;
+    border: $size-stroke solid $color-on-primary;
     font-size: $font-label-large;
     font-weight: $font-weight-medium;
     color: $color-on-primary;

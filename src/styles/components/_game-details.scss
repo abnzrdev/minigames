@@ -1,11 +1,6 @@
 @use '../abstracts/tokens' as *;
 @use '../abstracts/breakpoints' as *;
 
-$game-details-width: 600px;
-$game-details-hero: 220px;
-$game-details-rule: 1px;
-$game-details-stroke: 1.5px;
-
 .game-details {
   width: 100%;
   max-width: none;
@@ -41,19 +36,19 @@ $game-details-stroke: 1.5px;
     max-height: 100%;
     overflow: auto;
     background-color: $color-bg;
-    border: $game-details-rule solid $color-outline-variant;
+    border: $size-hairline solid $color-outline-variant;
     border-radius: $corner-extra-large;
     box-shadow: $shadow-level-3;
 
     @media (min-width: $breakpoint-tablet) {
-      width: $game-details-width;
+      width: $size-game-details-width;
       max-height: calc(100% - $size-4);
     }
   }
 
   &__hero {
     position: relative;
-    height: $game-details-hero;
+    height: $size-game-details-hero;
     flex-shrink: 0;
     overflow: hidden;
   }
@@ -157,7 +152,7 @@ $game-details-stroke: 1.5px;
     gap: $size-1;
     padding: $size-1 $size-2;
     background-color: $color-surface;
-    border: $game-details-rule solid $color-outline-variant;
+    border: $size-hairline solid $color-outline-variant;
     border-radius: $corner-small;
     box-shadow: $shadow-level-1;
 
@@ -205,7 +200,7 @@ $game-details-stroke: 1.5px;
     gap: $size-1;
     width: $size-6;
     padding: 0;
-    border: $game-details-rule solid $color-outline-variant;
+    border: $size-hairline solid $color-outline-variant;
     background-color: $color-surface;
     color: $color-on-primary;
 
@@ -281,10 +276,13 @@ $game-details-stroke: 1.5px;
 
   textarea {
     width: 100%;
+    min-height: $size-6;
+    max-height: $size-11;
     height: $size-6;
+    overflow-y: auto;
     resize: none;
     padding: $size-1 $size-2;
-    border: $game-details-rule solid $color-on-primary;
+    border: $size-hairline solid $color-on-primary;
     border-radius: $corner-small;
     background-color: $color-surface;
     color: $color-on-primary;
@@ -298,7 +296,7 @@ $game-details-stroke: 1.5px;
     justify-content: center;
     width: $size-5;
     height: $size-5;
-    border: $game-details-stroke solid $color-on-primary;
+    border: $size-stroke solid $color-on-primary;
     border-radius: $corner-small;
     background-color: $color-footer-icon-bg;
     color: $color-surface;
@@ -339,7 +337,7 @@ $game-details-stroke: 1.5px;
     justify-content: center;
     width: $size-4;
     height: $size-4;
-    border: $game-details-rule solid $color-on-primary;
+    border: $size-hairline solid $color-on-primary;
     border-radius: $corner-full;
     font-size: $font-label-medium;
     font-weight: $font-weight-bold;
@@ -395,8 +393,8 @@ $game-details-stroke: 1.5px;
 
 .visually-hidden {
   position: absolute;
-  width: $game-details-rule;
-  height: $game-details-rule;
+  width: $size-hairline;
+  height: $size-hairline;
   overflow: hidden;
   clip-path: inset(50%);
   white-space: nowrap;
