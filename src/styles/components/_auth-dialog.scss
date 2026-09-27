@@ -65,7 +65,8 @@ $auth-panel-min-height: 280px;
     animation: auth-dialog-open 0.25s ease;
   }
 
-  &--closing {
+  &--closing,
+  &--closing[open] {
     animation: auth-dialog-close 0.2s ease forwards;
 
     &::backdrop {

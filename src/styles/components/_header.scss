@@ -134,10 +134,10 @@ $signup-height-tablet: 33px;
       flex-direction: column;
       align-items: stretch;
       justify-content: flex-start;
-      gap: $size-5;
+      gap: $size-4;
       margin: 0;
-      padding: $size-3 $size-4 $size-5;
-      background-color: $color-on-primary;
+      padding: $size-3;
+      background-color: $color-footer-bg;
       transition:
         opacity 0.25s ease,
         visibility 0.25s ease;
@@ -168,13 +168,14 @@ $signup-height-tablet: 33px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: $size-5;
-      height: $size-5;
-      border: $size-025 solid $color-surface;
-      border-radius: $corner-medium;
-      background-color: $color-on-primary;
+      width: $size-4;
+      height: $size-4;
+      padding: 0;
+      border: none;
+      border-radius: $corner-small;
+      background-color: $color-footer-icon-bg;
       color: $color-surface;
-      font-size: $font-headline-large;
+      font-size: $font-headline-small;
       line-height: 1;
       cursor: pointer;
     }
@@ -198,7 +199,6 @@ $signup-height-tablet: 33px;
       flex-direction: column;
       align-items: flex-start;
       gap: $size-3;
-      margin-top: $size-2;
     }
   }
 
@@ -226,19 +226,21 @@ $signup-height-tablet: 33px;
     }
 
     @include respond-to('tablet') {
-      font-size: $font-headline-small;
-      color: $color-nav-muted;
+      font-size: $font-body-large;
+      color: $color-footer-muted;
 
       &:hover {
         color: $color-surface;
       }
 
       &--active {
+        font-weight: $font-weight-bold;
         color: $color-primary;
       }
 
       &--muted {
-        color: $color-nav-muted;
+        font-weight: $font-weight-medium;
+        color: $color-footer-muted;
       }
     }
   }
@@ -336,9 +338,11 @@ $signup-height-tablet: 33px;
   &__auth--menu &__auth-btn {
     width: 100%;
     height: auto;
-    min-height: $size-6;
+    min-height: $size-5;
+    padding: $size-btn-medium-y $size-icon-medium;
+    font-size: $font-body-small;
     white-space: nowrap;
-    border-radius: $corner-medium;
+    border-radius: $corner-small;
     box-shadow: none;
   }
 
