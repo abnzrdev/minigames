@@ -1,32 +1,32 @@
 import seed from './all-games-seed.json';
+import catMailCard from '../assets/games/covers/cat-mail-co-card.jpg';
+import heartopiaCard from '../assets/games/covers/heartopia-card.jpg';
 import islandersCard from '../assets/games/cards/islanders-new-shores-card.jpg';
-import vacationCard from '../assets/games/cards/vacation-cafe-simulator-card.jpg';
-import winterCard from '../assets/games/cards/winter-burrow-card.jpg';
-import potionsCard from '../assets/games/cards/shelve-the-potions-card.jpg';
-import type { CarouselCardVariant, NewGamesCarouselSlide } from './newGamesCarousel';
+import paliaCard from '../assets/games/covers/palia-card.jpg';
+import potionsCard from '../assets/games/covers/shelve-the-potions-card.jpg';
+import vacationCard from '../assets/games/covers/vacation-cafe-simulator-card.jpg';
+import winterCard from '../assets/games/covers/winter-burrow-card.jpg';
+import type { NewGamesCarouselSlide } from './newGamesCarousel';
 
 interface GameSeed {
   slug: string;
   name: string;
   rating: number;
   likesCount: number;
+  featured: boolean;
 }
 
 const CARD_IMAGES: Record<string, string> = {
-  'islanders-new-shores': islandersCard,
   'vacation-cafe-simulator': vacationCard,
   'winter-burrow': winterCard,
   'shelve-the-potions': potionsCard,
+  heartopia: heartopiaCard,
+  palia: paliaCard,
+  'cat-mail-co': catMailCard,
+  'tiny-glade': islandersCard,
+  'tailside-cozy-cafe-sim': vacationCard,
+  'islanders-new-shores': islandersCard,
 };
-
-/** Static strip layout: peek | standard | featured | standard | peek */
-const SLIDE_LAYOUT: { slug: string; variant: CarouselCardVariant }[] = [
-  { slug: 'shelve-the-potions', variant: 'peek' },
-  { slug: 'islanders-new-shores', variant: 'standard' },
-  { slug: 'vacation-cafe-simulator', variant: 'featured' },
-  { slug: 'winter-burrow', variant: 'standard' },
-  { slug: 'shelve-the-potions', variant: 'peek' },
-];
 
 function formatLikesCount(count: number): string {
   if (count >= 1000) {
@@ -38,27 +38,19 @@ function formatLikesCount(count: number): string {
   return String(count);
 }
 
-function gameBySlug(slug: string): GameSeed {
-  const game = (seed.data as GameSeed[]).find((entry) => entry.slug === slug);
-  if (!game) {
-    throw new Error(`Missing game in all-games-seed.json: ${slug}`);
-  }
-  return game;
-}
-
 export function getNewGamesCarouselSlides(): NewGamesCarouselSlide[] {
-  return SLIDE_LAYOUT.map(({ slug, variant }) => {
-    const game = gameBySlug(slug);
-    const image = CARD_IMAGES[slug];
-    if (!image) {
-      throw new Error(`Missing local card image for slug: ${slug}`);
-    }
-    return {
-      title: game.name,
-      likes: formatLikesCount(game.likesCount),
-      rating: game.rating.toFixed(1),
-      image,
-      variant,
-    };
-  });
+  return (seed.data as GameSeed[])
+    .filter((game) => game.featured)
+    .map((game) => {
+      const image = CARD_IMAGES[game.slug];
+      if (!image) {
+        throw new Error(`Missing local card image for slug: ${game.slug}`);
+      }
+      return {
+        title: game.name,
+        likes: formatLikesCount(game.likesCount),
+        rating: game.rating.toFixed(1),
+        image,
+      };
+    });
 }

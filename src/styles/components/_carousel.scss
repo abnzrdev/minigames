@@ -1,12 +1,12 @@
 @use '../abstracts/tokens' as *;
 @use '../abstracts/breakpoints' as *;
 
-$carousel-card-info-min-width: 200px;
 $carousel-card-height: calc($size-15 * 3 + $size-3);
 $carousel-card-height-mobile: 200px;
 $carousel-card-peek-width: $size-15;
 $carousel-card-peek-width-mobile: 56px;
 $carousel-card-standard-width: 288px;
+$carousel-overlay-min: $carousel-card-standard-width - ($size-025 * 2);
 $carousel-card-featured-width: calc($size-15 * 7 - $size-3);
 $carousel-card-featured-width-mobile: 218px;
 
@@ -54,61 +54,59 @@ $carousel-card-featured-width-mobile: 218px;
     padding: 0;
     border: none;
     background: none;
-    cursor: default;
+    cursor: pointer;
     line-height: 0;
-    pointer-events: none;
   }
 
   &__viewport {
     width: 100%;
     overflow: hidden;
+    touch-action: pan-y;
+    user-select: none;
   }
 
   &__track {
-    display: flex;
-    align-items: stretch;
-    justify-content: center;
-    gap: $size-3;
-    width: 100%;
-    padding-bottom: $size-1;
-
-    @include respond-to('tablet') {
-      gap: $size-1;
-    }
-  }
-
-  &__card {
-    flex: 0 0 auto;
-    height: $carousel-card-height;
     position: relative;
-    border-radius: $corner-large;
-    overflow: hidden;
-    border: $size-025 solid $color-on-primary;
-    box-shadow: $shadow-level-1;
-    container-type: inline-size;
+    width: 100%;
+    height: $carousel-card-height;
 
     @media (max-width: ($breakpoint-tablet - 1px)) {
       height: $carousel-card-height-mobile;
     }
+  }
 
-    &--peek {
-      width: $carousel-card-peek-width;
+  &__card {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    height: 100%;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    text-align: left;
+    border-radius: $corner-large;
+    overflow: hidden;
+    border: $size-025 solid $color-on-primary;
+    box-shadow: $shadow-level-1;
+    background: none;
+    container-type: inline-size;
+    cursor: pointer;
+    transition:
+      width 0.45s ease,
+      transform 0.45s ease,
+      opacity 0.45s ease;
 
-      @media (max-width: ($breakpoint-tablet - 1px)) {
-        width: $carousel-card-peek-width-mobile;
-      }
+    &[data-hidden] {
+      width: 0;
+      border-width: 0;
+      opacity: 0;
+      pointer-events: none;
     }
 
-    &--standard {
-      width: $carousel-card-standard-width;
-
-      @media (max-width: ($breakpoint-desktop - 1px)) {
-        display: none;
-      }
-    }
-
-    &--featured {
+    &[data-slot='0'] {
+      z-index: 3;
       width: min($carousel-card-featured-width, calc(100vw - $carousel-card-peek-width - $size-4));
+      transform: translateX(-50%);
 
       @media (max-width: ($breakpoint-tablet - 1px)) {
         width: min(
@@ -116,10 +114,86 @@ $carousel-card-featured-width-mobile: 218px;
           calc(100vw - ($carousel-card-peek-width-mobile * 2) - $size-4)
         );
       }
+    }
 
-      .carousel__card-overlay {
-        display: flex;
+    &[data-slot='1'],
+    &[data-slot='-1'] {
+      z-index: 2;
+      width: $carousel-card-standard-width;
+      transform: translateX(
+        calc(-50% + $carousel-card-featured-width / 2 + $size-3 + $carousel-card-standard-width / 2)
+      );
+
+      @media (max-width: ($breakpoint-desktop - 1px)) {
+        width: $carousel-card-peek-width;
+        transform: translateX(
+          calc(
+            -50% + min($carousel-card-featured-width, 100vw - $carousel-card-peek-width - $size-4) /
+              2 + $size-3 + $carousel-card-peek-width / 2
+          )
+        );
       }
+
+      @media (max-width: ($breakpoint-tablet - 1px)) {
+        width: $carousel-card-peek-width-mobile;
+        transform: translateX(
+          calc(
+            -50% + $carousel-card-featured-width-mobile / 2 + $size-1 +
+              $carousel-card-peek-width-mobile / 2
+          )
+        );
+      }
+    }
+
+    &[data-slot='-1'] {
+      transform: translateX(
+        calc(-50% - $carousel-card-featured-width / 2 - $size-3 - $carousel-card-standard-width / 2)
+      );
+
+      @media (max-width: ($breakpoint-desktop - 1px)) {
+        transform: translateX(
+          calc(
+            -50% - min($carousel-card-featured-width, 100vw - $carousel-card-peek-width - $size-4) /
+              2 - $size-3 - $carousel-card-peek-width / 2
+          )
+        );
+      }
+
+      @media (max-width: ($breakpoint-tablet - 1px)) {
+        transform: translateX(
+          calc(
+            -50% - $carousel-card-featured-width-mobile / 2 - $size-1 -
+              $carousel-card-peek-width-mobile / 2
+          )
+        );
+      }
+    }
+
+    &[data-slot='2'],
+    &[data-slot='-2'] {
+      z-index: 1;
+      width: $carousel-card-peek-width;
+      transform: translateX(
+        calc(
+          -50% + $carousel-card-featured-width / 2 + $size-3 + $carousel-card-standard-width +
+            $size-3 + $carousel-card-peek-width / 2
+        )
+      );
+
+      @media (max-width: ($breakpoint-desktop - 1px)) {
+        width: 0;
+        opacity: 0;
+        pointer-events: none;
+      }
+    }
+
+    &[data-slot='-2'] {
+      transform: translateX(
+        calc(
+          -50% - $carousel-card-featured-width / 2 - $size-3 - $carousel-card-standard-width -
+            $size-3 - $carousel-card-peek-width / 2
+        )
+      );
     }
 
     &-overlay {
@@ -139,7 +213,7 @@ $carousel-card-featured-width-mobile: 218px;
       color: $color-surface;
     }
 
-    @container (min-width: #{$carousel-card-info-min-width}) {
+    @container (min-width: #{$carousel-overlay-min}) {
       .carousel__card-overlay {
         display: flex;
       }

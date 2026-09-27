@@ -143,6 +143,16 @@ function resetDialog(dialog: HTMLDialogElement): void {
   });
 }
 
+export function openGameDetailsDialog(): void {
+  const dialog = document.getElementById('game-details');
+  if (!(dialog instanceof HTMLDialogElement) || dialog.open) {
+    return;
+  }
+  resetDialog(dialog);
+  dialog.showModal();
+  document.body.classList.add('game-details-open');
+}
+
 export function initGameDetails(): void {
   const dialog = document.getElementById('game-details');
   if (!(dialog instanceof HTMLDialogElement)) {
@@ -162,22 +172,13 @@ export function initGameDetails(): void {
     }, 200);
   };
 
-  const open = (): void => {
-    if (dialog.open) {
-      return;
-    }
-    resetDialog(dialog);
-    dialog.showModal();
-    document.body.classList.add('game-details-open');
-  };
-
   document.addEventListener('click', (event) => {
     const target = event.target;
     if (!(target instanceof Element)) {
       return;
     }
     if (target.closest('.game-card__details')) {
-      open();
+      openGameDetailsDialog();
     }
   });
 
