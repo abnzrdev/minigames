@@ -9,6 +9,7 @@
 @use 'components/library-hero';
 @use 'components/library-filter-bar';
 @use 'components/library-body';
+@use 'components/game-details';
 @use 'components/pagination';
 @use 'components/footer';
 
@@ -28,7 +29,8 @@ body {
 }
 
 body.menu-open,
-body.auth-open {
+body.auth-open,
+body.game-details-open {
   overflow: hidden;
 }
 
