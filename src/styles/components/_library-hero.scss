@@ -32,7 +32,7 @@ $hero-stack-gap: $size-1;
     color: $color-on-primary;
     font-size: $font-display-small;
     font-weight: $font-weight-bold;
-    line-height: 1;
+    line-height: normal;
 
     @media (min-width: $breakpoint-tablet) {
       font-size: $font-display-medium;
@@ -50,7 +50,7 @@ $hero-stack-gap: $size-1;
     color: $color-on-bg;
     font-size: $font-body-small;
     font-weight: $font-weight-medium;
-    line-height: 1;
+    line-height: normal;
 
     @media (min-width: $breakpoint-tablet) {
       font-size: $font-body-medium;

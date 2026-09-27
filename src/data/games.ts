@@ -27,16 +27,6 @@ export const LIBRARY_GAMES: LibraryGame[] = [
     cover: vacationCover,
   },
   {
-    title: 'Shelve the Potions!',
-    category: 'Puzzle',
-    price: 'Free',
-    description:
-      "Organize 2000+ potions on shelves after the witch's cats have knocked them over, using clues around an enchanted cellar. Learn strange symbols and decipher cryptic notes.",
-    rating: '4.7',
-    likes: '21.3K',
-    cover: potionsCover,
-  },
-  {
     title: 'Winter Burrow',
     category: 'Farm',
     price: 'Free',
@@ -45,6 +35,16 @@ export const LIBRARY_GAMES: LibraryGame[] = [
     rating: '4.9',
     likes: '32.4K',
     cover: winterCover,
+  },
+  {
+    title: 'Shelve the Potions!',
+    category: 'Puzzle',
+    price: 'Free',
+    description:
+      "Organize 2000+ potions on shelves after the witch's cats have knocked them over, using clues around an enchanted cellar. Learn strange symbols and decipher cryptic notes.",
+    rating: '4.7',
+    likes: '21.3K',
+    cover: potionsCover,
   },
   {
     title: 'Heartopia',
@@ -57,16 +57,6 @@ export const LIBRARY_GAMES: LibraryGame[] = [
     cover: heartopiaCover,
   },
   {
-    title: 'Cat Mail Co.',
-    category: 'Puzzle',
-    price: 'Free',
-    description:
-      'Run a cozy cat post office. Sort and deliver parcels from the daily boat. At night, the moon reveals hidden truths about packages. Clear a strange backlog and unlock new destinations.',
-    rating: '4.9',
-    likes: '38.2K',
-    cover: catMailCover,
-  },
-  {
     title: 'Palia',
     category: 'Strategy',
     price: 'Free',
@@ -75,5 +65,15 @@ export const LIBRARY_GAMES: LibraryGame[] = [
     rating: '4.8',
     likes: '89.5K',
     cover: paliaCover,
+  },
+  {
+    title: 'Cat Mail Co.',
+    category: 'Puzzle',
+    price: 'Free',
+    description:
+      'Run a cozy cat post office. Sort and deliver parcels from the daily boat. At night, the moon reveals hidden truths about packages. Clear a strange backlog and unlock new destinations.',
+    rating: '4.9',
+    likes: '38.2K',
+    cover: catMailCover,
   },
 ];

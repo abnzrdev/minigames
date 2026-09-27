@@ -19,7 +19,7 @@ $card-height-tablet: calc($size-15 + $size-4);
     }
 
     @include respond-to('desktop') {
-      padding: $size-2 $size-15;
+      padding: 0 $size-15;
     }
   }
 
@@ -34,7 +34,7 @@ $card-height-tablet: calc($size-15 + $size-4);
 
     @include respond-to('desktop') {
       grid-template-columns: 1fr 1fr;
-      gap: $size-2;
+      gap: $size-3;
     }
   }
 }
@@ -54,6 +54,11 @@ $card-height-tablet: calc($size-15 + $size-4);
     height: $card-height-tablet;
   }
 
+  @include respond-to('desktop') {
+    height: calc($size-15 + $size-10);
+    border-width: $size-carousel-stroke;
+  }
+
   &__media {
     flex-shrink: 0;
     width: 100%;
@@ -64,6 +69,10 @@ $card-height-tablet: calc($size-15 + $size-4);
       width: $card-thumb-width;
       height: auto;
       align-self: stretch;
+    }
+
+    @include respond-to('desktop') {
+      width: calc($size-15 * 2 + $size-10);
     }
   }
 
@@ -123,6 +132,10 @@ $card-height-tablet: calc($size-15 + $size-4);
     font-size: $font-headline-small;
     font-weight: $font-weight-bold;
     line-height: 1;
+
+    @include respond-to('desktop') {
+      font-size: $font-headline-medium;
+    }
   }
 
   &__category {
@@ -138,6 +151,10 @@ $card-height-tablet: calc($size-15 + $size-4);
 
     @media (min-width: $breakpoint-tablet) {
       padding: $size-05 $size-1;
+    }
+
+    @include respond-to('desktop') {
+      border-width: $size-stroke;
     }
   }
 
@@ -155,6 +172,10 @@ $card-height-tablet: calc($size-15 + $size-4);
 
     @media (min-width: $breakpoint-tablet) {
       display: block;
+    }
+
+    @include respond-to('desktop') {
+      font-size: $font-headline-medium;
     }
   }
 
@@ -179,6 +200,11 @@ $card-height-tablet: calc($size-15 + $size-4);
 
     @media (min-width: $breakpoint-tablet) {
       -webkit-line-clamp: 1;
+    }
+
+    @include respond-to('desktop') {
+      font-size: $font-body-medium;
+      -webkit-line-clamp: 3;
     }
   }
 
@@ -213,6 +239,10 @@ $card-height-tablet: calc($size-15 + $size-4);
     display: flex;
     align-items: center;
     gap: $size-2;
+
+    @include respond-to('desktop') {
+      gap: $size-3;
+    }
   }
 
   &__stat {
@@ -223,6 +253,10 @@ $card-height-tablet: calc($size-15 + $size-4);
     font-size: $font-label-medium;
     font-weight: $font-weight-bold;
     line-height: 1;
+
+    @include respond-to('desktop') {
+      font-size: $font-label-large;
+    }
   }
 
   &__icon {
@@ -233,6 +267,11 @@ $card-height-tablet: calc($size-15 + $size-4);
 
     &--like {
       color: $color-like;
+    }
+
+    @include respond-to('desktop') {
+      width: $size-icon-medium;
+      height: $size-icon-medium;
     }
   }
 
@@ -253,6 +292,10 @@ $card-height-tablet: calc($size-15 + $size-4);
     @media (min-width: $breakpoint-tablet) {
       width: auto;
       padding: $size-1 $size-2;
+    }
+
+    @include respond-to('desktop') {
+      padding: calc($size-1 + $size-025) $size-icon-medium;
     }
 
     &:hover {

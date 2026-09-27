@@ -81,6 +81,7 @@
 
     @include respond-to('desktop') {
       font-size: $font-headline-medium;
+      line-height: $line-height-normal;
     }
   }
 
@@ -124,7 +125,7 @@
 
   &__col-title {
     margin: 0 0 $size-2;
-    font-size: $font-label-extra-large;
+    font-size: $font-body-medium;
     font-weight: $font-weight-bold;
     line-height: $line-height-tight;
     color: $color-surface;
@@ -257,7 +258,7 @@
     justify-content: center;
     width: $size-icon-medium;
     height: $size-icon-medium;
-    border-radius: $corner-full;
+    border-radius: $corner-medium;
     flex-shrink: 0;
 
     @include respond-to('desktop') {
