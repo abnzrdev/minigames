@@ -12,6 +12,8 @@ $filter-chip-pad-y: $size-1;
 $filter-chip-pad-x: $size-2;
 $filter-chip-border: $size-025;
 $filter-sort-height-mobile: $size-5;
+$filter-chip-height-desktop: 33px;
+$filter-sort-height-desktop: 44px;
 $filter-sort-pad-y: $size-1;
 $filter-sort-pad-x: $size-2;
 $filter-sort-border: $size-025;
@@ -111,6 +113,11 @@ $filter-sort-border: $size-025;
       font-size: $font-label-large;
     }
 
+    @include respond-to('desktop') {
+      height: $filter-chip-height-desktop;
+      padding: 0 calc($size-2 - $size-025);
+    }
+
     &:hover {
       background-color: $color-bg;
     }
@@ -152,7 +159,8 @@ $filter-sort-border: $size-025;
     }
 
     @include respond-to('desktop') {
-      padding: $size-btn-medium-y $size-icon-medium;
+      height: $filter-sort-height-desktop;
+      padding: 0 calc($size-icon-medium - $size-025);
     }
 
     &:hover {
