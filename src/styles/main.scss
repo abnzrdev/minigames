@@ -4,6 +4,8 @@
 @use 'components/library-hero';
 @use 'components/library-filter-bar';
 @use 'components/library-body';
+@use 'components/pagination';
+@use 'components/footer';
 
 * {
   box-sizing: border-box;

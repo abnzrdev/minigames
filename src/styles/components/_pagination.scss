@@ -1,0 +1,62 @@
+@use '../abstracts/tokens' as *;
+@use '../abstracts/breakpoints' as *;
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  background-color: $color-bg;
+  padding: $size-3 $size-2;
+
+  @media (min-width: $breakpoint-tablet) {
+    padding: $size-5;
+  }
+
+  &__controls {
+    display: flex;
+    align-items: center;
+    gap: $size-1;
+
+    @include respond-to('desktop') {
+      gap: $size-2;
+    }
+  }
+
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: $size-5;
+    height: $size-5;
+    padding: 0;
+    border: $size-025 solid $color-on-primary;
+    border-radius: $corner-full;
+    background-color: $color-surface;
+    color: $color-on-primary;
+    font-family: inherit;
+    font-size: $font-label-large;
+    font-weight: $font-weight-bold;
+    line-height: 1;
+    cursor: pointer;
+
+    &:hover:not(:disabled):not(&--active) {
+      background-color: $color-secondary;
+    }
+
+    &--active {
+      background-color: $color-footer-icon-bg;
+      color: $color-surface;
+    }
+
+    &:disabled {
+      background-color: $color-bg;
+      border-color: $color-outline-variant;
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    svg {
+      width: $size-3;
+      height: $size-3;
+    }
+  }
+}

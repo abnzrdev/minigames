@@ -1,0 +1,300 @@
+@use '../abstracts/tokens' as *;
+@use '../abstracts/breakpoints' as *;
+
+$footer-rule: 1px;
+
+.footer {
+  background-color: $color-footer-bg;
+  color: $color-footer-muted;
+
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    gap: $size-3;
+    width: 100%;
+    max-width: $size-layout-max;
+    margin-inline: auto;
+    padding: $size-4 $size-2;
+
+    @media (min-width: $breakpoint-tablet) {
+      gap: $size-5;
+      padding: $size-5;
+    }
+
+    @include respond-to('desktop') {
+      gap: $size-8;
+      padding: $size-5 $size-15;
+    }
+  }
+
+  &__top,
+  &__brand {
+    display: flex;
+    flex-direction: column;
+    gap: $size-3;
+  }
+
+  &__brand {
+    @include respond-to('desktop') {
+      width: $size-footer-brand;
+      flex-shrink: 0;
+    }
+  }
+
+  &__top {
+    @include respond-to('desktop') {
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: $size-10;
+    }
+  }
+
+  &__logo {
+    display: inline-flex;
+    align-items: center;
+    gap: $size-1;
+    width: fit-content;
+    text-decoration: none;
+    line-height: 0;
+  }
+
+  &__logo-mark {
+    display: block;
+    width: $size-4;
+    height: $size-4;
+    overflow: hidden;
+    flex-shrink: 0;
+    border-radius: $corner-extra-small;
+
+    img {
+      display: block;
+      width: $size-brand-logo-source-width;
+      max-width: none;
+      height: $size-4;
+    }
+  }
+
+  &__logo-text {
+    font-size: $font-headline-small;
+    font-weight: $font-weight-bold;
+    color: $color-surface;
+    line-height: 1;
+
+    @include respond-to('desktop') {
+      font-size: $font-headline-medium;
+    }
+  }
+
+  &__tagline {
+    margin: 0;
+    font-size: $font-body-small;
+    line-height: $line-height-normal;
+    color: $color-footer-muted;
+  }
+
+  &__links {
+    display: flex;
+    flex-direction: column;
+    gap: $size-3;
+
+    @media (min-width: $breakpoint-tablet) {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: $size-5;
+    }
+
+    @include respond-to('desktop') {
+      gap: $size-10;
+    }
+  }
+
+  &__nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: $size-5;
+
+    @media (min-width: $breakpoint-tablet) {
+      display: flex;
+      gap: $size-5;
+    }
+
+    @include respond-to('desktop') {
+      gap: $size-10;
+    }
+  }
+
+  &__col-title {
+    margin: 0 0 $size-2;
+    font-size: $font-label-extra-large;
+    font-weight: $font-weight-bold;
+    line-height: $line-height-tight;
+    color: $color-surface;
+  }
+
+  &__col-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $size-2;
+    font-size: $font-body-small;
+    line-height: $line-height-tight;
+
+    a {
+      color: $color-footer-muted;
+      text-decoration: none;
+      font-size: inherit;
+      line-height: inherit;
+
+      &:hover {
+        color: $color-surface;
+      }
+    }
+  }
+
+  &__social {
+    display: flex;
+    gap: $size-2;
+  }
+
+  &__social-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: $size-4;
+    height: $size-4;
+    border-radius: $corner-full;
+    background-color: $color-footer-icon-bg;
+    color: $color-surface;
+
+    svg {
+      width: $size-2;
+      height: $size-2;
+    }
+
+    @include respond-to('desktop') {
+      width: $size-5;
+      height: $size-5;
+
+      svg {
+        width: $size-icon-medium;
+        height: $size-icon-medium;
+      }
+    }
+
+    &:hover {
+      background-color: $color-on-primary;
+    }
+  }
+
+  &__bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $size-1;
+    border-top: $footer-rule solid $color-footer-line;
+    padding-top: $size-1;
+
+    @media (min-width: $breakpoint-tablet) {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0;
+      padding-top: $size-2;
+    }
+
+    @include respond-to('desktop') {
+      padding-top: $size-3;
+    }
+  }
+
+  &__credits {
+    display: flex;
+    align-items: center;
+    gap: $size-2;
+
+    @media (min-width: $breakpoint-tablet) {
+      display: contents;
+    }
+  }
+
+  &__copy,
+  &__note,
+  &__credit {
+    margin: 0;
+    font-size: $font-label-medium;
+    line-height: $line-height-tight;
+    color: $color-footer-muted;
+    white-space: nowrap;
+
+    @media (min-width: $breakpoint-tablet) {
+      font-size: $font-body-small;
+    }
+  }
+
+  &__note {
+    display: none;
+
+    @media (min-width: $breakpoint-tablet) {
+      display: block;
+    }
+  }
+
+  &__credit {
+    display: inline-flex;
+    align-items: center;
+    gap: $size-1;
+    text-decoration: none;
+
+    &:hover {
+      color: $color-surface;
+    }
+  }
+
+  &__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: $size-icon-medium;
+    height: $size-icon-medium;
+    border-radius: $corner-full;
+    flex-shrink: 0;
+
+    @include respond-to('desktop') {
+      width: $size-3;
+      height: $size-3;
+    }
+  }
+
+  &__badge--rs {
+    background-color: $color-on-primary;
+    color: $color-primary;
+    font-size: $font-label-extra-small;
+    font-weight: $font-weight-bold;
+    letter-spacing: calc($size-025 * -0.15);
+    line-height: 1;
+
+    @include respond-to('desktop') {
+      font-size: $font-label-small;
+      letter-spacing: calc($size-025 * -0.25);
+    }
+  }
+
+  &__badge--github {
+    background-color: $color-surface;
+    color: $color-on-primary;
+  }
+
+  &__code-icon {
+    display: block;
+    width: $font-label-large;
+    height: $font-label-large;
+
+    @include respond-to('desktop') {
+      width: $size-2;
+      height: $size-2;
+    }
+  }
+}
