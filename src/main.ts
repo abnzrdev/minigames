@@ -2,6 +2,7 @@ import './styles/main.scss';
 import { renderAuthDialog } from './components/AuthDialog';
 import { renderCarousel } from './components/Carousel';
 import { renderFooter } from './components/Footer';
+import { initGameDetails, renderGameDetails } from './components/GameDetails';
 import { renderGameDev } from './components/GameDev';
 import { applyHeaderPage, renderHeader } from './components/Header';
 import { renderHero } from './components/Hero';
@@ -49,7 +50,9 @@ if (app) {
   app.appendChild(content);
   app.appendChild(renderFooter());
   app.appendChild(renderAuthDialog());
+  app.appendChild(renderGameDetails());
   initAuthDialog();
+  initGameDetails();
 
   function show(page: AppPage): void {
     applyHeaderPage(page);
