@@ -1,0 +1,264 @@
+@use '../abstracts/tokens' as *;
+@use '../abstracts/breakpoints' as *;
+
+// Figma 2:1055 mobile image 160; 2:857 tablet thumb 270 × card hug 152.
+$card-media-mobile-height: calc($size-15 + $size-5);
+$card-thumb-width: calc($size-15 + $size-15 + $size-4);
+$card-height-tablet: calc($size-15 + $size-4);
+
+.library-body {
+  background-color: $color-bg;
+
+  &__inner {
+    max-width: $size-layout-max;
+    margin-inline: auto;
+    padding: $size-2;
+
+    @media (min-width: $breakpoint-tablet) {
+      padding: 0 $size-5;
+    }
+
+    @include respond-to('desktop') {
+      padding: $size-2 $size-15;
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $size-2;
+
+    @media (min-width: $breakpoint-tablet) {
+      gap: $size-3;
+    }
+
+    @include respond-to('desktop') {
+      grid-template-columns: 1fr 1fr;
+      gap: $size-2;
+    }
+  }
+}
+
+.game-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: $color-surface;
+  border: $size-025 solid $color-on-primary;
+  border-radius: $corner-large;
+  box-shadow: $shadow-level-1;
+
+  @media (min-width: $breakpoint-tablet) {
+    flex-direction: row;
+    align-items: stretch;
+    height: $card-height-tablet;
+  }
+
+  &__media {
+    flex-shrink: 0;
+    width: 100%;
+    height: $card-media-mobile-height;
+    overflow: hidden;
+
+    @media (min-width: $breakpoint-tablet) {
+      width: $card-thumb-width;
+      height: auto;
+      align-self: stretch;
+    }
+  }
+
+  &__cover {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: $size-2;
+    min-width: 0;
+    padding: $size-2;
+    flex: 1;
+
+    @media (min-width: $breakpoint-tablet) {
+      justify-content: space-between;
+      gap: 0;
+    }
+  }
+
+  &__top {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $size-1;
+
+    @media (min-width: $breakpoint-tablet) {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: $size-2;
+      width: 100%;
+    }
+  }
+
+  &__heading {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $size-1;
+    min-width: 0;
+
+    @media (min-width: $breakpoint-tablet) {
+      flex-direction: row;
+      align-items: center;
+      gap: $size-2;
+    }
+  }
+
+  &__title {
+    margin: 0;
+    color: $color-on-primary;
+    font-size: $font-headline-small;
+    font-weight: $font-weight-bold;
+    line-height: 1;
+  }
+
+  &__category {
+    padding: $size-025 $size-1;
+    border: $size-025 solid $color-on-primary;
+    border-radius: $corner-extra-large;
+    background-color: $color-secondary;
+    color: $color-on-primary;
+    font-size: $font-label-medium;
+    font-weight: $font-weight-bold;
+    line-height: 1;
+    white-space: nowrap;
+
+    @media (min-width: $breakpoint-tablet) {
+      padding: $size-05 $size-1;
+    }
+  }
+
+  &__price {
+    display: none;
+    white-space: nowrap;
+    color: $color-on-primary;
+    font-size: $font-headline-small;
+    font-weight: $font-weight-bold;
+    line-height: 1;
+
+    &--free {
+      color: $color-price-free;
+    }
+
+    @media (min-width: $breakpoint-tablet) {
+      display: block;
+    }
+  }
+
+  &__price--mobile {
+    display: block;
+
+    @media (min-width: $breakpoint-tablet) {
+      display: none;
+    }
+  }
+
+  &__description {
+    margin: 0;
+    color: $color-on-bg;
+    font-size: $font-body-small;
+    font-weight: $font-weight-medium;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-clamp: 2;
+    overflow: hidden;
+
+    @media (min-width: $breakpoint-tablet) {
+      -webkit-line-clamp: 1;
+      line-clamp: 1;
+    }
+  }
+
+  &__footer {
+    display: flex;
+    flex-direction: column;
+    gap: $size-2;
+    width: 100%;
+
+    @media (min-width: $breakpoint-tablet) {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: $size-1;
+    }
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $size-2;
+    width: 100%;
+
+    @media (min-width: $breakpoint-tablet) {
+      width: auto;
+      justify-content: flex-start;
+    }
+  }
+
+  &__stats {
+    display: flex;
+    align-items: center;
+    gap: $size-2;
+  }
+
+  &__stat {
+    display: inline-flex;
+    align-items: center;
+    gap: $size-05;
+    color: $color-on-primary;
+    font-size: $font-label-medium;
+    font-weight: $font-weight-bold;
+    line-height: 1;
+  }
+
+  &__icon {
+    display: block;
+    width: $size-2;
+    height: $size-2;
+    color: $color-primary;
+
+    &--like {
+      color: $color-like;
+    }
+  }
+
+  &__details {
+    width: 100%;
+    padding: calc($size-1 + $size-025) calc($size-2 + $size-05);
+    border: $size-025 solid $color-on-primary;
+    border-radius: $corner-small;
+    text-align: center;
+    background-color: $color-primary;
+    color: $color-on-primary;
+    font-family: $font-family-main;
+    font-size: $font-label-large;
+    font-weight: $font-weight-bold;
+    line-height: 1;
+    cursor: pointer;
+
+    @media (min-width: $breakpoint-tablet) {
+      width: auto;
+      padding: $size-1 $size-2;
+    }
+
+    &:hover {
+      background-color: $color-primary-high;
+    }
+  }
+}
