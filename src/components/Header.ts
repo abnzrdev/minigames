@@ -22,8 +22,20 @@ function logoMarkup(variant: 'bar' | 'menu'): string {
   }
 
   return `
-    <a href="#" class="header__logo header__logo--bar">
-      <img src="${brandLogo}" width="172" height="32" alt="MiniGames" />
+    <a href="#" class="header__logo header__logo--bar" aria-label="MiniGames">
+      <img
+        class="header__logo--bar-full"
+        src="${brandLogo}"
+        width="172"
+        height="32"
+        alt=""
+      />
+      <span class="header__logo--bar-compact">
+        <span class="header__logo-mark" aria-hidden="true">
+          <img src="${brandLogo}" width="32" height="32" alt="" />
+        </span>
+        <span class="header__logo-text header__logo-text--bar">MiniGames</span>
+      </span>
     </a>
   `;
 }

@@ -1,6 +1,11 @@
 @use '../abstracts/tokens' as *;
 @use '../abstracts/breakpoints' as *;
 
+// Nudge these only (px allowed on $var: lines).
+$hero-pad-y: $size-2;
+$hero-pad-x: $size-2;
+$hero-stack-gap: $size-1;
+
 .library-hero {
   background-color: $color-bg;
 
@@ -8,10 +13,10 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: $size-1;
+    gap: $hero-stack-gap;
     max-width: $size-layout-max;
     margin-inline: auto;
-    padding: $size-2;
+    padding: $hero-pad-y $hero-pad-x;
 
     @media (min-width: $breakpoint-tablet) {
       padding: $size-3 $size-5;
@@ -27,10 +32,11 @@
     color: $color-on-primary;
     font-size: $font-display-small;
     font-weight: $font-weight-bold;
-    line-height: $line-height-tight;
+    line-height: 1;
 
     @media (min-width: $breakpoint-tablet) {
       font-size: $font-display-medium;
+      line-height: $line-height-tight;
     }
 
     @include respond-to('desktop') {
@@ -44,10 +50,11 @@
     color: $color-on-bg;
     font-size: $font-body-small;
     font-weight: $font-weight-medium;
-    line-height: $line-height-tight;
+    line-height: 1;
 
     @media (min-width: $breakpoint-tablet) {
       font-size: $font-body-medium;
+      line-height: $line-height-tight;
     }
 
     @include respond-to('desktop') {

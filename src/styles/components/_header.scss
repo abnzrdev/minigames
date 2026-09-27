@@ -10,6 +10,7 @@ $signup-height-tablet: 33px;
   background-color: $color-bg;
   border-bottom: $size-025 solid $color-on-primary;
   box-sizing: border-box;
+  width: 100%;
   height: $header-height-mobile;
   position: relative;
   z-index: 10;
@@ -29,7 +30,7 @@ $signup-height-tablet: 33px;
     gap: $size-2;
     height: 100%;
     min-height: 0;
-    padding-block: $size-2;
+    padding-block: 0;
 
     @include respond-to('desktop') {
       gap: $size-4;
@@ -37,22 +38,48 @@ $signup-height-tablet: 33px;
     }
   }
 
+  &__logo--bar {
+    align-items: center;
+    gap: $size-1;
+    max-width: $size-brand-logo-bar-width-compact;
+    min-width: 0;
+  }
+
+  &__logo--bar-full {
+    display: none;
+    line-height: 0;
+
+    @include respond-to('desktop') {
+      display: block;
+      width: $size-brand-logo-bar-width;
+      height: $size-brand-logo-bar-height;
+    }
+  }
+
+  &__logo--bar-compact {
+    display: inline-flex;
+    align-items: center;
+    gap: $size-1;
+    min-width: 0;
+
+    @include respond-to('desktop') {
+      display: none;
+    }
+  }
+
+  &__logo-text--bar {
+    color: $color-on-primary;
+    font-size: $font-headline-small;
+    font-weight: $font-weight-bold;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
   &__logo {
     display: inline-flex;
     flex-shrink: 0;
     line-height: 0;
     text-decoration: none;
-  }
-
-  &__logo--bar img {
-    display: block;
-    width: $size-brand-logo-bar-width-compact;
-    height: auto;
-
-    @include respond-to('desktop') {
-      width: $size-brand-logo-bar-width;
-      height: $size-brand-logo-bar-height;
-    }
   }
 
   &__logo--menu {
@@ -338,6 +365,11 @@ $signup-height-tablet: 33px;
 
   &__burger {
     display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: $size-4;
+    height: $size-4;
     padding: 0;
     background: none;
     border: none;
