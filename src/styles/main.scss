@@ -1,6 +1,11 @@
 @use 'abstracts/tokens' as *;
 @use 'abstracts/breakpoints' as *;
 @use 'components/header';
+@use 'components/hero';
+@use 'components/carousel';
+@use 'components/leaderboard';
+@use 'components/game-dev';
+@use 'components/auth-dialog';
 @use 'components/library-hero';
 @use 'components/library-filter-bar';
 @use 'components/library-body';
@@ -22,7 +27,8 @@ body {
   overflow-x: clip;
 }
 
-body.menu-open {
+body.menu-open,
+body.auth-open {
   overflow: hidden;
 }
 

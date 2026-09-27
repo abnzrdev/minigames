@@ -1,16 +1,26 @@
 import './styles/main.scss';
+import { renderAuthDialog } from './components/AuthDialog';
+import { renderCarousel } from './components/Carousel';
 import { renderFooter } from './components/Footer';
+import { renderGameDev } from './components/GameDev';
 import { applyHeaderPage, renderHeader } from './components/Header';
+import { renderHero } from './components/Hero';
+import { renderLeaderboard } from './components/Leaderboard';
 import { renderLibraryBody } from './components/LibraryBody';
 import { renderLibraryPagination } from './components/LibraryPagination';
 import { renderLibraryFilterBar } from './components/LibraryFilterBar';
 import { renderLibraryHero } from './components/LibraryHero';
+import { initAuthDialog } from './utils/authDialog';
 import { currentPage, subscribePage, type AppPage } from './utils/navigation';
 
 function renderHomePage(): HTMLElement {
   const main = document.createElement('main');
   main.className = 'home-page';
   main.setAttribute('aria-label', 'Home');
+  main.appendChild(renderHero());
+  main.appendChild(renderCarousel());
+  main.appendChild(renderLeaderboard());
+  main.appendChild(renderGameDev());
   return main;
 }
 
@@ -38,6 +48,8 @@ if (app) {
   app.appendChild(renderHeader());
   app.appendChild(content);
   app.appendChild(renderFooter());
+  app.appendChild(renderAuthDialog());
+  initAuthDialog();
 
   function show(page: AppPage): void {
     applyHeaderPage(page);
