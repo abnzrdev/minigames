@@ -68,7 +68,6 @@ $signup-height-tablet: 33px;
   }
 
   &__logo-text--bar {
-    color: $color-on-primary;
     font-size: $font-headline-small;
     font-weight: $font-weight-bold;
     line-height: 1;
@@ -112,6 +111,10 @@ $signup-height-tablet: 33px;
     font-weight: $font-weight-bold;
     color: $color-surface;
     line-height: 1;
+  }
+
+  &__logo-text--bar {
+    color: $color-on-primary;
   }
 
   &__nav {
