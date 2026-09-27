@@ -10,6 +10,7 @@ $signup-height-tablet: 33px;
   background-color: $color-bg;
   border-bottom: $size-025 solid $color-on-primary;
   box-sizing: border-box;
+  width: 100%;
   height: $header-height-mobile;
   position: relative;
   z-index: 10;
@@ -29,7 +30,7 @@ $signup-height-tablet: 33px;
     gap: $size-2;
     height: 100%;
     min-height: 0;
-    padding-block: $size-2;
+    padding-block: 0;
 
     @include respond-to('desktop') {
       gap: $size-4;
@@ -37,22 +38,47 @@ $signup-height-tablet: 33px;
     }
   }
 
+  &__logo--bar {
+    align-items: center;
+    gap: $size-1;
+    max-width: $size-brand-logo-bar-width-compact;
+    min-width: 0;
+  }
+
+  &__logo--bar-full {
+    display: none;
+    line-height: 0;
+
+    @include respond-to('desktop') {
+      display: block;
+      width: $size-brand-logo-bar-width;
+      height: $size-brand-logo-bar-height;
+    }
+  }
+
+  &__logo--bar-compact {
+    display: inline-flex;
+    align-items: center;
+    gap: $size-1;
+    min-width: 0;
+
+    @include respond-to('desktop') {
+      display: none;
+    }
+  }
+
+  &__logo-text--bar {
+    font-size: $font-headline-small;
+    font-weight: $font-weight-bold;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
   &__logo {
     display: inline-flex;
     flex-shrink: 0;
     line-height: 0;
     text-decoration: none;
-  }
-
-  &__logo--bar img {
-    display: block;
-    width: $size-brand-logo-bar-width-compact;
-    height: auto;
-
-    @include respond-to('desktop') {
-      width: $size-brand-logo-bar-width;
-      height: $size-brand-logo-bar-height;
-    }
   }
 
   &__logo--menu {
@@ -87,106 +113,102 @@ $signup-height-tablet: 33px;
     line-height: 1;
   }
 
+  &__logo-text--bar {
+    color: $color-on-primary;
+  }
+
   &__nav {
-    visibility: hidden;
-    opacity: 0;
-    pointer-events: none;
-    position: fixed;
-    inset: 0;
-    z-index: 20;
     display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: flex-start;
-    gap: $size-5;
-    margin: 0;
-    padding: $size-3 $size-4 $size-5;
+    flex-direction: row;
+    align-items: center;
+    gap: $size-4;
+    margin-left: auto;
     min-width: 0;
-    background-color: $color-on-primary;
-    transition:
-      opacity 0.25s ease,
-      visibility 0.25s ease;
+    padding: 0;
+    background-color: transparent;
 
-    &--open {
-      visibility: visible;
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    @include respond-to('desktop') {
-      visibility: visible;
-      opacity: 1;
-      pointer-events: auto;
-      position: static;
-      inset: auto;
-      z-index: auto;
-      flex-direction: row;
-      align-items: center;
+    @include respond-to('tablet') {
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
       gap: $size-4;
-      margin-left: auto;
-      padding: 0;
-      background-color: transparent;
-      transition: none;
+      margin: 0;
+      padding: $size-3;
+      background-color: $color-footer-bg;
+      transition:
+        opacity 0.25s ease,
+        visibility 0.25s ease;
 
       &--open {
+        visibility: visible;
+        opacity: 1;
         pointer-events: auto;
       }
     }
   }
 
   &__menu-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: $size-3;
+    display: none;
 
-    @include respond-to('desktop') {
-      display: none;
+    @include respond-to('tablet') {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: $size-3;
     }
   }
 
   &__menu-close {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: $size-5;
-    height: $size-5;
-    border: $size-025 solid $color-surface;
-    border-radius: $corner-medium;
-    background-color: $color-on-primary;
-    color: $color-surface;
-    font-size: $font-headline-large;
-    line-height: 1;
-    cursor: pointer;
+    display: none;
 
-    @include respond-to('desktop') {
-      display: none;
+    @include respond-to('tablet') {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: $size-4;
+      height: $size-4;
+      padding: 0;
+      border: none;
+      border-radius: $corner-small;
+      background-color: $color-footer-icon-bg;
+      color: $color-surface;
+      font-size: $font-headline-small;
+      line-height: 1;
+      cursor: pointer;
     }
   }
 
   &__nav-links {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: $size-3;
+    flex-direction: row;
+    align-items: center;
+    gap: $size-2;
     list-style: none;
-    margin: $size-2 0 0;
+    margin: 0;
     padding: 0;
-    flex-shrink: 1;
     min-width: 0;
 
     @include respond-to('desktop') {
-      flex-direction: row;
-      align-items: center;
       gap: $size-5;
-      margin: 0;
+    }
+
+    @include respond-to('tablet') {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: $size-3;
     }
   }
 
   &__link {
-    color: $color-nav-muted;
+    color: $color-on-primary;
     text-decoration: none;
-    font-size: $font-headline-small;
+    font-size: $font-body-medium;
     font-weight: $font-weight-medium;
     line-height: $line-height-tight;
     cursor: pointer;
@@ -194,32 +216,34 @@ $signup-height-tablet: 33px;
     transition: color 0.2s ease;
 
     &:hover {
-      color: $color-surface;
+      color: $color-tertiary;
     }
 
     &--active {
       font-weight: $font-weight-bold;
-      color: $color-primary;
+      color: $color-on-primary;
     }
 
     &--muted {
-      color: $color-nav-muted;
+      color: $color-on-bg;
     }
 
-    @include respond-to('desktop') {
-      color: $color-on-primary;
-      font-size: $font-body-medium;
+    @include respond-to('tablet') {
+      font-size: $font-body-large;
+      color: $color-footer-muted;
 
       &:hover {
-        color: $color-tertiary;
+        color: $color-surface;
       }
 
       &--active {
-        color: $color-on-primary;
+        font-weight: $font-weight-bold;
+        color: $color-primary;
       }
 
       &--muted {
-        color: $color-on-bg;
+        font-weight: $font-weight-medium;
+        color: $color-footer-muted;
       }
     }
   }
@@ -243,14 +267,14 @@ $signup-height-tablet: 33px;
   }
 
   &__auth {
-    display: flex;
-    flex-direction: column;
-    gap: $size-2;
-    width: 100%;
-    margin-top: auto;
+    display: none;
 
-    @include respond-to('desktop') {
-      display: none;
+    @include respond-to('tablet') {
+      display: flex;
+      flex-direction: column;
+      gap: $size-2;
+      width: 100%;
+      margin-top: auto;
     }
   }
 
@@ -308,10 +332,8 @@ $signup-height-tablet: 33px;
     }
 
     &--desktop {
-      display: none;
-
-      @include respond-to('desktop') {
-        display: inline-flex;
+      @include respond-to('tablet') {
+        display: none;
       }
     }
   }
@@ -319,9 +341,11 @@ $signup-height-tablet: 33px;
   &__auth--menu &__auth-btn {
     width: 100%;
     height: auto;
-    min-height: $size-6;
+    min-height: $size-5;
+    padding: $size-btn-medium-y $size-icon-medium;
+    font-size: $font-body-small;
     white-space: nowrap;
-    border-radius: $corner-medium;
+    border-radius: $corner-small;
     box-shadow: none;
   }
 
@@ -337,7 +361,12 @@ $signup-height-tablet: 33px;
   }
 
   &__burger {
-    display: inline-flex;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: $size-4;
+    height: $size-4;
     padding: 0;
     background: none;
     border: none;
@@ -352,8 +381,8 @@ $signup-height-tablet: 33px;
       height: $size-4;
     }
 
-    @include respond-to('desktop') {
-      display: none;
+    @include respond-to('tablet') {
+      display: inline-flex;
     }
   }
 }

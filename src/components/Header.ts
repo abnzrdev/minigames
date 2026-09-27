@@ -1,18 +1,19 @@
 import brandLogo from '../assets/games/Brand Logo.svg';
 import hamburgerIcon from '../assets/games/Hamburger Button.svg';
+import { bindPageLinks, currentPage, type AppPage } from '../utils/navigation';
 import { closeMobileMenu, openAuthDialog, toggleMobileMenu } from '../utils/authDialog';
 
-const NAV_LINKS: { label: string; href: string; active?: boolean }[] = [
-  { label: 'Home', href: '#', active: true },
-  { label: 'Library', href: '#' },
-  { label: 'Tournaments', href: '#' },
-  { label: 'Community', href: '#' },
+const NAV_LINKS: { label: string; target: AppPage; nav?: AppPage }[] = [
+  { label: 'Home', target: 'home', nav: 'home' },
+  { label: 'Library', target: 'library', nav: 'library' },
+  { label: 'Tournaments', target: 'home' },
+  { label: 'Community', target: 'home' },
 ];
 
 function logoMarkup(variant: 'bar' | 'menu'): string {
   if (variant === 'menu') {
     return `
-      <a href="#" class="header__logo header__logo--menu">
+      <a href="#home" class="header__logo header__logo--menu" data-target="home">
         <span class="header__logo-mark" aria-hidden="true">
           <img src="${brandLogo}" width="32" height="32" alt="" />
         </span>
@@ -22,8 +23,20 @@ function logoMarkup(variant: 'bar' | 'menu'): string {
   }
 
   return `
-    <a href="#" class="header__logo header__logo--bar">
-      <img src="${brandLogo}" width="172" height="32" alt="MiniGames" />
+    <a href="#home" class="header__logo header__logo--bar" data-target="home" aria-label="MiniGames">
+      <img
+        class="header__logo--bar-full"
+        src="${brandLogo}"
+        width="172"
+        height="32"
+        alt=""
+      />
+      <span class="header__logo--bar-compact">
+        <span class="header__logo-mark" aria-hidden="true">
+          <img src="${brandLogo}" width="32" height="32" alt="" />
+        </span>
+        <span class="header__logo-text header__logo-text--bar">MiniGames</span>
+      </span>
     </a>
   `;
 }
@@ -32,9 +45,11 @@ export function renderHeader(): HTMLElement {
   const header = document.createElement('header');
   header.className = 'header';
 
-  const navLinks = NAV_LINKS.map(({ label, href, active }) => {
-    const activeClass = active ? ' header__link--active' : ' header__link--muted';
-    return `<li><a href="${href}" class="header__link${activeClass}">${label}</a></li>`;
+  const navLinks = NAV_LINKS.map(({ label, target, nav }) => {
+    const isActive = Boolean(nav && nav === currentPage());
+    const activeClass = isActive ? ' header__link--active' : ' header__link--muted';
+    const navAttr = nav ? ` data-nav="${nav}"` : '';
+    return `<li><a href="#${target}" class="header__link${activeClass}" data-target="${target}"${navAttr}>${label}</a></li>`;
   }).join('');
 
   header.innerHTML = `
@@ -89,6 +104,8 @@ export function renderHeader(): HTMLElement {
   const menuLoginBtn = header.querySelector<HTMLButtonElement>('#auth-menu-login-btn');
   const menuSignupBtn = header.querySelector<HTMLButtonElement>('#auth-menu-signup-btn');
 
+  bindPageLinks(header);
+
   burgerBtn?.addEventListener('click', () => {
     toggleMobileMenu();
   });
@@ -113,4 +130,12 @@ export function renderHeader(): HTMLElement {
   menuSignupBtn?.addEventListener('click', () => openAuthDialog('register'));
 
   return header;
+}
+
+export function applyHeaderPage(page: AppPage): void {
+  document.querySelectorAll<HTMLAnchorElement>('[data-nav]').forEach((link) => {
+    const active = link.dataset.nav === page;
+    link.classList.toggle('header__link--active', active);
+    link.classList.toggle('header__link--muted', !active);
+  });
 }

@@ -20,6 +20,7 @@ $color-on-bg: #5f5d75;
 $color-footer-muted: #b9b5c9;
 $color-footer-icon-bg: #2a264f;
 $color-footer-bg: #1e1b3a;
+$color-footer-line: rgb(185 181 201 / 28%);
 
 // Avatar Backgrounds
 $color-avatar-1: #e9eef6;
@@ -55,6 +56,8 @@ $size-brand-logo-source-width: 172px;
 
 // Header bar (Figma 25:2458)
 $size-header-height: 85px;
+$size-footer-brand: 400px;
+$size-icon-medium: 20px;
 
 // Auth buttons (Figma 25:2470 / 25:2472)
 $size-auth-btn-height: 37px;
@@ -79,6 +82,7 @@ $font-label-extra-large: 16px;
 $font-label-large: 14px;
 $font-label-medium: 12px;
 $font-label-small: 10px;
+$font-label-extra-small: 8px;
 
 // Typography: Font Weights
 $font-weight-regular: 400;

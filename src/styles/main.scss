@@ -1,6 +1,16 @@
 @use 'abstracts/tokens' as *;
 @use 'abstracts/breakpoints' as *;
 @use 'components/header';
+@use 'components/hero';
+@use 'components/carousel';
+@use 'components/leaderboard';
+@use 'components/game-dev';
+@use 'components/auth-dialog';
+@use 'components/library-hero';
+@use 'components/library-filter-bar';
+@use 'components/library-body';
+@use 'components/pagination';
+@use 'components/footer';
 
 * {
   box-sizing: border-box;
@@ -14,9 +24,11 @@ body {
   color: $color-on-primary;
   line-height: $line-height-normal;
   min-height: 100vh;
+  overflow-x: clip;
 }
 
-body.menu-open {
+body.menu-open,
+body.auth-open {
   overflow: hidden;
 }
 

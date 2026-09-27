@@ -1,8 +1,61 @@
 import './styles/main.scss';
-import { renderHeader } from './components/Header';
+import { renderAuthDialog } from './components/AuthDialog';
+import { renderCarousel } from './components/Carousel';
+import { renderFooter } from './components/Footer';
+import { renderGameDev } from './components/GameDev';
+import { applyHeaderPage, renderHeader } from './components/Header';
+import { renderHero } from './components/Hero';
+import { renderLeaderboard } from './components/Leaderboard';
+import { renderLibraryBody } from './components/LibraryBody';
+import { renderLibraryPagination } from './components/LibraryPagination';
+import { renderLibraryFilterBar } from './components/LibraryFilterBar';
+import { renderLibraryHero } from './components/LibraryHero';
+import { initAuthDialog } from './utils/authDialog';
+import { currentPage, subscribePage, type AppPage } from './utils/navigation';
+
+function renderHomePage(): HTMLElement {
+  const main = document.createElement('main');
+  main.className = 'home-page';
+  main.setAttribute('aria-label', 'Home');
+  main.appendChild(renderHero());
+  main.appendChild(renderCarousel());
+  main.appendChild(renderLeaderboard());
+  main.appendChild(renderGameDev());
+  return main;
+}
+
+function renderLibraryPage(): HTMLElement {
+  const main = document.createElement('main');
+  main.className = 'library-page';
+  main.setAttribute('aria-label', 'Library');
+  main.appendChild(renderLibraryHero());
+  main.appendChild(renderLibraryFilterBar());
+  main.appendChild(renderLibraryBody());
+  main.appendChild(renderLibraryPagination());
+  return main;
+}
+
+function pageView(page: AppPage): HTMLElement {
+  return page === 'library' ? renderLibraryPage() : renderHomePage();
+}
 
 const app = document.getElementById('app');
 if (app) {
+  const content = document.createElement('div');
+  content.id = 'page-content';
+
   app.replaceChildren();
   app.appendChild(renderHeader());
+  app.appendChild(content);
+  app.appendChild(renderFooter());
+  app.appendChild(renderAuthDialog());
+  initAuthDialog();
+
+  function show(page: AppPage): void {
+    applyHeaderPage(page);
+    content.replaceChildren(pageView(page));
+  }
+
+  subscribePage(show);
+  show(currentPage());
 }
