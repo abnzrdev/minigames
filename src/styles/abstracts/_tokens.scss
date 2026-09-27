@@ -64,8 +64,6 @@ $size-auth-btn-height: 37px;
 $size-auth-btn-login-width: 82px;
 $size-auth-btn-signup-width: 93px;
 $size-btn-medium-y: calc($size-1 + $size-025);
-$size-auth-dialog-width: 420px;
-$size-auth-panel-min-height: 280px;
 $size-signup-width-tablet: 85px;
 $size-signup-height-tablet: 33px;
 
@@ -76,6 +74,14 @@ $size-carousel-center-mobile: 218px;
 $size-game-details-width: 600px;
 $size-game-details-hero: 220px;
 $size-hero-panel-tablet: 480px;
+
+// Auth dialog (Figma 2:1327 / 2:1363)
+$size-auth-dialog-width: 420px;
+$size-auth-dialog-border: 3px;
+$size-auth-dialog-stroke: 2.5px;
+$size-auth-dialog-rule: 1px;
+$size-auth-dialog-cta: 52px;
+$size-auth-dialog-google: 50px;
 
 // Layout
 $size-layout-max: 1920px;
