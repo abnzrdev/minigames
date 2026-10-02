@@ -1,4 +1,5 @@
 ﻿import heroRoomArt from '../assets/games/hero-bg.jpg';
+import { navigateTo } from '../utils/navigation';
 
 export function renderHero(): HTMLElement {
   const section = document.createElement('section');
@@ -20,6 +21,10 @@ export function renderHero(): HTMLElement {
       </div>
     </div>
   `;
+
+  section.querySelector('.hero__cta')?.addEventListener('click', () => {
+    navigateTo('library');
+  });
 
   return section;
 }

@@ -8,7 +8,7 @@
     position: relative;
     width: 100%;
     overflow: hidden;
-    border-block: 2px solid $color-on-primary;
+    border-block: $size-025 solid $color-on-primary;
     min-height: calc($size-15 * 4);
 
     @media (min-width: $breakpoint-desktop) {
@@ -42,7 +42,7 @@
     min-height: inherit;
     padding-block: $size-5;
 
-    @media (min-width: 1024px) {
+    @media (min-width: $breakpoint-desktop) {
       padding-block: $size-8;
     }
   }
@@ -51,12 +51,12 @@
     max-width: calc($size-15 * 5 + $size-5);
     padding: $size-4;
     background-color: $color-bg;
-    border: 2px solid $color-on-primary;
+    border: $size-025 solid $color-on-primary;
     border-radius: $corner-extra-large;
     box-shadow: $shadow-level-2;
 
     @include respond-to('tablet') {
-      width: min(480px, 100%);
+      width: min($size-hero-panel-tablet, 100%);
       max-width: none;
       padding: $size-3;
       border-radius: $corner-large;
@@ -70,7 +70,7 @@
       box-shadow: $shadow-level-1;
     }
 
-    @media (min-width: 1024px) {
+    @media (min-width: $breakpoint-desktop) {
       padding: $size-5;
     }
   }
@@ -123,7 +123,7 @@
     font-family: inherit;
     font-size: $font-label-extra-large;
     font-weight: $font-weight-bold;
-    border: 2px solid $color-on-primary;
+    border: $size-025 solid $color-on-primary;
     border-radius: $corner-small;
     box-shadow: $shadow-level-1;
     cursor: pointer;
@@ -148,7 +148,7 @@
     }
 
     @media (min-width: $breakpoint-tablet) and (max-width: ($breakpoint-desktop - 1px)) {
-      padding: 10px 20px;
+      padding: calc($size-1 + $size-025) $size-icon-medium;
       font-size: $font-body-small;
     }
   }

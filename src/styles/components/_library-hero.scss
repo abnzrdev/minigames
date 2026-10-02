@@ -1,0 +1,65 @@
+@use '../abstracts/tokens' as *;
+@use '../abstracts/breakpoints' as *;
+
+// Nudge these only (px allowed on $var: lines).
+$hero-pad-y: $size-2;
+$hero-pad-x: $size-2;
+$hero-stack-gap: $size-1;
+
+.library-hero {
+  background-color: $color-bg;
+
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $hero-stack-gap;
+    max-width: $size-layout-max;
+    margin-inline: auto;
+    padding: $hero-pad-y $hero-pad-x;
+
+    @media (min-width: $breakpoint-tablet) {
+      padding: $size-3 $size-5;
+    }
+
+    @include respond-to('desktop') {
+      padding: $size-5 $size-15;
+    }
+  }
+
+  &__title {
+    margin: 0;
+    color: $color-on-primary;
+    font-size: $font-display-small;
+    font-weight: $font-weight-bold;
+    line-height: normal;
+
+    @media (min-width: $breakpoint-tablet) {
+      font-size: $font-display-medium;
+      line-height: $line-height-tight;
+    }
+
+    @include respond-to('desktop') {
+      font-size: $font-display-large;
+      white-space: nowrap;
+    }
+  }
+
+  &__subtitle {
+    margin: 0;
+    color: $color-on-bg;
+    font-size: $font-body-small;
+    font-weight: $font-weight-medium;
+    line-height: normal;
+
+    @media (min-width: $breakpoint-tablet) {
+      font-size: $font-body-medium;
+      line-height: $line-height-tight;
+    }
+
+    @include respond-to('desktop') {
+      font-size: $font-body-large;
+      white-space: nowrap;
+    }
+  }
+}

@@ -91,8 +91,8 @@ function closeAuthDialogWithAnimation(dialog: HTMLDialogElement): void {
 
   dialog.classList.add(DIALOG_CLOSING_CLASS);
 
-  const onEnd = (event: AnimationEvent): void => {
-    if (event.target !== dialog) {
+  const finish = (): void => {
+    if (!dialog.classList.contains(DIALOG_CLOSING_CLASS)) {
       return;
     }
     dialog.classList.remove(DIALOG_CLOSING_CLASS);
@@ -101,7 +101,15 @@ function closeAuthDialogWithAnimation(dialog: HTMLDialogElement): void {
     dialog.removeEventListener('animationend', onEnd);
   };
 
+  const onEnd = (event: AnimationEvent): void => {
+    if (event.target !== dialog) {
+      return;
+    }
+    finish();
+  };
+
   dialog.addEventListener('animationend', onEnd);
+  window.setTimeout(finish, 220);
 }
 
 export function initAuthDialog(): void {

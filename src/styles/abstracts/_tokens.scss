@@ -10,7 +10,7 @@ $color-tertiary: #3a2ebf;
 $color-table-header: #4f3bdb;
 $color-like: #ff4848;
 $color-error: #b3261e;
-$color-price-free: #088a8f;
+$color-price-free: #0b8a8f;
 
 // Borders
 $color-outline: #e5e7eb;
@@ -20,6 +20,7 @@ $color-on-bg: #5f5d75;
 $color-footer-muted: #b9b5c9;
 $color-footer-icon-bg: #2a264f;
 $color-footer-bg: #1e1b3a;
+$color-footer-line: rgb(185 181 201 / 28%);
 
 // Avatar Backgrounds
 $color-avatar-1: #e9eef6;
@@ -47,6 +48,44 @@ $size-13: 104px;
 $size-14: 112px;
 $size-15: 120px;
 
+// Header / brand sizes (Figma)
+$size-brand-logo-bar-width: 172px;
+$size-brand-logo-bar-height: $size-4;
+$size-brand-logo-bar-width-compact: 150px;
+$size-brand-logo-source-width: 172px;
+
+// Header bar (Figma 25:2458)
+$size-header-height: 85px;
+$size-footer-brand: 400px;
+$size-icon-medium: 20px;
+
+// Auth buttons (Figma 25:2470 / 25:2472)
+$size-auth-btn-height: 37px;
+$size-auth-btn-login-width: 82px;
+$size-auth-btn-signup-width: 93px;
+$size-btn-medium-y: calc($size-1 + $size-025);
+$size-signup-width-tablet: 85px;
+$size-signup-height-tablet: 33px;
+
+$size-hairline: 1px;
+$size-stroke: 1.5px;
+$size-carousel-stroke: 2.5px;
+$size-carousel-center-mobile: 218px;
+$size-game-details-width: 600px;
+$size-game-details-hero: 220px;
+$size-hero-panel-tablet: 480px;
+
+// Auth dialog (Figma 2:1327 / 2:1363)
+$size-auth-dialog-width: 420px;
+$size-auth-dialog-border: 3px;
+$size-auth-dialog-stroke: 2.5px;
+$size-auth-dialog-rule: 1px;
+$size-auth-dialog-cta: 52px;
+$size-auth-dialog-google: 50px;
+
+// Layout
+$size-layout-max: 1920px;
+
 // Typography: Font Sizes
 $font-display-large: 56px;
 $font-display-medium: 36px;
@@ -61,6 +100,7 @@ $font-label-extra-large: 16px;
 $font-label-large: 14px;
 $font-label-medium: 12px;
 $font-label-small: 10px;
+$font-label-extra-small: 8px;
 
 // Typography: Font Weights
 $font-weight-regular: 400;

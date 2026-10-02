@@ -38,7 +38,7 @@
     padding: $size-4;
     height: fit-content;
     background-color: $color-surface;
-    border: 2px solid $color-on-primary;
+    border: $size-025 solid $color-on-primary;
     border-radius: $corner-extra-large;
     box-shadow: $shadow-level-1;
 
@@ -78,7 +78,7 @@
     font-weight: $font-weight-bold;
     color: $color-on-primary;
     background-color: $color-primary;
-    border: 2px solid $color-on-primary;
+    border: $size-025 solid $color-on-primary;
     border-radius: $corner-medium;
     box-shadow: $shadow-level-1;
     cursor: pointer;

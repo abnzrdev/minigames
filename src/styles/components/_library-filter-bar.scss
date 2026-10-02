@@ -1,0 +1,187 @@
+@use '../abstracts/tokens' as *;
+@use '../abstracts/breakpoints' as *;
+
+// Mobile 2:1037 — chips clip inside 16px pad. Chip height uses $size-4.
+// Full chip row ~528; last chip (Arcade) sits past the clip and scrolls with no scrollbar.
+// Mobile sort 2:1052 — 343 fill × 40. Tablet sort 2:853 — hug + caret.
+$filter-pad-y: $size-2;
+$filter-pad-x: $size-2;
+$filter-stack-gap: $size-2;
+$filter-chip-gap: $size-1;
+$filter-chip-pad-y: $size-1;
+$filter-chip-pad-x: $size-2;
+$filter-chip-border: $size-025;
+$filter-sort-height-mobile: $size-5;
+$filter-chip-height-desktop: 33px;
+$filter-sort-height-desktop: 44px;
+$filter-sort-pad-y: $size-1;
+$filter-sort-pad-x: $size-2;
+$filter-sort-border: $size-025;
+
+.library-filter-bar {
+  background-color: $color-bg;
+  overflow-x: clip;
+
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: $filter-stack-gap;
+    max-width: $size-layout-max;
+    margin-inline: auto;
+    padding: $filter-pad-y $filter-pad-x;
+
+    @media (min-width: $breakpoint-tablet) {
+      align-items: flex-start;
+      padding: $size-2 $size-5;
+    }
+
+    @include respond-to('desktop') {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: $size-4;
+      padding: $size-2 $size-15;
+    }
+  }
+
+  &__chips-scroll {
+    min-width: 0;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
+    }
+
+    @media (min-width: $breakpoint-tablet) {
+      overflow: visible;
+    }
+
+    @include respond-to('desktop') {
+      flex: 1;
+    }
+  }
+
+  &__chips {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: $filter-chip-gap;
+    width: max-content;
+
+    @media (min-width: $breakpoint-tablet) {
+      flex-wrap: wrap;
+      width: 100%;
+    }
+
+    @include respond-to('desktop') {
+      flex-wrap: nowrap;
+      gap: $size-2;
+      width: auto;
+    }
+  }
+
+  &__chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    padding: $filter-chip-pad-y $filter-chip-pad-x;
+    border: $filter-chip-border solid $color-on-primary;
+    border-radius: $corner-large;
+    background-color: $color-surface;
+    color: $color-on-primary;
+    font-family: $font-family-main;
+    font-size: $font-label-medium;
+    font-weight: $font-weight-bold;
+    line-height: normal;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
+
+    @media (min-width: $breakpoint-tablet) {
+      border-radius: $corner-extra-large;
+      font-size: $font-label-large;
+    }
+
+    @include respond-to('desktop') {
+      height: $filter-chip-height-desktop;
+      padding: 0 calc($size-2 - $size-025);
+    }
+
+    &:hover {
+      background-color: $color-bg;
+    }
+
+    &--active {
+      background-color: $color-primary;
+
+      &:hover {
+        background-color: $color-primary-high;
+      }
+    }
+  }
+
+  &__sort {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $size-1;
+    box-sizing: border-box;
+    width: 100%;
+    height: $filter-sort-height-mobile;
+    padding: $filter-sort-pad-y $filter-sort-pad-x;
+    border: $filter-sort-border solid $color-on-primary;
+    border-radius: $corner-extra-large;
+    background-color: $color-surface;
+    color: $color-on-primary;
+    font-family: $font-family-main;
+    font-size: $font-label-medium;
+    font-weight: $font-weight-bold;
+    line-height: normal;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    @media (min-width: $breakpoint-tablet) {
+      width: auto;
+      height: auto;
+      min-height: 0;
+      font-size: $font-label-large;
+    }
+
+    @include respond-to('desktop') {
+      height: $filter-sort-height-desktop;
+      padding: 0 calc($size-icon-medium - $size-025);
+    }
+
+    &:hover {
+      background-color: $color-bg;
+    }
+  }
+
+  &__sort-text {
+    white-space: nowrap;
+  }
+
+  &__sort-icon {
+    display: block;
+    flex-shrink: 0;
+    width: $size-icon-medium;
+    height: $size-icon-medium;
+    color: $color-on-primary;
+
+    @media (min-width: $breakpoint-tablet) {
+      width: $size-3;
+      height: $size-3;
+    }
+  }
+}

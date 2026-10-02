@@ -32,7 +32,7 @@
   }
 
   &__table-wrap {
-    border: 2px solid $color-on-primary;
+    border: $size-025 solid $color-on-primary;
     border-radius: $corner-large;
     overflow-x: auto;
     background-color: $color-surface;
@@ -41,10 +41,10 @@
 
   &__caption {
     position: absolute;
-    width: 1px;
-    height: 1px;
+    width: $size-hairline;
+    height: $size-hairline;
     padding: 0;
-    margin: -1px;
+    margin: calc(-1 * $size-hairline);
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
@@ -64,7 +64,7 @@
     thead {
       background-color: $color-tertiary;
       color: $color-surface;
-      border-bottom: 2px solid $color-on-primary;
+      border-bottom: $size-025 solid $color-on-primary;
     }
 
     th {
@@ -78,7 +78,7 @@
     }
 
     tbody tr {
-      border-top: 1px solid $color-outline;
+      border-top: $size-hairline solid $color-outline;
       background-color: $color-bg;
 
       &:nth-child(even) {
@@ -124,7 +124,7 @@
     font-size: $font-label-medium;
     font-weight: $font-weight-bold;
     color: $color-on-primary;
-    border: 1.5px solid $color-on-primary;
+    border: $size-stroke solid $color-on-primary;
 
     &--gold {
       background-color: $color-primary;
@@ -177,7 +177,7 @@
     padding: $size-05 $size-2;
     border-radius: $corner-full;
     background-color: $color-bg;
-    border: 1.5px solid $color-on-primary;
+    border: $size-stroke solid $color-on-primary;
     font-size: $font-label-large;
     font-weight: $font-weight-medium;
     color: $color-on-primary;
