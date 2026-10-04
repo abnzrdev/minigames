@@ -25,6 +25,32 @@ export interface FeaturedGame {
   likesCount: number;
 }
 
+export interface GameDetailsSpecs {
+  genre: string;
+  players: string;
+  duration: string;
+  price: string;
+}
+
+export interface GameRecord {
+  position: number;
+  playerName: string;
+  score: number;
+  achievedAt: string;
+}
+
+export interface GameDetails {
+  slug: string;
+  name: string;
+  heroImage: string;
+  rating: number;
+  likesCount: number;
+  isLikedByCurrentUser: boolean;
+  fullDescription: string;
+  specs: GameDetailsSpecs;
+  topRecords: GameRecord[];
+}
+
 export type GameSort = 'rating-desc' | 'rating-asc' | 'name-asc' | 'name-desc';
 
 export interface LibraryGamesQuery {
@@ -53,7 +79,11 @@ interface GamesResponse {
   meta: LibraryGamesMeta;
 }
 
-export function cardImageUrl(imagePath: string): string {
+interface GameDetailsResponse {
+  data?: GameDetails | null;
+}
+
+export function gameAssetUrl(imagePath: string): string {
   const fileName = imagePath.split('/').pop();
 
   if (!fileName) {
@@ -61,6 +91,10 @@ export function cardImageUrl(imagePath: string): string {
   }
 
   return `${ASSETS_BASE_URL}${fileName}`;
+}
+
+export function cardImageUrl(imagePath: string): string {
+  return gameAssetUrl(imagePath);
 }
 
 export async function fetchFeaturedGames(): Promise<FeaturedGame[]> {
@@ -95,4 +129,35 @@ export async function fetchLibraryGames(query: LibraryGamesQuery): Promise<Libra
     games: result.data,
     meta: result.meta,
   };
+}
+
+export async function fetchGameDetails(
+  slug: string,
+  userEmail?: string,
+  signal?: AbortSignal
+): Promise<GameDetails | null> {
+  const params = new URLSearchParams();
+
+  if (userEmail) {
+    params.set('userEmail', userEmail);
+  }
+
+  const query = params.toString();
+
+  const response = await fetch(
+    `${API_BASE_URL}/api/games/${encodeURIComponent(slug)}${query ? `?${query}` : ''}`,
+    { signal }
+  );
+
+  if (!response.ok) {
+    throw new Error(`Failed to load game details: ${response.status}`);
+  }
+
+  if (response.status === 204) {
+    return null;
+  }
+
+  const result: GameDetailsResponse = await response.json();
+
+  return result.data ?? null;
 }

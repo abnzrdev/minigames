@@ -100,36 +100,48 @@ function createCardsHtml(slides: CarouselSlide[]): string {
     slides
       .map(
         (slide) => `
-          <button
-            type="button"
-            class="carousel__card"
-            data-copy="${copy}"
-            data-slug="${slide.slug}"
-          >
-            <img
-              class="carousel__card-image"
-              src="${slide.image}"
-              alt=""
-              draggable="false"
-            />
+            <button
+              type="button"
+              class="carousel__card"
+              data-copy="${copy}"
+              data-slug="${slide.slug}"
+            >
+              <img
+                class="carousel__card-image"
+                src="${slide.image}"
+                alt=""
+                draggable="false"
+              />
 
-            <span class="carousel__card-overlay">
-              <span class="carousel__card-title">${slide.title}</span>
-
-              <span class="carousel__card-meta">
-                <span class="carousel__card-stat">
-                  <img src="${starIcon}" width="24" height="24" alt="" />
-                  ${slide.rating}
+              <span class="carousel__card-overlay">
+                <span class="carousel__card-title">
+                  ${slide.title}
                 </span>
 
-                <span class="carousel__card-stat">
-                  <img src="${favoriteIcon}" width="24" height="24" alt="" />
-                  ${slide.likes}
+                <span class="carousel__card-meta">
+                  <span class="carousel__card-stat">
+                    <img
+                      src="${starIcon}"
+                      width="24"
+                      height="24"
+                      alt=""
+                    />
+                    ${slide.rating}
+                  </span>
+
+                  <span class="carousel__card-stat">
+                    <img
+                      src="${favoriteIcon}"
+                      width="24"
+                      height="24"
+                      alt=""
+                    />
+                    ${slide.likes}
+                  </span>
                 </span>
               </span>
-            </span>
-          </button>
-        `
+            </button>
+          `
       )
       .join('')
   ).join('');
@@ -137,7 +149,10 @@ function createCardsHtml(slides: CarouselSlide[]): string {
 
 function createLoadingHtml(): string {
   return `
-    <div class="carousel__loading" aria-label="Loading featured games">
+    <div
+      class="carousel__loading"
+      aria-label="Loading featured games"
+    >
       <div class="carousel__skeleton"></div>
       <div class="carousel__skeleton"></div>
       <div class="carousel__skeleton"></div>
@@ -147,17 +162,29 @@ function createLoadingHtml(): string {
 
 function createEmptyHtml(): string {
   return `
-    <div class="carousel__state carousel__state--empty">
-      <p>No featured games are available right now.</p>
+    <div
+      class="carousel__state carousel__state--empty"
+    >
+      <p>
+        No featured games are available right now.
+      </p>
     </div>
   `;
 }
 
 function createErrorHtml(): string {
   return `
-    <div class="carousel__state carousel__state--error">
-      <p>Featured games could not be loaded.</p>
-      <button type="button" class="carousel__retry">
+    <div
+      class="carousel__state carousel__state--error"
+    >
+      <p>
+        Featured games could not be loaded.
+      </p>
+
+      <button
+        type="button"
+        class="carousel__retry"
+      >
         Retry
       </button>
     </div>
@@ -174,6 +201,7 @@ function createDotsHtml(count: number): string {
 
 function initCarouselInteractions(section: HTMLElement, slides: CarouselSlide[]): () => void {
   const viewportNode = section.querySelector('.carousel__viewport');
+
   const trackNode = section.querySelector('.carousel__track');
 
   const cards = [...section.querySelectorAll<HTMLButtonElement>('.carousel__card')];
@@ -252,6 +280,7 @@ function initCarouselInteractions(section: HTMLElement, slides: CarouselSlide[])
   function snapToMiddle(): void {
     if (cursor >= count * 2 || cursor < count) {
       cursor = count + logicalIndex();
+
       place(false);
     }
   }
@@ -304,7 +333,10 @@ function initCarouselInteractions(section: HTMLElement, slides: CarouselSlide[])
 
     button.addEventListener('click', handler);
 
-    return { button, handler };
+    return {
+      button,
+      handler,
+    };
   });
 
   cards.forEach((card) => {
@@ -314,7 +346,13 @@ function initCarouselInteractions(section: HTMLElement, slides: CarouselSlide[])
         return;
       }
 
-      openGameDetailsDialog();
+      const slug = card.dataset.slug;
+
+      if (!slug) {
+        return;
+      }
+
+      openGameDetailsDialog(slug);
     });
   });
 
@@ -325,6 +363,7 @@ function initCarouselInteractions(section: HTMLElement, slides: CarouselSlide[])
 
     holding = true;
     swiped = false;
+
     pointerStartX = event.clientX;
 
     pauseTimer();
@@ -362,6 +401,7 @@ function initCarouselInteractions(section: HTMLElement, slides: CarouselSlide[])
     }
 
     holding = false;
+
     arm(remaining);
   };
 
@@ -370,7 +410,9 @@ function initCarouselInteractions(section: HTMLElement, slides: CarouselSlide[])
   };
 
   viewport.addEventListener('pointerdown', handlePointerDown);
+
   viewport.addEventListener('pointerup', handlePointerUp);
+
   viewport.addEventListener('pointercancel', handlePointerCancel);
 
   window.addEventListener('resize', handleResize);
@@ -388,6 +430,7 @@ function initCarouselInteractions(section: HTMLElement, slides: CarouselSlide[])
     clearTimer();
 
     window.clearTimeout(movementTimer);
+
     cancelAnimationFrame(frameId);
 
     window.removeEventListener('resize', handleResize);
@@ -409,10 +452,13 @@ export function renderCarousel(): HTMLElement {
 
   section.className = 'carousel';
   section.id = 'new-games';
+
   section.setAttribute('aria-labelledby', 'new-games-heading');
 
   section.innerHTML = `
-    <div class="layout-container carousel__header-wrap">
+    <div
+      class="layout-container carousel__header-wrap"
+    >
       <header class="carousel__header">
         <div class="carousel__title">
           <img
@@ -464,7 +510,10 @@ export function renderCarousel(): HTMLElement {
     </div>
 
     <div class="carousel__viewport">
-      <div class="carousel__track" role="list">
+      <div
+        class="carousel__track"
+        role="list"
+      >
         ${createLoadingHtml()}
       </div>
     </div>
@@ -478,6 +527,7 @@ export function renderCarousel(): HTMLElement {
   `;
 
   const trackNode = section.querySelector<HTMLElement>('.carousel__track');
+
   const dotsNode = section.querySelector<HTMLElement>('.carousel__dots');
 
   if (!trackNode || !dotsNode) {
@@ -488,14 +538,17 @@ export function renderCarousel(): HTMLElement {
   const dots = dotsNode;
 
   let cleanupInteractions: (() => void) | null = null;
+
   let recoveringFromError = false;
 
   async function loadCarousel(): Promise<void> {
     cleanupInteractions?.();
+
     cleanupInteractions = null;
 
     track.style.transform = '';
     track.innerHTML = createLoadingHtml();
+
     dots.innerHTML = '';
 
     try {
@@ -507,10 +560,12 @@ export function renderCarousel(): HTMLElement {
 
       if (slides.length === 0) {
         track.innerHTML = createEmptyHtml();
+
         return;
       }
 
       track.innerHTML = createCardsHtml(slides);
+
       dots.innerHTML = createDotsHtml(slides.length);
 
       cleanupInteractions = initCarouselInteractions(section, slides);
@@ -528,6 +583,7 @@ export function renderCarousel(): HTMLElement {
       recoveringFromError = true;
 
       track.innerHTML = createErrorHtml();
+
       dots.innerHTML = '';
 
       showSnackbar('Could not load featured games.', 'error');
@@ -550,6 +606,7 @@ export function renderCarousel(): HTMLElement {
     const observer = new MutationObserver(() => {
       if (!section.isConnected) {
         cleanupInteractions?.();
+
         observer.disconnect();
       }
     });
