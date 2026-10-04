@@ -193,9 +193,8 @@ $filter-sort-border: $size-025;
   }
 
   &__sort {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: $size-1;
     box-sizing: border-box;
     width: 100%;
@@ -208,9 +207,7 @@ $filter-sort-border: $size-025;
     font-family: $font-family-main;
     font-size: $font-label-medium;
     font-weight: $font-weight-bold;
-    line-height: normal;
     cursor: pointer;
-    transition: background-color 0.2s ease;
 
     @media (min-width: $breakpoint-tablet) {
       width: auto;
@@ -227,10 +224,34 @@ $filter-sort-border: $size-025;
     &:hover {
       background-color: $color-bg;
     }
+
+    &:focus-within {
+      outline: $size-stroke solid $color-on-primary;
+      outline-offset: $size-025;
+    }
   }
 
-  &__sort-text {
+  &__sort-label {
+    flex-shrink: 0;
     white-space: nowrap;
+  }
+
+  &__sort-select {
+    min-width: 0;
+    flex: 1;
+    appearance: none;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: $color-on-primary;
+    font: inherit;
+    font-weight: $font-weight-bold;
+    cursor: pointer;
+
+    @media (min-width: $breakpoint-tablet) {
+      flex: 0 1 auto;
+    }
   }
 
   &__sort-icon {
@@ -239,6 +260,7 @@ $filter-sort-border: $size-025;
     width: $size-icon-medium;
     height: $size-icon-medium;
     color: $color-on-primary;
+    pointer-events: none;
 
     @media (min-width: $breakpoint-tablet) {
       width: $size-3;
