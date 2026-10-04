@@ -6,6 +6,17 @@ $card-media-mobile-height: calc($size-15 + $size-5);
 $card-thumb-width: calc($size-15 + $size-15 + $size-4);
 $card-height-tablet: calc($size-15 + $size-4);
 
+@keyframes library-skeleton-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+
+  50% {
+    opacity: 0.85;
+  }
+}
+
 .library-body {
   background-color: $color-bg;
 
@@ -35,6 +46,51 @@ $card-height-tablet: calc($size-15 + $size-4);
     @include respond-to('desktop') {
       grid-template-columns: 1fr 1fr;
       gap: $size-3;
+    }
+  }
+
+  &__skeleton {
+    min-height: calc($size-15 + $size-10);
+    border-radius: $corner-large;
+    background-color: $color-outline-variant;
+    animation: library-skeleton-pulse 1.2s ease-in-out infinite;
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+    }
+  }
+
+  &__state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    grid-column: 1 / -1;
+    min-height: calc($size-15 + $size-10);
+    padding: $size-3;
+    border: $size-stroke solid $color-outline;
+    border-radius: $corner-large;
+    background-color: $color-surface;
+    text-align: center;
+
+    &--error {
+      flex-direction: column;
+      gap: $size-2;
+      color: $color-error;
+    }
+  }
+
+  &__retry {
+    padding: $size-1 $size-2;
+    border: $size-stroke solid $color-on-primary;
+    border-radius: $corner-full;
+    background-color: $color-primary;
+    color: $color-on-primary;
+    font: inherit;
+    font-weight: $font-weight-bold;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $color-primary-high;
     }
   }
 }
