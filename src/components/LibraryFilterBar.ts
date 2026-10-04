@@ -1,11 +1,39 @@
 import { fetchCategories, type Category, type CategorySlug } from '../api/categories';
+import type { GameSort } from '../api/games';
 import { showSnackbar } from './Snackbar';
 
 export const LIBRARY_CATEGORY_CHANGE_EVENT = 'library-category-change';
+export const LIBRARY_SORT_CHANGE_EVENT = 'library-sort-change';
 
 export interface LibraryCategoryChangeDetail {
   category: CategorySlug;
 }
+
+export interface LibrarySortChangeDetail {
+  sort: GameSort;
+}
+
+const SORT_OPTIONS: Array<{
+  value: GameSort;
+  label: string;
+}> = [
+  {
+    value: 'rating-desc',
+    label: 'Rating ↓',
+  },
+  {
+    value: 'rating-asc',
+    label: 'Rating ↑',
+  },
+  {
+    value: 'name-asc',
+    label: 'Name A–Z',
+  },
+  {
+    value: 'name-desc',
+    label: 'Name Z–A',
+  },
+];
 
 function chipMarkup(category: Category, activeCategory: CategorySlug): string {
   const isActive = category.slug === activeCategory;
@@ -21,6 +49,16 @@ function chipMarkup(category: Category, activeCategory: CategorySlug): string {
       ${category.label}
     </button>
   `;
+}
+
+function sortOptionsMarkup(): string {
+  return SORT_OPTIONS.map(
+    (option) => `
+      <option value="${option.value}">
+        ${option.label}
+      </option>
+    `
+  ).join('');
 }
 
 function createLoadingHtml(): string {
@@ -72,6 +110,16 @@ function dispatchCategoryChange(category: CategorySlug): void {
   );
 }
 
+function dispatchSortChange(sort: GameSort): void {
+  window.dispatchEvent(
+    new CustomEvent<LibrarySortChangeDetail>(LIBRARY_SORT_CHANGE_EVENT, {
+      detail: {
+        sort,
+      },
+    })
+  );
+}
+
 export function renderLibraryFilterBar(): HTMLElement {
   const section = document.createElement('section');
 
@@ -90,14 +138,17 @@ export function renderLibraryFilterBar(): HTMLElement {
         </div>
       </div>
 
-      <button
-        type="button"
-        class="library-filter-bar__sort"
-        aria-haspopup="listbox"
-      >
-        <span class="library-filter-bar__sort-text">
-          Sort by: Rating ↓
+      <label class="library-filter-bar__sort">
+        <span class="library-filter-bar__sort-label">
+          Sort by:
         </span>
+
+        <select
+          class="library-filter-bar__sort-select"
+          aria-label="Sort games"
+        >
+          ${sortOptionsMarkup()}
+        </select>
 
         <svg
           class="library-filter-bar__sort-icon"
@@ -111,17 +162,26 @@ export function renderLibraryFilterBar(): HTMLElement {
             fill="currentColor"
           />
         </svg>
-      </button>
+      </label>
     </div>
   `;
 
   const chipsNode = section.querySelector<HTMLElement>('.library-filter-bar__chips');
+  const sortSelect = section.querySelector<HTMLSelectElement>('.library-filter-bar__sort-select');
 
-  if (!chipsNode) {
+  if (!chipsNode || !sortSelect) {
     return section;
   }
 
   const chips = chipsNode;
+
+  sortSelect.value = 'rating-desc';
+
+  sortSelect.addEventListener('change', () => {
+    const sort = sortSelect.value as GameSort;
+
+    dispatchSortChange(sort);
+  });
 
   let recoveringFromError = false;
 

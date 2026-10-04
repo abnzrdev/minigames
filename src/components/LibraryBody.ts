@@ -1,8 +1,10 @@
 import type { CategorySlug } from '../api/categories';
-import { cardImageUrl, fetchLibraryGames, type Game } from '../api/games';
+import { cardImageUrl, fetchLibraryGames, type Game, type GameSort } from '../api/games';
 import {
   LIBRARY_CATEGORY_CHANGE_EVENT,
+  LIBRARY_SORT_CHANGE_EVENT,
   type LibraryCategoryChangeDetail,
+  type LibrarySortChangeDetail,
 } from './LibraryFilterBar';
 import { showSnackbar } from './Snackbar';
 
@@ -175,6 +177,7 @@ export function renderLibraryBody(): HTMLElement {
   const grid = gridNode;
 
   let activeCategory: CategorySlug = 'all';
+  let activeSort: GameSort = 'rating-desc';
   let recoveringFromError = false;
   let requestVersion = 0;
 
@@ -186,7 +189,7 @@ export function renderLibraryBody(): HTMLElement {
     try {
       const games = await fetchLibraryGames({
         category: activeCategory,
-        sort: 'rating-desc',
+        sort: activeSort,
         page: 1,
         limit: 6,
       });
@@ -246,7 +249,25 @@ export function renderLibraryBody(): HTMLElement {
     void loadGames();
   };
 
+  const handleSortChange = (event: Event): void => {
+    if (!(event instanceof CustomEvent)) {
+      return;
+    }
+
+    const detail = event.detail as LibrarySortChangeDetail;
+
+    if (detail.sort === activeSort) {
+      return;
+    }
+
+    activeSort = detail.sort;
+
+    void loadGames();
+  };
+
   window.addEventListener(LIBRARY_CATEGORY_CHANGE_EVENT, handleCategoryChange);
+
+  window.addEventListener(LIBRARY_SORT_CHANGE_EVENT, handleSortChange);
 
   const page = document.getElementById('page-content');
 
@@ -254,6 +275,8 @@ export function renderLibraryBody(): HTMLElement {
     const observer = new MutationObserver(() => {
       if (!section.isConnected) {
         window.removeEventListener(LIBRARY_CATEGORY_CHANGE_EVENT, handleCategoryChange);
+
+        window.removeEventListener(LIBRARY_SORT_CHANGE_EVENT, handleSortChange);
 
         observer.disconnect();
       }
