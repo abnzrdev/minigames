@@ -9,6 +9,7 @@ export interface RouteState {
   page: AppPage;
   path: string;
   category: CategorySlug;
+  categorySpecified: boolean;
   sort: GameSort;
   libraryPage: number;
   game: string | null;
@@ -40,6 +41,7 @@ export function currentRoute(): RouteState {
     page,
     path,
     category: page === 'library' && categories.includes(category) ? category : 'all',
+    categorySpecified: page === 'library' && categories.includes(category),
     sort: page === 'library' && sorts.includes(sort) ? sort : 'rating-desc',
     libraryPage:
       page === 'library' && Number.isSafeInteger(libraryPage) && libraryPage > 0 ? libraryPage : 1,
@@ -51,7 +53,7 @@ export function currentRoute(): RouteState {
 function routeUrl(route: RouteState): string {
   const params = new URLSearchParams();
   if (route.page === 'library') {
-    if (route.category !== 'all') params.set('category', route.category);
+    if (route.categorySpecified || route.category !== 'all') params.set('category', route.category);
     if (route.sort !== 'rating-desc') params.set('sort', route.sort);
     if (route.libraryPage !== 1) params.set('page', String(route.libraryPage));
   }
@@ -72,7 +74,14 @@ export function subscribeRoute(listener: (route: RouteState) => void): () => voi
 }
 
 export function updateRoute(change: Partial<RouteState>, replace = false): void {
-  const url = routeUrl({ ...currentRoute(), ...change });
+  const url = routeUrl({
+    ...currentRoute(),
+    ...change,
+    categorySpecified:
+      Object.hasOwn(change, 'category') ||
+      change.categorySpecified ||
+      currentRoute().categorySpecified,
+  });
   if (url === `${location.pathname}${location.search}`) return;
   if (replace) history.replaceState(null, '', url);
   else history.pushState(null, '', url);

@@ -1,7 +1,7 @@
 import { fetchCategories, type Category, type CategorySlug } from '../api/categories';
 import type { GameSort } from '../api/games';
 import { showSnackbar } from './Snackbar';
-import { currentRoute, navigateLibrary, subscribeRoute } from '../utils/navigation';
+import { currentRoute, navigateLibrary, subscribeRoute, updateRoute } from '../utils/navigation';
 
 const SORT_OPTIONS: Array<{
   value: GameSort;
@@ -196,6 +196,12 @@ export function renderLibraryFilterBar(): HTMLElement {
       if (categories.length === 0) {
         chips.innerHTML = createEmptyHtml();
         return;
+      }
+
+      const route = currentRoute();
+      const defaultCategory = categories.find((category) => category.isDefault);
+      if (!route.categorySpecified && defaultCategory) {
+        updateRoute({ category: defaultCategory.slug }, true);
       }
 
       chips.innerHTML = categories
