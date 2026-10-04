@@ -1,17 +1,7 @@
 import { fetchCategories, type Category, type CategorySlug } from '../api/categories';
 import type { GameSort } from '../api/games';
 import { showSnackbar } from './Snackbar';
-
-export const LIBRARY_CATEGORY_CHANGE_EVENT = 'library-category-change';
-export const LIBRARY_SORT_CHANGE_EVENT = 'library-sort-change';
-
-export interface LibraryCategoryChangeDetail {
-  category: CategorySlug;
-}
-
-export interface LibrarySortChangeDetail {
-  sort: GameSort;
-}
+import { currentRoute, navigateLibrary, subscribeRoute } from '../utils/navigation';
 
 const SORT_OPTIONS: Array<{
   value: GameSort;
@@ -100,26 +90,6 @@ function createErrorHtml(): string {
   `;
 }
 
-function dispatchCategoryChange(category: CategorySlug): void {
-  window.dispatchEvent(
-    new CustomEvent<LibraryCategoryChangeDetail>(LIBRARY_CATEGORY_CHANGE_EVENT, {
-      detail: {
-        category,
-      },
-    })
-  );
-}
-
-function dispatchSortChange(sort: GameSort): void {
-  window.dispatchEvent(
-    new CustomEvent<LibrarySortChangeDetail>(LIBRARY_SORT_CHANGE_EVENT, {
-      detail: {
-        sort,
-      },
-    })
-  );
-}
-
 export function renderLibraryFilterBar(): HTMLElement {
   const section = document.createElement('section');
 
@@ -175,12 +145,12 @@ export function renderLibraryFilterBar(): HTMLElement {
 
   const chips = chipsNode;
 
-  sortSelect.value = 'rating-desc';
+  sortSelect.value = currentRoute().sort;
 
   sortSelect.addEventListener('change', () => {
     const sort = sortSelect.value as GameSort;
 
-    dispatchSortChange(sort);
+    navigateLibrary({ sort });
   });
 
   let recoveringFromError = false;
@@ -208,8 +178,7 @@ export function renderLibraryFilterBar(): HTMLElement {
           return;
         }
 
-        activateCategory(category);
-        dispatchCategoryChange(category);
+        navigateLibrary({ category });
       });
     });
   }
@@ -229,15 +198,11 @@ export function renderLibraryFilterBar(): HTMLElement {
         return;
       }
 
-      const defaultCategory = categories.find((category) => category.isDefault) ?? categories[0];
-
       chips.innerHTML = categories
-        .map((category) => chipMarkup(category, defaultCategory.slug))
+        .map((category) => chipMarkup(category, currentRoute().category))
         .join('');
 
       bindCategoryButtons();
-
-      dispatchCategoryChange(defaultCategory.slug);
 
       if (recoveringFromError) {
         showSnackbar('Categories loaded successfully.', 'success');
@@ -265,6 +230,22 @@ export function renderLibraryFilterBar(): HTMLElement {
         { once: true }
       );
     }
+  }
+
+  const unsubscribe = subscribeRoute((route) => {
+    if (!section.isConnected) return;
+    activateCategory(route.category);
+    sortSelect.value = route.sort;
+  });
+  const pageContent = document.getElementById('page-content');
+  if (pageContent) {
+    const observer = new MutationObserver(() => {
+      if (!section.isConnected) {
+        unsubscribe();
+        observer.disconnect();
+      }
+    });
+    observer.observe(pageContent, { childList: true });
   }
 
   void loadCategories();

@@ -1,19 +1,8 @@
-import type { CategorySlug } from '../api/categories';
-import { cardImageUrl, fetchLibraryGames, type Game, type GameSort } from '../api/games';
-import {
-  LIBRARY_CATEGORY_CHANGE_EVENT,
-  LIBRARY_SORT_CHANGE_EVENT,
-  type LibraryCategoryChangeDetail,
-  type LibrarySortChangeDetail,
-} from './LibraryFilterBar';
+import { cardImageUrl, fetchLibraryGames, type Game } from '../api/games';
+import { currentRoute, subscribeRoute, updateRoute } from '../utils/navigation';
 import { showSnackbar } from './Snackbar';
 
-export const LIBRARY_PAGE_CHANGE_EVENT = 'library-page-change';
 export const LIBRARY_PAGINATION_UPDATE_EVENT = 'library-pagination-update';
-
-export interface LibraryPageChangeDetail {
-  page: number;
-}
 
 export interface LibraryPaginationUpdateDetail {
   page: number;
@@ -199,9 +188,7 @@ export function renderLibraryBody(): HTMLElement {
 
   const grid = gridNode;
 
-  let activeCategory: CategorySlug = 'all';
-  let activeSort: GameSort = 'rating-desc';
-  let activePage = 1;
+  let activeQuery = currentRoute();
   let recoveringFromError = false;
   let requestVersion = 0;
 
@@ -212,9 +199,9 @@ export function renderLibraryBody(): HTMLElement {
 
     try {
       const result = await fetchLibraryGames({
-        category: activeCategory,
-        sort: activeSort,
-        page: activePage,
+        category: activeQuery.category,
+        sort: activeQuery.sort,
+        page: activeQuery.libraryPage,
         limit: 6,
       });
 
@@ -225,9 +212,12 @@ export function renderLibraryBody(): HTMLElement {
       const totalPages = Math.max(1, result.meta.totalPages);
       const page = Math.min(Math.max(1, result.meta.page), totalPages);
 
-      activePage = page;
-
       dispatchPaginationUpdate(page, totalPages);
+
+      if (page !== currentRoute().libraryPage) {
+        updateRoute({ libraryPage: page }, true);
+        return;
+      }
 
       if (result.games.length === 0) {
         grid.innerHTML = createEmptyHtml();
@@ -264,76 +254,27 @@ export function renderLibraryBody(): HTMLElement {
     }
   }
 
-  const handleCategoryChange = (event: Event): void => {
-    if (!(event instanceof CustomEvent)) {
+  const unsubscribe = subscribeRoute((route) => {
+    if (!section.isConnected || route.page !== 'library') return;
+    if (
+      route.category === activeQuery.category &&
+      route.sort === activeQuery.sort &&
+      route.libraryPage === activeQuery.libraryPage
+    )
       return;
-    }
-
-    const detail = event.detail as LibraryCategoryChangeDetail;
-
-    if (detail.category === activeCategory) {
-      return;
-    }
-
-    activeCategory = detail.category;
-    activePage = 1;
-
-    dispatchPaginationUpdate(1, 1);
-
+    const reset = route.category !== activeQuery.category || route.sort !== activeQuery.sort;
+    activeQuery = route;
+    if (reset) dispatchPaginationUpdate(1, 1);
     void loadGames();
-  };
-
-  const handleSortChange = (event: Event): void => {
-    if (!(event instanceof CustomEvent)) {
-      return;
-    }
-
-    const detail = event.detail as LibrarySortChangeDetail;
-
-    if (detail.sort === activeSort) {
-      return;
-    }
-
-    activeSort = detail.sort;
-    activePage = 1;
-
-    dispatchPaginationUpdate(1, 1);
-
-    void loadGames();
-  };
-
-  const handlePageChange = (event: Event): void => {
-    if (!(event instanceof CustomEvent)) {
-      return;
-    }
-
-    const detail = event.detail as LibraryPageChangeDetail;
-
-    if (!Number.isInteger(detail.page) || detail.page < 1 || detail.page === activePage) {
-      return;
-    }
-
-    activePage = detail.page;
-
-    void loadGames();
-  };
-
-  window.addEventListener(LIBRARY_CATEGORY_CHANGE_EVENT, handleCategoryChange);
-
-  window.addEventListener(LIBRARY_SORT_CHANGE_EVENT, handleSortChange);
-
-  window.addEventListener(LIBRARY_PAGE_CHANGE_EVENT, handlePageChange);
+  });
 
   const pageContent = document.getElementById('page-content');
 
   if (pageContent) {
     const observer = new MutationObserver(() => {
       if (!section.isConnected) {
-        window.removeEventListener(LIBRARY_CATEGORY_CHANGE_EVENT, handleCategoryChange);
-
-        window.removeEventListener(LIBRARY_SORT_CHANGE_EVENT, handleSortChange);
-
-        window.removeEventListener(LIBRARY_PAGE_CHANGE_EVENT, handlePageChange);
+        unsubscribe();
+        requestVersion += 1;
 
         observer.disconnect();
       }
