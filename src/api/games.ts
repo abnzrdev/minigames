@@ -149,6 +149,10 @@ export async function fetchGameDetails(
     { signal }
   );
 
+  if (response.status === 404) {
+    return null;
+  }
+
   if (!response.ok) {
     throw new Error(`Failed to load game details: ${response.status}`);
   }

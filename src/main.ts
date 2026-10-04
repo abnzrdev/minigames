@@ -11,6 +11,7 @@ import { renderLibraryBody } from './components/LibraryBody';
 import { renderLibraryPagination } from './components/LibraryPagination';
 import { renderLibraryFilterBar } from './components/LibraryFilterBar';
 import { renderLibraryHero } from './components/LibraryHero';
+import { renderNotFound } from './components/NotFound';
 import { initAuthDialog } from './utils/authDialog';
 import { currentPage, initNavigation, subscribeRoute, type AppPage } from './utils/navigation';
 
@@ -37,6 +38,7 @@ function renderLibraryPage(): HTMLElement {
 }
 
 function pageView(page: AppPage): HTMLElement {
+  if (page === 'not-found') return renderNotFound();
   return page === 'library' ? renderLibraryPage() : renderHomePage();
 }
 

@@ -121,6 +121,7 @@ function createEmptyHtml(): string {
 
     <div class="game-details__body">
       <div class="game-details__state">
+        <h2 id="game-details-title">Game Not Found</h2>
         <p>Game details are not available.</p>
       </div>
     </div>
@@ -295,6 +296,7 @@ export function renderGameDetails(): HTMLDialogElement {
   dialog.className = 'game-details';
   dialog.id = 'game-details';
   dialog.setAttribute('aria-labelledby', 'game-details-title');
+  dialog.setAttribute('aria-label', 'Game Details');
 
   dialog.innerHTML = `
     <div class="game-details__card">
