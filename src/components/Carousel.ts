@@ -367,8 +367,6 @@ function initCarouselInteractions(section: HTMLElement, slides: CarouselSlide[])
     pointerStartX = event.clientX;
 
     pauseTimer();
-
-    viewport.setPointerCapture(event.pointerId);
   };
 
   const handlePointerUp = (event: PointerEvent): void => {
@@ -411,9 +409,9 @@ function initCarouselInteractions(section: HTMLElement, slides: CarouselSlide[])
 
   viewport.addEventListener('pointerdown', handlePointerDown);
 
-  viewport.addEventListener('pointerup', handlePointerUp);
+  window.addEventListener('pointerup', handlePointerUp);
 
-  viewport.addEventListener('pointercancel', handlePointerCancel);
+  window.addEventListener('pointercancel', handlePointerCancel);
 
   window.addEventListener('resize', handleResize);
 
@@ -437,9 +435,9 @@ function initCarouselInteractions(section: HTMLElement, slides: CarouselSlide[])
 
     viewport.removeEventListener('pointerdown', handlePointerDown);
 
-    viewport.removeEventListener('pointerup', handlePointerUp);
+    window.removeEventListener('pointerup', handlePointerUp);
 
-    viewport.removeEventListener('pointercancel', handlePointerCancel);
+    window.removeEventListener('pointercancel', handlePointerCancel);
 
     stepHandlers.forEach(({ button, handler }) => {
       button.removeEventListener('click', handler);
