@@ -1,8 +1,11 @@
+import { currentRoute, subscribeRoute, updateRoute, type RouteState } from './navigation';
+
 const BODY_MENU_OPEN_CLASS = 'menu-open';
 const BODY_DIALOG_OPEN_CLASS = 'auth-open';
 const DIALOG_CLOSING_CLASS = 'auth-dialog--closing';
 
 export type AuthDialogTab = 'login' | 'register';
+let closeTimer = 0;
 
 function applyAuthTab(tab: AuthDialogTab): void {
   const dialog = document.getElementById('auth-dialog');
@@ -50,12 +53,19 @@ function applyAuthTab(tab: AuthDialogTab): void {
 }
 
 export function openAuthDialog(tab: AuthDialogTab = 'login'): void {
+  closeMobileMenu();
+  updateRoute({ auth: tab, game: null });
+}
+
+function showAuthDialog(tab: AuthDialogTab): void {
   const dialog = document.getElementById('auth-dialog');
   if (!(dialog instanceof HTMLDialogElement)) {
     return;
   }
 
   closeMobileMenu();
+  window.clearTimeout(closeTimer);
+  dialog.classList.remove(DIALOG_CLOSING_CLASS);
   applyAuthTab(tab);
 
   if (!dialog.open) {
@@ -109,7 +119,8 @@ function closeAuthDialogWithAnimation(dialog: HTMLDialogElement): void {
   };
 
   dialog.addEventListener('animationend', onEnd);
-  window.setTimeout(finish, 220);
+  window.clearTimeout(closeTimer);
+  closeTimer = window.setTimeout(finish, 220);
 }
 
 export function initAuthDialog(): void {
@@ -126,7 +137,7 @@ export function initAuthDialog(): void {
     button.addEventListener('click', () => {
       const tab = button.dataset.authTab;
       if (tab === 'login' || tab === 'register') {
-        applyAuthTab(tab);
+        openAuthDialog(tab);
       }
     });
   });
@@ -135,27 +146,45 @@ export function initAuthDialog(): void {
     link.addEventListener('click', () => {
       const tab = link.dataset.authSwitch;
       if (tab === 'login' || tab === 'register') {
-        applyAuthTab(tab);
+        openAuthDialog(tab);
       }
     });
   });
 
   closeBtn?.addEventListener('click', () => {
-    closeAuthDialogWithAnimation(dialog);
+    updateRoute({ auth: null });
   });
 
   dialog.addEventListener('click', (event) => {
     if (event.target === dialog) {
-      closeAuthDialogWithAnimation(dialog);
+      updateRoute({ auth: null });
     }
   });
 
   dialog.addEventListener('cancel', (event) => {
     event.preventDefault();
-    closeAuthDialogWithAnimation(dialog);
+    updateRoute({ auth: null });
   });
 
   dialog.addEventListener('close', () => {
     document.body.classList.remove(BODY_DIALOG_OPEN_CLASS);
   });
+
+  let activeMode: AuthDialogTab | null = null;
+  const synchronize = (route: RouteState): void => {
+    if (route.auth) {
+      if (
+        route.auth !== activeMode ||
+        !dialog.open ||
+        dialog.classList.contains(DIALOG_CLOSING_CLASS)
+      ) {
+        showAuthDialog(route.auth);
+      }
+    } else if (dialog.open) {
+      closeAuthDialogWithAnimation(dialog);
+    }
+    activeMode = route.auth;
+  };
+  subscribeRoute(synchronize);
+  synchronize(currentRoute());
 }

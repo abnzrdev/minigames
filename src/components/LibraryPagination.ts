@@ -1,9 +1,5 @@
-import {
-  LIBRARY_PAGE_CHANGE_EVENT,
-  LIBRARY_PAGINATION_UPDATE_EVENT,
-  type LibraryPageChangeDetail,
-  type LibraryPaginationUpdateDetail,
-} from './LibraryBody';
+import { LIBRARY_PAGINATION_UPDATE_EVENT, type LibraryPaginationUpdateDetail } from './LibraryBody';
+import { currentRoute, navigateLibrary, subscribeRoute } from '../utils/navigation';
 
 const DESKTOP_LIMIT = 4;
 const MOBILE_LIMIT = 3;
@@ -30,16 +26,6 @@ function visiblePages(current: number, total: number, limit: number): number[] {
   return Array.from({ length: limit }, (_, index) => start + index);
 }
 
-function dispatchPageChange(page: number): void {
-  window.dispatchEvent(
-    new CustomEvent<LibraryPageChangeDetail>(LIBRARY_PAGE_CHANGE_EVENT, {
-      detail: {
-        page,
-      },
-    })
-  );
-}
-
 export function renderLibraryPagination(): HTMLElement {
   const section = document.createElement('section');
 
@@ -52,8 +38,8 @@ export function renderLibraryPagination(): HTMLElement {
 
   section.appendChild(controls);
 
-  let currentPage = 1;
-  let totalPages = 1;
+  let currentPage = currentRoute().libraryPage;
+  let totalPages = currentPage;
 
   function paint(): void {
     const safeTotalPages = Math.max(1, totalPages);
@@ -144,7 +130,7 @@ export function renderLibraryPagination(): HTMLElement {
       return;
     }
 
-    dispatchPageChange(nextPage);
+    navigateLibrary({ libraryPage: nextPage });
   });
 
   const handlePaginationUpdate = (event: Event): void => {
@@ -166,6 +152,12 @@ export function renderLibraryPagination(): HTMLElement {
   };
 
   window.addEventListener(LIBRARY_PAGINATION_UPDATE_EVENT, handlePaginationUpdate);
+  const unsubscribe = subscribeRoute((route) => {
+    if (!section.isConnected || route.page !== 'library') return;
+    currentPage = route.libraryPage;
+    totalPages = Math.max(totalPages, currentPage);
+    paint();
+  });
 
   const media = window.matchMedia(MOBILE_QUERY);
 
@@ -181,6 +173,7 @@ export function renderLibraryPagination(): HTMLElement {
     const observer = new MutationObserver(() => {
       if (!section.isConnected) {
         window.removeEventListener(LIBRARY_PAGINATION_UPDATE_EVENT, handlePaginationUpdate);
+        unsubscribe();
 
         media.removeEventListener('change', onMediaChange);
 

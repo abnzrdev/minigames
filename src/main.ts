@@ -12,7 +12,7 @@ import { renderLibraryPagination } from './components/LibraryPagination';
 import { renderLibraryFilterBar } from './components/LibraryFilterBar';
 import { renderLibraryHero } from './components/LibraryHero';
 import { initAuthDialog } from './utils/authDialog';
-import { currentPage, subscribePage, type AppPage } from './utils/navigation';
+import { currentPage, initNavigation, subscribeRoute, type AppPage } from './utils/navigation';
 
 function renderHomePage(): HTMLElement {
   const main = document.createElement('main');
@@ -42,6 +42,7 @@ function pageView(page: AppPage): HTMLElement {
 
 const app = document.getElementById('app');
 if (app) {
+  initNavigation();
   const content = document.createElement('div');
   content.id = 'page-content';
 
@@ -59,6 +60,12 @@ if (app) {
     content.replaceChildren(pageView(page));
   }
 
-  subscribePage(show);
+  let renderedPage = currentPage();
+  subscribeRoute((route) => {
+    if (route.page !== renderedPage) {
+      renderedPage = route.page;
+      show(route.page);
+    }
+  });
   show(currentPage());
 }
