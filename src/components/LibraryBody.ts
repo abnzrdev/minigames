@@ -1,4 +1,13 @@
-import { LIBRARY_GAMES, type LibraryGame } from '../data/games';
+import { cardImageUrl, fetchLibraryGames, type Game } from '../api/games';
+import { currentRoute, subscribeRoute, updateRoute } from '../utils/navigation';
+import { showSnackbar } from './Snackbar';
+
+export const LIBRARY_PAGINATION_UPDATE_EVENT = 'library-pagination-update';
+
+export interface LibraryPaginationUpdateDetail {
+  page: number;
+  totalPages: number;
+}
 
 const STAR_ICON = `<svg class="game-card__icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
   <path fill="currentColor" d="M8 1.2l1.8 3.7 4.1.6-3 2.9.7 4.1L8 10.6 4.4 12.5l.7-4.1-3-2.9 4.1-.6L8 1.2z"/>
@@ -12,54 +21,271 @@ function priceClass(price: string): string {
   return price === 'Free' ? ' game-card__price--free' : '';
 }
 
-function cardMarkup(game: LibraryGame): string {
+function formatLikesCount(count: number): string {
+  if (count < 1000) {
+    return String(count);
+  }
+
+  const thousands = Math.floor(count / 100) / 10;
+
+  return `${thousands.toFixed(1)}K`;
+}
+
+function formatCategory(category: string): string {
+  if (!category) {
+    return '';
+  }
+
+  return category.charAt(0).toUpperCase() + category.slice(1);
+}
+
+function cardMarkup(game: Game): string {
   return `
-    <article class="game-card">
+    <article
+      class="game-card"
+      data-slug="${game.slug}"
+    >
       <div class="game-card__media">
-        <img class="game-card__cover" src="${game.cover}" alt="" width="400" height="220" />
+        <img
+          class="game-card__cover"
+          src="${cardImageUrl(game.cardImage)}"
+          alt=""
+          width="400"
+          height="220"
+        />
       </div>
+
       <div class="game-card__body">
         <div class="game-card__top">
           <div class="game-card__heading">
-            <h2 class="game-card__title">${game.title}</h2>
-            <span class="game-card__category">${game.category}</span>
+            <h2 class="game-card__title">
+              ${game.name}
+            </h2>
+
+            <span class="game-card__category">
+              ${formatCategory(game.category)}
+            </span>
           </div>
-          <span class="game-card__price${priceClass(game.price)}">${game.price}</span>
+
+          <span
+            class="game-card__price${priceClass(game.price)}"
+          >
+            ${game.price}
+          </span>
         </div>
-        <p class="game-card__description">${game.description}</p>
+
+        <p class="game-card__description">
+          ${game.shortDescription}
+        </p>
+
         <div class="game-card__footer">
           <div class="game-card__meta">
             <div class="game-card__stats">
-              <span class="game-card__stat game-card__stat--rating">
+              <span
+                class="game-card__stat game-card__stat--rating"
+              >
                 ${STAR_ICON}
-                <span>${game.rating}</span>
+                <span>${game.rating.toFixed(1)}</span>
               </span>
-              <span class="game-card__stat game-card__stat--likes">
+
+              <span
+                class="game-card__stat game-card__stat--likes"
+              >
                 ${HEART_ICON}
-                <span>${game.likes}</span>
+                <span>
+                  ${formatLikesCount(game.likesCount)}
+                </span>
               </span>
             </div>
-            <span class="game-card__price game-card__price--mobile${priceClass(game.price)}">${game.price}</span>
+
+            <span
+              class="game-card__price game-card__price--mobile${priceClass(game.price)}"
+            >
+              ${game.price}
+            </span>
           </div>
-          <button type="button" class="game-card__details">Details</button>
+
+          <button
+            type="button"
+            class="game-card__details"
+            data-slug="${game.slug}"
+          >
+            Details
+          </button>
         </div>
       </div>
     </article>
   `;
 }
 
+function createLoadingHtml(): string {
+  return Array.from(
+    { length: 6 },
+    () => `
+      <div
+        class="library-body__skeleton"
+        aria-label="Loading game"
+      ></div>
+    `
+  ).join('');
+}
+
+function createEmptyHtml(): string {
+  return `
+    <div class="library-body__state">
+      <p>Data Not Found</p>
+    </div>
+  `;
+}
+
+function createErrorHtml(): string {
+  return `
+    <div
+      class="library-body__state library-body__state--error"
+    >
+      <p>Games could not be loaded.</p>
+
+      <button
+        type="button"
+        class="library-body__retry"
+      >
+        Retry
+      </button>
+    </div>
+  `;
+}
+
+function dispatchPaginationUpdate(page: number, totalPages: number): void {
+  window.dispatchEvent(
+    new CustomEvent<LibraryPaginationUpdateDetail>(LIBRARY_PAGINATION_UPDATE_EVENT, {
+      detail: {
+        page,
+        totalPages,
+      },
+    })
+  );
+}
+
 export function renderLibraryBody(): HTMLElement {
   const section = document.createElement('section');
+
   section.className = 'library-body';
   section.setAttribute('aria-label', 'Games');
 
   section.innerHTML = `
     <div class="library-body__inner">
       <div class="library-body__grid">
-        ${LIBRARY_GAMES.map(cardMarkup).join('')}
+        ${createLoadingHtml()}
       </div>
     </div>
   `;
+
+  const gridNode = section.querySelector<HTMLElement>('.library-body__grid');
+
+  if (!gridNode) {
+    return section;
+  }
+
+  const grid = gridNode;
+
+  let activeQuery = currentRoute();
+  let recoveringFromError = false;
+  let requestVersion = 0;
+
+  async function loadGames(): Promise<void> {
+    const currentRequest = ++requestVersion;
+
+    grid.innerHTML = createLoadingHtml();
+
+    try {
+      const result = await fetchLibraryGames({
+        category: activeQuery.category,
+        sort: activeQuery.sort,
+        page: activeQuery.libraryPage,
+        limit: 6,
+      });
+
+      if (currentRequest !== requestVersion || !section.isConnected) {
+        return;
+      }
+
+      const totalPages = Math.max(1, result.meta.totalPages);
+      const page = Math.min(Math.max(1, result.meta.page), totalPages);
+
+      dispatchPaginationUpdate(page, totalPages);
+
+      if (page !== currentRoute().libraryPage) {
+        updateRoute({ libraryPage: page }, true);
+        return;
+      }
+
+      if (result.games.length === 0) {
+        grid.innerHTML = createEmptyHtml();
+        return;
+      }
+
+      grid.innerHTML = result.games.map(cardMarkup).join('');
+
+      if (recoveringFromError) {
+        showSnackbar('Games loaded successfully.', 'success');
+
+        recoveringFromError = false;
+      }
+    } catch {
+      if (currentRequest !== requestVersion || !section.isConnected) {
+        return;
+      }
+
+      recoveringFromError = true;
+
+      grid.innerHTML = createErrorHtml();
+
+      showSnackbar('Could not load games.', 'error');
+
+      const retryButton = grid.querySelector<HTMLButtonElement>('.library-body__retry');
+
+      retryButton?.addEventListener(
+        'click',
+        () => {
+          void loadGames();
+        },
+        { once: true }
+      );
+    }
+  }
+
+  const unsubscribe = subscribeRoute((route) => {
+    if (!section.isConnected || route.page !== 'library') return;
+    if (
+      route.category === activeQuery.category &&
+      route.sort === activeQuery.sort &&
+      route.libraryPage === activeQuery.libraryPage
+    )
+      return;
+    const reset = route.category !== activeQuery.category || route.sort !== activeQuery.sort;
+    activeQuery = route;
+    if (reset) dispatchPaginationUpdate(1, 1);
+    void loadGames();
+  });
+
+  const pageContent = document.getElementById('page-content');
+
+  if (pageContent) {
+    const observer = new MutationObserver(() => {
+      if (!section.isConnected) {
+        unsubscribe();
+        requestVersion += 1;
+
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(pageContent, {
+      childList: true,
+    });
+  }
+
+  void loadGames();
 
   return section;
 }

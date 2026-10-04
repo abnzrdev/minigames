@@ -18,6 +18,17 @@ $filter-sort-pad-y: $size-1;
 $filter-sort-pad-x: $size-2;
 $filter-sort-border: $size-025;
 
+@keyframes library-filter-skeleton-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+
+  50% {
+    opacity: 0.85;
+  }
+}
+
 .library-filter-bar {
   background-color: $color-bg;
   overflow-x: clip;
@@ -131,10 +142,59 @@ $filter-sort-border: $size-025;
     }
   }
 
-  &__sort {
-    display: inline-flex;
+  &__loading {
+    display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: $filter-chip-gap;
+  }
+
+  &__skeleton {
+    display: block;
+    width: $size-10;
+    height: $size-4;
+    flex-shrink: 0;
+    border-radius: $corner-large;
+    background-color: $color-outline-variant;
+    animation: library-filter-skeleton-pulse 1.2s ease-in-out infinite;
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+    }
+  }
+
+  &__state {
+    display: flex;
+    align-items: center;
+    gap: $size-2;
+    min-height: $size-4;
+    color: $color-on-bg;
+    font-size: $font-body-small;
+    font-weight: $font-weight-medium;
+
+    &--error {
+      color: $color-error;
+    }
+  }
+
+  &__retry {
+    padding: $size-05 $size-2;
+    border: $size-stroke solid $color-on-primary;
+    border-radius: $corner-large;
+    background-color: $color-primary;
+    color: $color-on-primary;
+    font-family: $font-family-main;
+    font-size: $font-label-medium;
+    font-weight: $font-weight-bold;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $color-primary-high;
+    }
+  }
+
+  &__sort {
+    display: flex;
+    align-items: center;
     gap: $size-1;
     box-sizing: border-box;
     width: 100%;
@@ -147,9 +207,7 @@ $filter-sort-border: $size-025;
     font-family: $font-family-main;
     font-size: $font-label-medium;
     font-weight: $font-weight-bold;
-    line-height: normal;
     cursor: pointer;
-    transition: background-color 0.2s ease;
 
     @media (min-width: $breakpoint-tablet) {
       width: auto;
@@ -166,10 +224,34 @@ $filter-sort-border: $size-025;
     &:hover {
       background-color: $color-bg;
     }
+
+    &:focus-within {
+      outline: $size-stroke solid $color-on-primary;
+      outline-offset: $size-025;
+    }
   }
 
-  &__sort-text {
+  &__sort-label {
+    flex-shrink: 0;
     white-space: nowrap;
+  }
+
+  &__sort-select {
+    min-width: 0;
+    flex: 1;
+    appearance: none;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: $color-on-primary;
+    font: inherit;
+    font-weight: $font-weight-bold;
+    cursor: pointer;
+
+    @media (min-width: $breakpoint-tablet) {
+      flex: 0 1 auto;
+    }
   }
 
   &__sort-icon {
@@ -178,6 +260,7 @@ $filter-sort-border: $size-025;
     width: $size-icon-medium;
     height: $size-icon-medium;
     color: $color-on-primary;
+    pointer-events: none;
 
     @media (min-width: $breakpoint-tablet) {
       width: $size-3;
