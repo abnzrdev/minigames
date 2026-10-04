@@ -1,6 +1,17 @@
 @use '../abstracts/tokens' as *;
 @use '../abstracts/breakpoints' as *;
 
+@keyframes leaderboard-skeleton-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+
+  50% {
+    opacity: 0.85;
+  }
+}
+
 .leaderboard {
   padding-block: $size-6;
   background-color: $color-bg;
@@ -187,6 +198,43 @@
   &__score--compact,
   &__streak-unit--short {
     display: none;
+  }
+
+  &__skeleton-row td {
+    padding: $size-2;
+  }
+
+  &__skeleton {
+    width: 100%;
+    height: $size-6;
+    border-radius: $corner-medium;
+    background-color: $color-outline-variant;
+    animation: leaderboard-skeleton-pulse 1.2s ease-in-out infinite;
+  }
+
+  &__state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $size-2;
+    min-height: $size-8;
+    text-align: center;
+
+    &--error {
+      flex-direction: column;
+      color: $color-error;
+    }
+  }
+
+  &__retry {
+    padding: $size-1 $size-2;
+    border: $size-stroke solid $color-on-primary;
+    border-radius: $corner-full;
+    background-color: $color-primary;
+    color: $color-on-primary;
+    font: inherit;
+    font-weight: $font-weight-bold;
+    cursor: pointer;
   }
 
   @media (max-width: ($breakpoint-desktop - 1px)) {
