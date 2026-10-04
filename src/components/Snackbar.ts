@@ -49,7 +49,7 @@ function getSnackbar(): HTMLElement {
 
 export function showSnackbar(message: string, variant: SnackbarVariant): void {
   const snackbar = getSnackbar();
-  const dialog = document.querySelector<HTMLDialogElement>('dialog[open]');
+  const dialog = [...document.querySelectorAll<HTMLDialogElement>('dialog[open]')].at(-1);
 
   (dialog ?? document.body).appendChild(snackbar);
   if (dialog) {

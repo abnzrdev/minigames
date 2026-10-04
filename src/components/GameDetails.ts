@@ -4,6 +4,7 @@ import { fetchGameDetails, gameAssetUrl, type GameDetails, type GameRecord } fro
 import { showSnackbar } from './Snackbar';
 import { escapeHtml } from '../utils/escapeHtml';
 import { loadGameComments } from './GameComments';
+import { currentRoute, subscribeRoute, updateRoute, type RouteState } from '../utils/navigation';
 
 function formatLikesCount(count: number): string {
   if (count < 1000) {
@@ -364,6 +365,10 @@ async function loadGameDetails(dialog: HTMLDialogElement, slug: string): Promise
 }
 
 export function openGameDetailsDialog(slug: string): void {
+  if (slug) updateRoute({ game: slug, auth: null });
+}
+
+function showGameDetailsDialog(slug: string): void {
   const dialog = document.getElementById('game-details');
 
   if (!(dialog instanceof HTMLDialogElement) || !slug) {
@@ -391,7 +396,7 @@ export function initGameDetails(): void {
     return;
   }
 
-  const close = (): void => {
+  const closeView = (): void => {
     if (!dialog.open || dialog.classList.contains('game-details--closing')) {
       return;
     }
@@ -413,6 +418,25 @@ export function initGameDetails(): void {
       recoveringFromError = false;
     }, 200);
   };
+
+  const close = (): void => {
+    updateRoute({ game: null });
+  };
+  const synchronize = (route: RouteState): void => {
+    if (route.game) {
+      if (
+        route.game !== activeSlug ||
+        !dialog.open ||
+        dialog.classList.contains('game-details--closing')
+      ) {
+        showGameDetailsDialog(route.game);
+      }
+    } else {
+      closeView();
+    }
+  };
+  subscribeRoute(synchronize);
+  synchronize(currentRoute());
 
   document.addEventListener('click', (event) => {
     const target = event.target;
