@@ -8,6 +8,18 @@ import {
 } from './LibraryFilterBar';
 import { showSnackbar } from './Snackbar';
 
+export const LIBRARY_PAGE_CHANGE_EVENT = 'library-page-change';
+export const LIBRARY_PAGINATION_UPDATE_EVENT = 'library-pagination-update';
+
+export interface LibraryPageChangeDetail {
+  page: number;
+}
+
+export interface LibraryPaginationUpdateDetail {
+  page: number;
+  totalPages: number;
+}
+
 const STAR_ICON = `<svg class="game-card__icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
   <path fill="currentColor" d="M8 1.2l1.8 3.7 4.1.6-3 2.9.7 4.1L8 10.6 4.4 12.5l.7-4.1-3-2.9 4.1-.6L8 1.2z"/>
 </svg>`;
@@ -132,7 +144,7 @@ function createLoadingHtml(): string {
 function createEmptyHtml(): string {
   return `
     <div class="library-body__state">
-      <p>No games found.</p>
+      <p>Data Not Found</p>
     </div>
   `;
 }
@@ -152,6 +164,17 @@ function createErrorHtml(): string {
       </button>
     </div>
   `;
+}
+
+function dispatchPaginationUpdate(page: number, totalPages: number): void {
+  window.dispatchEvent(
+    new CustomEvent<LibraryPaginationUpdateDetail>(LIBRARY_PAGINATION_UPDATE_EVENT, {
+      detail: {
+        page,
+        totalPages,
+      },
+    })
+  );
 }
 
 export function renderLibraryBody(): HTMLElement {
@@ -178,6 +201,7 @@ export function renderLibraryBody(): HTMLElement {
 
   let activeCategory: CategorySlug = 'all';
   let activeSort: GameSort = 'rating-desc';
+  let activePage = 1;
   let recoveringFromError = false;
   let requestVersion = 0;
 
@@ -187,10 +211,10 @@ export function renderLibraryBody(): HTMLElement {
     grid.innerHTML = createLoadingHtml();
 
     try {
-      const games = await fetchLibraryGames({
+      const result = await fetchLibraryGames({
         category: activeCategory,
         sort: activeSort,
-        page: 1,
+        page: activePage,
         limit: 6,
       });
 
@@ -198,12 +222,19 @@ export function renderLibraryBody(): HTMLElement {
         return;
       }
 
-      if (games.length === 0) {
+      const totalPages = Math.max(1, result.meta.totalPages);
+      const page = Math.min(Math.max(1, result.meta.page), totalPages);
+
+      activePage = page;
+
+      dispatchPaginationUpdate(page, totalPages);
+
+      if (result.games.length === 0) {
         grid.innerHTML = createEmptyHtml();
         return;
       }
 
-      grid.innerHTML = games.map(cardMarkup).join('');
+      grid.innerHTML = result.games.map(cardMarkup).join('');
 
       if (recoveringFromError) {
         showSnackbar('Games loaded successfully.', 'success');
@@ -245,6 +276,9 @@ export function renderLibraryBody(): HTMLElement {
     }
 
     activeCategory = detail.category;
+    activePage = 1;
+
+    dispatchPaginationUpdate(1, 1);
 
     void loadGames();
   };
@@ -261,6 +295,25 @@ export function renderLibraryBody(): HTMLElement {
     }
 
     activeSort = detail.sort;
+    activePage = 1;
+
+    dispatchPaginationUpdate(1, 1);
+
+    void loadGames();
+  };
+
+  const handlePageChange = (event: Event): void => {
+    if (!(event instanceof CustomEvent)) {
+      return;
+    }
+
+    const detail = event.detail as LibraryPageChangeDetail;
+
+    if (!Number.isInteger(detail.page) || detail.page < 1 || detail.page === activePage) {
+      return;
+    }
+
+    activePage = detail.page;
 
     void loadGames();
   };
@@ -269,20 +322,24 @@ export function renderLibraryBody(): HTMLElement {
 
   window.addEventListener(LIBRARY_SORT_CHANGE_EVENT, handleSortChange);
 
-  const page = document.getElementById('page-content');
+  window.addEventListener(LIBRARY_PAGE_CHANGE_EVENT, handlePageChange);
 
-  if (page) {
+  const pageContent = document.getElementById('page-content');
+
+  if (pageContent) {
     const observer = new MutationObserver(() => {
       if (!section.isConnected) {
         window.removeEventListener(LIBRARY_CATEGORY_CHANGE_EVENT, handleCategoryChange);
 
         window.removeEventListener(LIBRARY_SORT_CHANGE_EVENT, handleSortChange);
 
+        window.removeEventListener(LIBRARY_PAGE_CHANGE_EVENT, handlePageChange);
+
         observer.disconnect();
       }
     });
 
-    observer.observe(page, {
+    observer.observe(pageContent, {
       childList: true,
     });
   }

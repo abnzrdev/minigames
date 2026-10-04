@@ -34,12 +34,23 @@ export interface LibraryGamesQuery {
   limit: number;
 }
 
+export interface LibraryGamesMeta {
+  page: number;
+  totalPages: number;
+}
+
+export interface LibraryGamesResult {
+  games: Game[];
+  meta: LibraryGamesMeta;
+}
+
 interface FeaturedGamesResponse {
   data: FeaturedGame[];
 }
 
 interface GamesResponse {
   data: Game[];
+  meta: LibraryGamesMeta;
 }
 
 export function cardImageUrl(imagePath: string): string {
@@ -64,7 +75,7 @@ export async function fetchFeaturedGames(): Promise<FeaturedGame[]> {
   return result.data;
 }
 
-export async function fetchLibraryGames(query: LibraryGamesQuery): Promise<Game[]> {
+export async function fetchLibraryGames(query: LibraryGamesQuery): Promise<LibraryGamesResult> {
   const params = new URLSearchParams({
     category: query.category,
     sort: query.sort,
@@ -80,5 +91,8 @@ export async function fetchLibraryGames(query: LibraryGamesQuery): Promise<Game[
 
   const result: GamesResponse = await response.json();
 
-  return result.data;
+  return {
+    games: result.data,
+    meta: result.meta,
+  };
 }
