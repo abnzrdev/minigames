@@ -18,6 +18,17 @@ $filter-sort-pad-y: $size-1;
 $filter-sort-pad-x: $size-2;
 $filter-sort-border: $size-025;
 
+@keyframes library-filter-skeleton-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+
+  50% {
+    opacity: 0.85;
+  }
+}
+
 .library-filter-bar {
   background-color: $color-bg;
   overflow-x: clip;
@@ -128,6 +139,56 @@ $filter-sort-border: $size-025;
       &:hover {
         background-color: $color-primary-high;
       }
+    }
+  }
+
+  &__loading {
+    display: flex;
+    align-items: center;
+    gap: $filter-chip-gap;
+  }
+
+  &__skeleton {
+    display: block;
+    width: $size-10;
+    height: $size-4;
+    flex-shrink: 0;
+    border-radius: $corner-large;
+    background-color: $color-outline-variant;
+    animation: library-filter-skeleton-pulse 1.2s ease-in-out infinite;
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+    }
+  }
+
+  &__state {
+    display: flex;
+    align-items: center;
+    gap: $size-2;
+    min-height: $size-4;
+    color: $color-on-bg;
+    font-size: $font-body-small;
+    font-weight: $font-weight-medium;
+
+    &--error {
+      color: $color-error;
+    }
+  }
+
+  &__retry {
+    padding: $size-05 $size-2;
+    border: $size-stroke solid $color-on-primary;
+    border-radius: $corner-large;
+    background-color: $color-primary;
+    color: $color-on-primary;
+    font-family: $font-family-main;
+    font-size: $font-label-medium;
+    font-weight: $font-weight-bold;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $color-primary-high;
     }
   }
 

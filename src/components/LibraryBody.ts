@@ -1,4 +1,9 @@
+import type { CategorySlug } from '../api/categories';
 import { cardImageUrl, fetchLibraryGames, type Game } from '../api/games';
+import {
+  LIBRARY_CATEGORY_CHANGE_EVENT,
+  type LibraryCategoryChangeDetail,
+} from './LibraryFilterBar';
 import { showSnackbar } from './Snackbar';
 
 const STAR_ICON = `<svg class="game-card__icon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
@@ -169,15 +174,24 @@ export function renderLibraryBody(): HTMLElement {
 
   const grid = gridNode;
 
+  let activeCategory: CategorySlug = 'all';
   let recoveringFromError = false;
+  let requestVersion = 0;
 
   async function loadGames(): Promise<void> {
+    const currentRequest = ++requestVersion;
+
     grid.innerHTML = createLoadingHtml();
 
     try {
-      const games = await fetchLibraryGames();
+      const games = await fetchLibraryGames({
+        category: activeCategory,
+        sort: 'rating-desc',
+        page: 1,
+        limit: 6,
+      });
 
-      if (!section.isConnected) {
+      if (currentRequest !== requestVersion || !section.isConnected) {
         return;
       }
 
@@ -194,7 +208,7 @@ export function renderLibraryBody(): HTMLElement {
         recoveringFromError = false;
       }
     } catch {
-      if (!section.isConnected) {
+      if (currentRequest !== requestVersion || !section.isConnected) {
         return;
       }
 
@@ -214,6 +228,40 @@ export function renderLibraryBody(): HTMLElement {
         { once: true }
       );
     }
+  }
+
+  const handleCategoryChange = (event: Event): void => {
+    if (!(event instanceof CustomEvent)) {
+      return;
+    }
+
+    const detail = event.detail as LibraryCategoryChangeDetail;
+
+    if (detail.category === activeCategory) {
+      return;
+    }
+
+    activeCategory = detail.category;
+
+    void loadGames();
+  };
+
+  window.addEventListener(LIBRARY_CATEGORY_CHANGE_EVENT, handleCategoryChange);
+
+  const page = document.getElementById('page-content');
+
+  if (page) {
+    const observer = new MutationObserver(() => {
+      if (!section.isConnected) {
+        window.removeEventListener(LIBRARY_CATEGORY_CHANGE_EVENT, handleCategoryChange);
+
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(page, {
+      childList: true,
+    });
   }
 
   void loadGames();

@@ -1,3 +1,5 @@
+import type { CategorySlug } from './categories';
+
 const API_BASE_URL = 'https://faxb76kxra.execute-api.eu-central-1.amazonaws.com';
 
 const ASSETS_BASE_URL =
@@ -21,6 +23,15 @@ export interface FeaturedGame {
   cardImage: string;
   rating: number;
   likesCount: number;
+}
+
+export type GameSort = 'rating-desc' | 'rating-asc' | 'name-asc' | 'name-desc';
+
+export interface LibraryGamesQuery {
+  category: CategorySlug;
+  sort: GameSort;
+  page: number;
+  limit: number;
 }
 
 interface FeaturedGamesResponse {
@@ -53,8 +64,15 @@ export async function fetchFeaturedGames(): Promise<FeaturedGame[]> {
   return result.data;
 }
 
-export async function fetchLibraryGames(): Promise<Game[]> {
-  const response = await fetch(`${API_BASE_URL}/api/games?limit=6`);
+export async function fetchLibraryGames(query: LibraryGamesQuery): Promise<Game[]> {
+  const params = new URLSearchParams({
+    category: query.category,
+    sort: query.sort,
+    page: String(query.page),
+    limit: String(query.limit),
+  });
+
+  const response = await fetch(`${API_BASE_URL}/api/games?${params.toString()}`);
 
   if (!response.ok) {
     throw new Error(`Failed to load library games: ${response.status}`);
