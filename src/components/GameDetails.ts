@@ -3,33 +3,7 @@ import starIcon from '../assets/games/star.svg';
 import { fetchGameDetails, gameAssetUrl, type GameDetails, type GameRecord } from '../api/games';
 import { showSnackbar } from './Snackbar';
 import { escapeHtml } from '../utils/escapeHtml';
-
-const COMMENTS = [
-  {
-    initial: 'F',
-    name: 'ForestDweller',
-    time: '3 hours ago',
-    tone: 'blue',
-    likes: 12,
-    text: "The hand-drawn art is absolutely magical 🍄 Every location feels like a page from a children's storybook. The mushroom village made me cry happy tears!",
-  },
-  {
-    initial: 'H',
-    name: 'HerbalTeaLover',
-    time: '1 day ago',
-    tone: 'gold',
-    likes: 5,
-    text: 'Perfect cozy evening game — brew a cup of chamomile, wrap in a blanket and help the little Tukoni prepare for winter. The puzzles are gentle but satisfying.',
-  },
-  {
-    initial: 'C',
-    name: 'CottageCoreMia',
-    time: '3 days ago',
-    tone: 'sand',
-    likes: 8,
-    text: 'I want to live inside this game forever 🌿 The NPCs are so charming, the tea recipes are real, and the atmosphere is pure warmth and calm.',
-  },
-] as const;
+import { loadGameComments } from './GameComments';
 
 function formatLikesCount(count: number): string {
   if (count < 1000) {
@@ -73,49 +47,6 @@ function medalForPosition(position: number): string {
   }
 
   return `#${position}`;
-}
-
-function commentMarkup(comment: (typeof COMMENTS)[number]): string {
-  return `
-    <div class="game-details__comment">
-      <div class="game-details__comment-head">
-        <div class="game-details__person">
-          <span
-            class="game-details__avatar game-details__avatar--${comment.tone}"
-          >
-            ${comment.initial}
-          </span>
-
-          <span class="game-details__name">
-            ${comment.name}
-          </span>
-        </div>
-
-        <span class="game-details__time">
-          ${comment.time}
-        </span>
-      </div>
-
-      <p class="game-details__comment-text">
-        ${comment.text}
-      </p>
-
-      <button
-        type="button"
-        class="game-details__like"
-        data-base-likes="${comment.likes}"
-      >
-        <img
-          src="${favoriteIcon}"
-          width="16"
-          height="16"
-          alt=""
-        />
-
-        <span>${comment.likes}</span>
-      </button>
-    </div>
-  `;
 }
 
 function recordMarkup(record: GameRecord): string {
@@ -352,46 +283,7 @@ function createGameDetailsHtml(game: GameDetails): string {
         </ul>
       </section>
 
-      <section
-        class="game-details__comments"
-        aria-label="Comments"
-      >
-        <h3 class="game-details__section-title">
-          Comments (${COMMENTS.length})
-        </h3>
-
-        <form class="game-details__composer">
-          <span
-            class="game-details__avatar game-details__avatar--you"
-            aria-hidden="true"
-          >
-            U
-          </span>
-
-          <label class="game-details__composer-field">
-            <span class="visually-hidden">
-              Write a comment
-            </span>
-
-            <textarea
-              rows="1"
-              placeholder="Write a comment..."
-            ></textarea>
-          </label>
-
-          <button
-            type="submit"
-            class="game-details__send"
-            aria-label="Send comment"
-          >
-            ➤
-          </button>
-        </form>
-
-        <div class="game-details__comment-list">
-          ${COMMENTS.map(commentMarkup).join('')}
-        </div>
-      </section>
+      <section class="game-details__comments" aria-label="Comments"></section>
     </div>
   `;
 }
@@ -417,6 +309,7 @@ let activeSlug = '';
 let recoveringFromError = false;
 let requestController: AbortController | null = null;
 let closeTimer = 0;
+let cleanupComments: (() => void) | null = null;
 
 async function loadGameDetails(dialog: HTMLDialogElement, slug: string): Promise<void> {
   const card = dialog.querySelector<HTMLElement>('.game-details__card');
@@ -426,6 +319,8 @@ async function loadGameDetails(dialog: HTMLDialogElement, slug: string): Promise
   }
 
   const currentRequest = ++requestVersion;
+  cleanupComments?.();
+  cleanupComments = null;
   requestController?.abort();
   requestController = new AbortController();
 
@@ -444,6 +339,11 @@ async function loadGameDetails(dialog: HTMLDialogElement, slug: string): Promise
     }
 
     card.innerHTML = createGameDetailsHtml(game);
+
+    const comments = card.querySelector<HTMLElement>('.game-details__comments');
+    if (comments) {
+      cleanupComments = loadGameComments(comments, slug);
+    }
 
     if (recoveringFromError) {
       showSnackbar('Game details loaded successfully.', 'success');
@@ -497,6 +397,7 @@ export function initGameDetails(): void {
     }
 
     requestVersion += 1;
+    cleanupComments?.();
     requestController?.abort();
 
     dialog.classList.add('game-details--closing');
@@ -547,6 +448,8 @@ export function initGameDetails(): void {
       return;
     }
 
+    if (target.closest('.game-comments__retry')) return;
+
     if (target.closest('.game-details__retry')) {
       if (activeSlug) {
         void loadGameDetails(dialog, activeSlug);
@@ -566,22 +469,6 @@ export function initGameDetails(): void {
 
       if (label) {
         label.textContent = active ? 'Remove from Favorites' : 'Add to Favorites';
-      }
-
-      return;
-    }
-
-    const likeButton = target.closest<HTMLButtonElement>('.game-details__like');
-
-    if (likeButton) {
-      const count = likeButton.querySelector('span');
-
-      const base = Number(likeButton.dataset.baseLikes ?? '0');
-
-      const active = likeButton.classList.toggle('game-details__like--active');
-
-      if (count) {
-        count.textContent = String(active ? base + 1 : base);
       }
 
       return;
@@ -625,6 +512,8 @@ export function initGameDetails(): void {
   });
 
   dialog.addEventListener('close', () => {
+    cleanupComments?.();
+    cleanupComments = null;
     requestVersion += 1;
     requestController?.abort();
     window.clearTimeout(closeTimer);
