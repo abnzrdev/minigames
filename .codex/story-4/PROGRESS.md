@@ -25,3 +25,6 @@
 
 - Task 3 PR #34 merged at 12a654e; local browser fixtures were required because real API comment lists were empty. Public Story 4 deep link verified.
 - Task 4 session manager, lifecycle checks, reusable protected-action guard and Game Details suspension implemented in four incremental commits. Added jsdom only for DOM integration tests. Fixed Vitest mock callback typing after TypeScript check; all checks then passed, 49 tests, statements 12.38%. Browser checks passed for restore/no renewal, blocked expiration, single modal, URL/DOM preservation, cancellation, corrupt storage and unrelated-key preservation.
+
+- Task 4 PR #35 merged at c7da49f; Pages run 38114750048 succeeded.
+- Task 5 connected existing validated forms to modular Firebase; added all-control pending lock, duplicate prevention, dismissal/navigation locks, safe errors, loading and success/error Snackbar. Tests passed: 65, statements 28.34%. Real browser Firebase registration, displayName update, wrong-password failure and successful retry login verified. Temporary test account deleted after verification; no credentials retained. Story 3 smoke checks passed again.
