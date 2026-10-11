@@ -11,8 +11,8 @@ describe('five-minute app session', () => {
   const profile = { displayName: 'Alice', email: 'alice@example.com' };
   let values: Map<string, string>;
   let signOut: ReturnType<typeof vi.fn<() => Promise<void>>>;
-  let expired: ReturnType<typeof vi.fn>;
-  let cleanupError: ReturnType<typeof vi.fn>;
+  let expired: ReturnType<typeof vi.fn<() => void>>;
+  let cleanupError: ReturnType<typeof vi.fn<() => void>>;
   let manager: ReturnType<typeof createAppSessionManager>;
 
   beforeEach(() => {
