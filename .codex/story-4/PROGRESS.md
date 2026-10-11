@@ -32,3 +32,12 @@
 - Task 5 PR #36 merged at dab8dfe; Pages run 38115001254 succeeded.
 - Task 6 implemented safe profile renderer, Unicode-aware initials and missing/broken image fallback; integrated session subscription in header/mobile menu without logout. Browser verified 375/768/1920, settled menu transitions, photo success/failure, markup as text, generic avatar, expiration Guest reset, no horizontal overflow. HMR module identity affected the initial fixture injection; browser harness now writes only profile fixtures to namespaced storage and invokes the real focus validation event.
 - Final relevant Story 3 regression browser checks passed: server-side category/sort/pagination requests, category reset to page 1, Back/reload synchronization, Details error/retry/Escape, carousel movement and not-found view. No page errors. All checks passed: 9 suites / 84 tests; statements 33.03%.
+
+- Task 6 PR #37 confirmed MERGED into story-4 at ed28a8306b920b49363395c79430821bf593acb6. Six new task PRs merged; 108 points self-assessed. Hard stop reached: no seventh implementation branch or task.
+- Final Pages run 38115314350 SUCCESS at ed28a83; actual public responsive profile/menu/photo/expiry checks passed. Public screenshots attached to PR #37. Repeated real Firebase registration/login verified completed header integration; temporary test account deleted.
+- Wrote REVIEW.md with all six task PRs, full commit histories, merge confirmations, screenshots, verification results, deferred work and manual review instructions. Final post-merge records remain local/uncommitted; no new branch or implementation commit created.
+
+## Batch 2 started 11.10.2026
+- Owner confirmed Batch 1 registration/profile/refresh/session-expiration checks. Preserved original workspace's four source edits; reused existing story-4 worktree with local Batch 1 tracker/review records intact. Pulled latest story-4 at ed28a83, then created logout-guest-mode. Read all six official specs. Comment contract is 1–500 trimmed characters (not 1500).
+
+- Logout implemented in desktop/mobile profile controls; session end clears only its key, publishes Guest Mode immediately and handles serialized Firebase cleanup errors. Game favorite/comment-like flags reset in place; native Details close cleanup now preserves suspended Auth state. Verified 87 passing tests, 33.35% statements; all required commands passed. Browser verified desktop/mobile, pending and explicitly injected Firebase failure, public Details remaining open and unrelated-key preservation.

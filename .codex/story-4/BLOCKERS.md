@@ -1,8 +1,7 @@
 # Blockers and limitations
 
-No active prerequisite blockers. PR #30 merged at 90dbaa5.
-Email/Password authentication enabled — confirmed by project owner; Firebase Console provider state not independently inspected by the agent.
-RS App deadline could not be independently verified; nonblocking per explicit owner override.
-Four npm high severity findings remain; no forced audit fixes used.
-Pages currently serves Story 3; minimal infrastructure PR will enable Story 4 before public runtime evidence.
-Original workspace's four source modifications remain untouched. Work proceeds in ../minigames-batch1.
+Batch 2 authorized; no active external blocker. Preserve Batch 1 history.
+- RS App deadline remains independently unverified; no invented deadline.
+- Four existing Firebase/Firestore/grpc npm high-severity findings remain; no forced downgrade.
+- Google OAuth and final 80% coverage task remain deferred to Batch 3.
+- Original workspace's four source edits preserved; implementation continues in ../minigames-batch1.
