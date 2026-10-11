@@ -1,0 +1,5 @@
+# Keep source and task records consistent with Prettier on Windows and CI.
+*.ts text eol=lf
+*.scss text eol=lf
+*.html text eol=lf
+*.md text eol=lf
