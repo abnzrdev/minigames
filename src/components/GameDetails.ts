@@ -5,7 +5,7 @@ import { showSnackbar } from './Snackbar';
 import { escapeHtml } from '../utils/escapeHtml';
 import { loadGameComments } from './GameComments';
 import { currentRoute, subscribeRoute, updateRoute, type RouteState } from '../utils/navigation';
-import { ensureActiveSession } from '../utils/protectedAction';
+import { initializeFavoriteControl } from './FavoriteControl';
 import { appSession } from '../utils/session';
 
 function formatLikesCount(count: number): string {
@@ -219,7 +219,7 @@ function createGameDetailsHtml(game: GameDetails): string {
               alt=""
             />
 
-            ${formatLikesCount(game.likesCount)}
+            <span data-game-likes>${formatLikesCount(game.likesCount)}</span>
           </span>
         </div>
       </div>
@@ -315,6 +315,7 @@ let recoveringFromError = false;
 let requestController: AbortController | null = null;
 let closeTimer = 0;
 let cleanupComments: (() => void) | null = null;
+let cleanupFavorite: (() => void) | null = null;
 
 async function loadGameDetails(dialog: HTMLDialogElement, slug: string): Promise<void> {
   const card = dialog.querySelector<HTMLElement>('.game-details__card');
@@ -324,6 +325,7 @@ async function loadGameDetails(dialog: HTMLDialogElement, slug: string): Promise
   }
 
   const currentRequest = ++requestVersion;
+  cleanupFavorite?.();
   cleanupComments?.();
   cleanupComments = null;
   requestController?.abort();
@@ -332,9 +334,14 @@ async function loadGameDetails(dialog: HTMLDialogElement, slug: string): Promise
   card.innerHTML = createLoadingHtml();
 
   try {
-    const game = await fetchGameDetails(slug, undefined, requestController.signal);
+    const userEmail = appSession.check()?.email;
+    const game = await fetchGameDetails(slug, userEmail, requestController.signal);
 
     if (currentRequest !== requestVersion || !dialog.open) {
+      return;
+    }
+    if (userEmail !== appSession.check()?.email) {
+      void loadGameDetails(dialog, slug);
       return;
     }
 
@@ -344,6 +351,7 @@ async function loadGameDetails(dialog: HTMLDialogElement, slug: string): Promise
     }
 
     card.innerHTML = createGameDetailsHtml(game);
+    cleanupFavorite = initializeFavoriteControl(card, slug, game);
 
     const comments = card.querySelector<HTMLElement>('.game-details__comments');
     if (comments) {
@@ -427,8 +435,18 @@ export function initGameDetails(): void {
     updateRoute({ game: null });
   };
   let suspendedSlug: string | null = null;
+  let sessionIdentity = appSession.check()?.authenticatedAt;
+  let refreshOnRestore = false;
   appSession.subscribe((session) => {
-    if (session) return;
+    const changed = sessionIdentity !== session?.authenticatedAt;
+    sessionIdentity = session?.authenticatedAt;
+    if (session) {
+      if (changed && activeSlug) {
+        if (suspendedSlug) refreshOnRestore = true;
+        else if (dialog.open) void loadGameDetails(dialog, activeSlug);
+      }
+      return;
+    }
     const favorite = dialog.querySelector<HTMLButtonElement>('.game-details__favorite');
     favorite?.classList.remove('game-details__favorite--active');
     favorite?.setAttribute('aria-pressed', 'false');
@@ -454,6 +472,10 @@ export function initGameDetails(): void {
       suspendedSlug = null;
       dialog.showModal();
       document.body.classList.add('game-details-open');
+      if (refreshOnRestore) {
+        refreshOnRestore = false;
+        void loadGameDetails(dialog, route.game);
+      }
       return;
     }
     if (suspendedSlug) {
@@ -520,23 +542,6 @@ export function initGameDetails(): void {
       return;
     }
 
-    const favoriteButton = target.closest<HTMLButtonElement>('.game-details__favorite');
-
-    if (favoriteButton) {
-      if (!ensureActiveSession()) return;
-      const active = favoriteButton.classList.toggle('game-details__favorite--active');
-
-      favoriteButton.setAttribute('aria-pressed', String(active));
-
-      const label = favoriteButton.querySelector('span');
-
-      if (label) {
-        label.textContent = active ? 'Remove from Favorites' : 'Add to Favorites';
-      }
-
-      return;
-    }
-
     if (event.target === dialog) {
       close();
     }
@@ -577,6 +582,8 @@ export function initGameDetails(): void {
   dialog.addEventListener('close', () => {
     // Auth temporarily closes this native dialog; its loaded public content must survive.
     if (suspendedSlug) return;
+    cleanupFavorite?.();
+    cleanupFavorite = null;
     cleanupComments?.();
     cleanupComments = null;
     requestVersion += 1;

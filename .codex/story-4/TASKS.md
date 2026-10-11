@@ -80,18 +80,18 @@ Prerequisite: PR #30 MERGED at 90dbaa5. Provider enabled status confirmed by own
 ## RSS-QS-4-3-4 (15 points)
 
 - Official specification: https://github.com/rolling-scopes-school/qualifying-stage/blob/main/tasks/minigames/tasks/story-4/RSS-QS-4-3-4-auth-dialog-url-guard.md
-- Status: IN_PROGRESS
+- Status: MERGED
 - Branch: auth-url-guard
 - Dependencies: preceding task PR merged; Batch 1 complete.
-- Tests: 93 passed, 34.90% statements; screenshots auth-guard-direct.png, auth-guard-history.png, auth-guard-expired.png; commits cd9ab97, 266a808; PR pending
+- Tests: 93 passed, 34.90% statements; screenshots attached in PR; commits cd9ab97, 266a808, 10b9201; PR https://github.com/abnzrdev/minigames/pull/39; merge af700b4c26e2e7430ad09f44ca189a4d0bf19b43 (GitHub MERGED)
 
 ## RSS-QS-4-2-1 (15 points)
 
 - Official specification: https://github.com/rolling-scopes-school/qualifying-stage/blob/main/tasks/minigames/tasks/story-4/RSS-QS-4-2-1-favorites-api.md
-- Status: NOT_STARTED
+- Status: IN_PROGRESS
 - Branch: favorites-api
 - Dependencies: preceding task PR merged; Batch 1 complete.
-- Tests: pending; screenshots: pending; commits: pending; PR: pending; merge: pending.
+- Tests: 105 passed, 39.59% statements; screenshots favorite-pending/success/rejected/unknown/expired.png; commits deb4408, f55298b, 99105ae, 012ca17; PR pending
 
 ## RSS-QS-4-2-2 (20 points)
 

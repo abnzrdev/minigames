@@ -70,3 +70,8 @@
 - Genuine local screenshots: auth-guard-direct.png, auth-guard-history.png, auth-guard-expired.png. Isolated valid/expired profile storage fixtures.
 - Browser verified path/query/hash preservation, no extra history entry, one active dialog, valid user guard and expired Guest Back/Forward/Details restoration.
 - All required checks passed: 10 suites / 93 tests; statements 34.90%.
+
+## Batch 2 Task 3 — favorites
+- Genuine screenshots: favorite-pending.png, favorite-success.png, favorite-rejected.png, favorite-unknown.png, favorite-expired.png.
+- Isolated profile identity tested against real backend: favorite POST 200 add and 200 remove, restoring original false state. Error scenarios explicitly intercepted as 400 and aborted response. Read-only recovery never sent another POST; Guest/expired actions sent none.
+- Required checks passed: 12 suites / 105 tests; statements 39.59%.

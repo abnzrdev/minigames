@@ -55,6 +55,7 @@ export function createAppSessionManager(dependencies: SessionDependencies) {
   let cleanup = Promise.resolve();
   let rejectedRaw: string | null = null;
   let cleanupSucceeded = true;
+  let recoveryVersion = 0;
 
   function publish(session: AppSession | null): void {
     clearTimeout(timer);
@@ -69,6 +70,7 @@ export function createAppSessionManager(dependencies: SessionDependencies) {
   }
 
   function rejectSession(expired: boolean): null {
+    recoveryVersion += 1;
     try {
       dependencies.storage.removeItem(APP_SESSION_KEY);
     } catch {
@@ -131,6 +133,9 @@ export function createAppSessionManager(dependencies: SessionDependencies) {
   }
 
   return {
+    get recoveryVersion() {
+      return recoveryVersion;
+    },
     check,
     authenticate,
     async end(): Promise<boolean> {
