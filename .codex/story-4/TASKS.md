@@ -58,8 +58,8 @@ Prerequisite: PR #30 MERGED at 90dbaa5. Provider enabled status confirmed by own
 
 ## DEFERRED — NOT AUTHORIZED IN THIS BATCH
 
-- RSS-QS-4-1-4: Google OAuth.
-- RSS-QS-4-4-4: Final coverage target.
+- RSS-QS-4-1-4: Google OAuth was deferred in Batches 1/2; authorized in Batch 3 below.
+- RSS-QS-4-4-4: Coverage target was deferred in Batches 1/2; authorized in Batch 3 below.
 - Story 4 final cross-check submission. Never merge story-level cross-check PRs, including #28.
 
 ## Already completed before this batch
@@ -112,7 +112,27 @@ Prerequisite: PR #30 MERGED at 90dbaa5. Provider enabled status confirmed by own
 ## RSS-QS-4-4-3 (35 points)
 
 - Official specification: https://github.com/rolling-scopes-school/qualifying-stage/blob/main/tasks/minigames/tasks/story-4/RSS-QS-4-4-3-successful-test-execution.md
-- Status: VERIFIED
+- Status: MERGED
 - Branch: passing-tests
 - Dependencies: preceding task PR merged; Batch 1 complete.
-- Tests: 133 passed in both commands, 47.21% statements; genuine output screenshots captured; commit 5ebce2e; PR pending; CI pending; merge pending
+- Tests: 133 passed in both commands, 47.21% statements; screenshots attached; commits 5ebce2e, 4766dbe; PR https://github.com/abnzrdev/minigames/pull/43; merge 0d1090cb440315108c384ec77b0f59495bb19e52 (GitHub MERGED); CI 38123193612 and 38123297038 SUCCESS
+
+# Batch 3 - two authorized tasks
+
+## RSS-QS-4-1-4 (40 points)
+
+- Official specification: https://github.com/rolling-scopes-school/qualifying-stage/blob/main/tasks/minigames/tasks/story-4/RSS-QS-4-1-4-google-oauth.md
+- Status: EXTERNALLY_BLOCKED
+- Branch: google-oauth
+- Dependencies: verified story-4 at 0d1090c; required Google provider/domain configuration and real sign-in before merge.
+- Acceptance: enabled provider; working controls; all-actions/input pending lock; dismissal/navigation lock; shared session/profile/close on success; retry/cancel/error and Snackbar.
+- Tests: 154 passed, 48.42% statements; frontend verified, real OAuth unverified; commits 99e9cf8, cb3ba8c, f4aec5d; screenshots captured; provider/domain/Console blocker; PR pending; unmerged
+
+## RSS-QS-4-4-4 (80 points)
+
+- Official specification: https://github.com/rolling-scopes-school/qualifying-stage/blob/main/tasks/minigames/tasks/story-4/RSS-QS-4-4-4-code-coverage-target.md
+- Status: NOT_STARTED
+- Branch: test-coverage-target
+- Dependencies: OAuth PR resolved or explicitly externally blocked; independent tests can proceed from story-4.
+- Acceptance: actual aggregate statements >=80%; meaningful observable behavior; mocked external services; no denominator manipulation; threshold enforced after genuine coverage reached.
+- Tests: baseline 133 passed, 47.21% statements; final coverage/commits/PR/merge/evidence pending.
