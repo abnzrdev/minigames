@@ -23,20 +23,20 @@ Prerequisite: PR #30 MERGED at 90dbaa5. Provider enabled status confirmed by own
 ## RSS-QS-4-2-3 (3 points)
 
 - Official specification: https://github.com/rolling-scopes-school/qualifying-stage/blob/main/tasks/minigames/tasks/story-4/RSS-QS-4-2-3-comment-avatar-styling.md
-- Status: IN_PROGRESS
+- Status: MERGED
 - Branch: `comment-avatar`
 - Dependencies: RSS-QS-4-4-2 PR merged
 - Acceptance criteria: Random avatar-random tokens; stable mounted commenter colors; uppercase trimmed initial.
-- Tests: 3 suites / 21 passed, statements 4.94%; screenshot evidence/comment-avatar.png pending capture; commits 37ebbfb, 6889a3b; PR pending
+- Tests: 21 tests passed, 4.94% statements; screenshots https://github.com/user-attachments/assets/14cefa24-9f51-4b00-929b-0aee75b1f96d; commits 37ebbfb, ae5639b; PR https://github.com/abnzrdev/minigames/pull/34; merge 12a654e (GitHub MERGED)
 
 ## RSS-QS-4-3-2 (20 points)
 
 - Official specification: https://github.com/rolling-scopes-school/qualifying-stage/blob/main/tasks/minigames/tasks/story-4/RSS-QS-4-3-2-session-persistence-expiration.md
-- Status: NOT_STARTED
-- Branch: `session-persistence` (not created)
+- Status: IN_PROGRESS
+- Branch: `session-persistence`
 - Dependencies: RSS-QS-4-2-3 PR merged
 - Acceptance criteria: Five-minute fixed session; namespaced storage; profile validation; restore without renewal; signOut and Guest reset; one expiration Snackbar; navigation/protected-action checks; dialog restoration.
-- Tests: not run; screenshots: none; commits: none; PR: none; merge: none.
+- Tests: 49 tests passed, 12.38% statements; screenshots evidence/session-expiration.png, evidence/session-guest-restored.png; commits 0a5decc, 2d3f7df, f93635b, 611db03; PR pending
 
 ## RSS-QS-4-1-2 (20 points)
 
