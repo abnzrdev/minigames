@@ -122,11 +122,11 @@ Prerequisite: PR #30 MERGED at 90dbaa5. Provider enabled status confirmed by own
 ## RSS-QS-4-1-4 (40 points)
 
 - Official specification: https://github.com/rolling-scopes-school/qualifying-stage/blob/main/tasks/minigames/tasks/story-4/RSS-QS-4-1-4-google-oauth.md
-- Status: EXTERNALLY_BLOCKED
+- Status: VERIFIED — MERGE AUTHORIZED
 - Branch: google-oauth
 - Dependencies: verified story-4 at 0d1090c; required Google provider/domain configuration and real sign-in before merge.
 - Acceptance: enabled provider; working controls; all-actions/input pending lock; dismissal/navigation lock; shared session/profile/close on success; retry/cancel/error and Snackbar.
-- Tests: Frontend verified on updated story-4 base: 209 tests / 24 suites, 94.22% statements (1763/1871); initial commits 99e9cf8, cb3ba8c, f4aec5d, 2898602; base sync commit pending; PR https://github.com/abnzrdev/minigames/pull/44 OPEN DRAFT; real Google/provider/domain unverified; unmerged
+- Tests: 209 passed / 24 suites; 94.22% statements (1763/1871) after normal story-4 sync; commits 99e9cf8, cb3ba8c, f4aec5d, 2898602, 18e16c1; CI 38126893973 SUCCESS; screenshots attached; PR https://github.com/abnzrdev/minigames/pull/44 OPEN VERIFIED, merge authorized; provider/domain confirmed resolved; real Google authorization owner-confirmed; owner screenshot attached and inspected
 
 ## RSS-QS-4-4-4 (80 points)
 
@@ -135,4 +135,4 @@ Prerequisite: PR #30 MERGED at 90dbaa5. Provider enabled status confirmed by own
 - Branch: test-coverage-target
 - Dependencies: OAuth PR resolved or explicitly externally blocked; independent tests can proceed from story-4.
 - Acceptance: actual aggregate statements >=80%; meaningful observable behavior; mocked external services; no denominator manipulation; threshold enforced after genuine coverage reached.
-- Tests: 188 passed, 93.88% statements (1736/1849), threshold 80; commits 01bd13b, ec1558a, 4e9733d, 845be8a, cdfe808, 5734bf9, f79542a; PR https://github.com/abnzrdev/minigames/pull/45; merge 339627026af6fba1f4332fda29a01d1b8880310b GitHub MERGED; CI 38126570626 and 38126742059 SUCCESS; Pages 38126742045 SUCCESS
+- Tests: 188 passed in both commands, 93.88% statements (1736/1849); baseline 47.21%; unchanged exclusions; threshold 80; commits 01bd13b, ec1558a, 4e9733d, 845be8a, cdfe808, 5734bf9; f79542a; genuine screenshots attached; PR https://github.com/abnzrdev/minigames/pull/45 MERGED; merge 339627026af6fba1f4332fda29a01d1b8880310b; CI 38126742059 and Pages 38126742045 SUCCESS
