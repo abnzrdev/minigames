@@ -2,6 +2,7 @@ import type { CategorySlug } from '../api/categories';
 import type { GameSort } from '../api/games';
 import { closeMobileMenu, isAuthPending } from './authDialog';
 import { appSession } from './session';
+import { showSnackbar } from '../components/Snackbar';
 
 export type AppPage = 'home' | 'library' | 'not-found';
 export type AuthMode = 'login' | 'register';
@@ -53,7 +54,8 @@ export function currentRoute(): RouteState {
 }
 
 function routeUrl(route: RouteState): string {
-  const params = new URLSearchParams();
+  const params = new URLSearchParams(location.search);
+  for (const key of ['category', 'sort', 'page', 'game', 'auth']) params.delete(key);
   if (route.page === 'library') {
     if (route.categorySpecified || route.category !== 'all') params.set('category', route.category);
     if (route.sort !== 'rating-desc') params.set('sort', route.sort);
@@ -62,11 +64,23 @@ function routeUrl(route: RouteState): string {
   if (route.game) params.set('game', route.game);
   if (route.auth) params.set('auth', route.auth);
   const query = params.toString();
-  return `${base}${route.path}${query ? `?${query}` : ''}`;
+  return `${base}${route.path}${query ? `?${query}` : ''}${location.hash}`;
+}
+
+/** Clean only auth; preserve unknown query parameters, public state and hash in the same entry. */
+export function guardAuthenticatedAuth(): boolean {
+  const url = new URL(location.href);
+  if (!url.searchParams.has('auth') || !appSession.check()) return false;
+  url.searchParams.delete('auth');
+  history.replaceState(history.state, '', `${url.pathname}${url.search}${url.hash}`);
+  lastPublishedUrl = `${location.pathname}${location.search}${location.hash}`;
+  showSnackbar('You are already authenticated.', 'success');
+  return true;
 }
 
 function publish(): void {
-  lastPublishedUrl = `${location.pathname}${location.search}`;
+  guardAuthenticatedAuth();
+  lastPublishedUrl = `${location.pathname}${location.search}${location.hash}`;
   const route = currentRoute();
   listeners.forEach((listener) => listener(route));
 }
@@ -78,7 +92,11 @@ export function subscribeRoute(listener: (route: RouteState) => void): () => voi
 
 export function updateRoute(change: Partial<RouteState>, replace = false): void {
   if (isAuthPending()) return;
-  appSession.check();
+  const session = appSession.check();
+  if (change.auth && session) {
+    if (!guardAuthenticatedAuth()) showSnackbar('You are already authenticated.', 'success');
+    return;
+  }
   const url = routeUrl({
     ...currentRoute(),
     ...change,
@@ -87,15 +105,15 @@ export function updateRoute(change: Partial<RouteState>, replace = false): void 
       change.categorySpecified ||
       currentRoute().categorySpecified,
   });
-  if (url === `${location.pathname}${location.search}`) return;
+  if (url === `${location.pathname}${location.search}${location.hash}`) return;
   if (replace) history.replaceState(null, '', url);
   else history.pushState(null, '', url);
   publish();
 }
 
 export function initNavigation(): void {
-  history.replaceState(null, '', routeUrl(currentRoute()));
-  lastPublishedUrl = `${location.pathname}${location.search}`;
+  if (!guardAuthenticatedAuth()) history.replaceState(null, '', routeUrl(currentRoute()));
+  lastPublishedUrl = `${location.pathname}${location.search}${location.hash}`;
   window.addEventListener('popstate', () => {
     // Native Back must also keep pending authentication visible. This lock lasts only for the request.
     if (isAuthPending()) {
@@ -103,7 +121,7 @@ export function initNavigation(): void {
       return;
     }
     appSession.check();
-    history.replaceState(null, '', routeUrl(currentRoute()));
+    if (!guardAuthenticatedAuth()) history.replaceState(null, '', routeUrl(currentRoute()));
     closeMobileMenu();
     publish();
   });

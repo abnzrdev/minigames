@@ -1,4 +1,10 @@
-import { currentRoute, subscribeRoute, updateRoute, type RouteState } from './navigation';
+import {
+  currentRoute,
+  guardAuthenticatedAuth,
+  subscribeRoute,
+  updateRoute,
+  type RouteState,
+} from './navigation';
 
 const BODY_MENU_OPEN_CLASS = 'menu-open';
 const BODY_DIALOG_OPEN_CLASS = 'auth-open';
@@ -225,6 +231,7 @@ export function initAuthDialog(): void {
 
   let activeMode: AuthDialogTab | null = null;
   const synchronize = (route: RouteState): void => {
+    if (route.auth && guardAuthenticatedAuth()) route = currentRoute();
     if (route.auth) {
       if (
         route.auth !== activeMode ||
