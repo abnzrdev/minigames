@@ -53,6 +53,7 @@ export function createAppSessionManager(dependencies: SessionDependencies) {
   let active: AppSession | null = null;
   let timer: ReturnType<typeof setTimeout> | undefined;
   let cleanup = Promise.resolve();
+  let rejectedRaw: string | null = null;
 
   function publish(session: AppSession | null): void {
     clearTimeout(timer);
@@ -86,11 +87,15 @@ export function createAppSessionManager(dependencies: SessionDependencies) {
       return active ? rejectSession(false) : null;
     }
     if (raw === null) {
+      rejectedRaw = null;
       return active ? rejectSession(false) : null;
     }
+    if (raw === rejectedRaw) return null;
     const parsed = parseAppSession(raw, now());
-    if (!parsed) return rejectSession(false);
-    if (now() - parsed.authenticatedAt >= APP_SESSION_LIFETIME_MS) return rejectSession(true);
+    if (!parsed || now() - parsed.authenticatedAt >= APP_SESSION_LIFETIME_MS) {
+      rejectedRaw = raw;
+      return rejectSession(parsed !== null);
+    }
     if (JSON.stringify(active) !== JSON.stringify(parsed)) publish(parsed);
     return { ...parsed };
   }
@@ -114,6 +119,7 @@ export function createAppSessionManager(dependencies: SessionDependencies) {
       throw new Error('Session could not be saved. Allow browser storage and retry.');
     }
     publish(session);
+    rejectedRaw = null;
     return { ...session };
   }
 
