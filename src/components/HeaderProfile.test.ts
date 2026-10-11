@@ -2,7 +2,9 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { AppSession } from '../utils/appSession';
 const state = vi.hoisted(() => ({ listeners: [] as Array<(session: AppSession | null) => void> }));
+const logoutMock = vi.hoisted(() => vi.fn().mockResolvedValue(undefined));
 vi.mock('../utils/session', () => ({
+  logout: logoutMock,
   appSession: {
     subscribe: (listener: (session: AppSession | null) => void) => {
       state.listeners.push(listener);
@@ -21,6 +23,15 @@ import { renderHeaderProfile } from './HeaderProfile';
 import { renderHeader } from './Header';
 
 describe('header profile DOM', () => {
+  it('dispatches logout once from the profile control and locks it immediately', () => {
+    logoutMock.mockClear();
+    const root = renderHeaderProfile(profile);
+    const button = root.querySelector<HTMLButtonElement>('.header__logout')!;
+    button.click();
+    button.click();
+    expect(logoutMock).toHaveBeenCalledOnce();
+    expect(button.disabled).toBe(true);
+  });
   const profile: AppSession = {
     displayName: 'Alice Smith',
     email: 'alice@example.com',

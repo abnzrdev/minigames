@@ -5,6 +5,22 @@ $header-height-mobile: $size-8;
 $header-height-tablet: $size-9;
 
 .header {
+  &__logout {
+    padding: $size-1;
+    border: $size-025 solid currentColor;
+    border-radius: $corner-small;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  &__profile--bar &__logout {
+    @include respond-to('tablet') {
+      display: none;
+    }
+  }
+
   [hidden] {
     display: none;
   }

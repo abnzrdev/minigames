@@ -46,3 +46,22 @@
 - Responsive capture waits for real menu transitions to settle. Name/initial/photo/fallback states and no overflow verified at all required widths.
 - All required commands passed: 9 suites / 84 tests; statements 33.03%, branches 34.95%, functions 32.19%, lines 32.60%.
 - Story 3 regression screenshot: evidence/story3-library-regression.png. Browser recorded real server query strings for page=2, category=puzzle and sort=name-desc; verified Back/reload, Details error/retry/Escape, carousel navigation and not-found. Error scenario used an explicitly injected HTTP 500 then real API retry.
+
+## Final public and integrated verification
+- Pages run 38115314350 SUCCESS for ed28a83; public profile/menu at 375/768/1920, loaded/broken image, safe text, generic icon, Guest reset and no overflow passed.
+- Public screenshots locally: header-public-375.png, header-public-768.png, header-public-1920.png, header-public-menu-375.png, header-public-menu-768.png, header-public-photo.png, header-public-broken-photo.png.
+- Completed local app real Firebase registration/profile header and wrong-password retry verified; screenshots auth-final-*.png. Disposable test account deleted, credentials not retained.
+- header-375: https://github.com/user-attachments/assets/bcf68ba8-a1b6-46e3-916a-373ea798ea6a
+- header-768: https://github.com/user-attachments/assets/c5ffd1e1-778f-40e0-9696-c20f55935cfe
+- header-1920: https://github.com/user-attachments/assets/5b983403-3811-4f03-8c19-f2aa8e208889
+- header-menu-375: https://github.com/user-attachments/assets/4a161d8f-31b0-4dfc-8d8e-7e6ed0b17acc
+- header-menu-768: https://github.com/user-attachments/assets/2fba0079-2f45-46a6-9027-70d98cd4b95d
+- header-photo: https://github.com/user-attachments/assets/32637cf3-6abc-4946-a2a3-cf0037f2d90b
+- header-broken-photo: https://github.com/user-attachments/assets/a4e32958-9b11-49ba-863a-5e46b077fb1a
+- Public 375px profile: https://github.com/user-attachments/assets/10ecdfba-652e-4085-8bdb-84adf32f81f9
+- Public 1920px profile: https://github.com/user-attachments/assets/59f7b4ae-9c36-45bb-a1f0-a4795fc13294
+- Real Firebase registration updates completed profile header: https://github.com/user-attachments/assets/59edcae9-0e92-4958-8b1a-d843a15f66bd
+
+## Batch 2 Task 1 — logout
+- Actual local screenshots: logout-details.png, logout-mobile.png, logout-guest.png, logout-pending.png, logout-error.png. Profile storage fixture; failure screenshot uses explicitly injected Firebase signOut rejection at the session boundary. Production source is unmodified by the browser harness.
+- 87 tests passed, coverage 33.35%; lint/format/build/tests/coverage/diff checks passed.

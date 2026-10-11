@@ -15,6 +15,12 @@ export const appSession = createAppSessionManager({
   onCleanupError: () => showSnackbar('Firebase sign-out failed. You are in Guest Mode.', 'error'),
 });
 
+export async function logout(): Promise<void> {
+  showSnackbar('Signing out…', 'success');
+  const success = await appSession.end();
+  if (success) showSnackbar('Logged out successfully.', 'success');
+}
+
 export function initAppSession(): void {
   appSession.subscribe((session) => {
     document.body.dataset.authenticated = String(session !== null);

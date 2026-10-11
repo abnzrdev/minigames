@@ -1,6 +1,7 @@
 import type { AppSession } from '../utils/appSession';
 import { profileInitials, profileName } from '../utils/profile';
 import personIcon from '../assets/auth/person.svg';
+import { logout } from '../utils/session';
 
 export function renderHeaderProfile(profile: AppSession): HTMLElement {
   const name = profileName(profile);
@@ -54,5 +55,14 @@ export function renderHeaderProfile(profile: AppSession): HTMLElement {
   label.textContent = name;
   label.title = name;
   root.append(avatar, label);
+  const logoutButton = document.createElement('button');
+  logoutButton.type = 'button';
+  logoutButton.className = 'header__logout';
+  logoutButton.textContent = 'Log Out';
+  logoutButton.addEventListener('click', () => {
+    logoutButton.disabled = true;
+    void logout();
+  });
+  root.append(logoutButton);
   return root;
 }
