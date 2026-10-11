@@ -14,6 +14,8 @@ import { renderLibraryHero } from './components/LibraryHero';
 import { renderNotFound } from './components/NotFound';
 import { initAuthDialog } from './utils/authDialog';
 import { currentPage, initNavigation, subscribeRoute, type AppPage } from './utils/navigation';
+// Initialize Firebase Authentication when MiniGames starts.
+import './config/firebase';
 
 function renderHomePage(): HTMLElement {
   const main = document.createElement('main');
