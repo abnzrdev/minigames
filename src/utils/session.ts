@@ -16,6 +16,7 @@ export const appSession = createAppSessionManager({
 });
 
 export async function logout(): Promise<void> {
+  showSnackbar('Signing out…', 'success');
   const success = await appSession.end();
   if (success) showSnackbar('Logged out successfully.', 'success');
 }

@@ -43,6 +43,27 @@ describe('five-minute app session', () => {
     vi.useRealTimers();
   });
 
+  it('logout immediately clears profile and only its storage key, then signs out', async () => {
+    manager.authenticate(profile);
+    const listener = vi.fn();
+    manager.subscribe(listener);
+    const request = manager.end();
+    expect(listener).toHaveBeenLastCalledWith(null);
+    expect(manager.check()).toBeNull();
+    expect(values.get('unrelated')).toBe('preserve me');
+    await expect(request).resolves.toBe(true);
+    expect(signOut).toHaveBeenCalledOnce();
+    expect(expired).not.toHaveBeenCalled();
+  });
+
+  it('logout stays in Guest Mode when Firebase sign-out rejects', async () => {
+    manager.authenticate(profile);
+    signOut.mockRejectedValueOnce(Error('offline'));
+    await expect(manager.end()).resolves.toBe(false);
+    expect(manager.check()).toBeNull();
+    expect(cleanupError).toHaveBeenCalledOnce();
+  });
+
   it('persists only profile fields and numeric authentication timestamp', () => {
     const firebaseLikeUser = {
       ...profile,
