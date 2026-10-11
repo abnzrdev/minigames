@@ -25,3 +25,8 @@ dist-ssr
 
 # Local RS School task specs (not pushed)
 /tasks-local/
+
+# Local evidence is uploaded to PRs, not shipped or versioned
+.codex/story-4/evidence/
+.codex/story-4/pr-body.md
+coverage/

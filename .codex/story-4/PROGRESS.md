@@ -1,0 +1,78 @@
+# Progress
+
+## 11.10.2026
+
+- Inspected local Git: firebase-setup; four pre-existing modified source files preserved.
+- Fetched origin and reviewed PR #30: OPEN, head firebase-setup, base story-4, expected commits e65c78e and 70b4ceb; CodeRabbit SUCCESS.
+- Corrected title to `feat(auth): configure Firebase Authentication` and repaired nested task Markdown link.
+- Read Firebase and all six official task specifications.
+- Downloaded and visually inspected existing PR screenshot: project dashboard only; provider configuration is not shown.
+- Created isolated detached review worktree at ../minigames-pr30-review; installed dependencies there and ran checks.
+- Verified public deployment HTTP 200; latest successful Pages run serves story-3 commit 3b1c4ea851cb5fdcfab97dad7335769b96cbcc71. Workflow excludes story-4.
+- Stopped at prerequisite merge gate; no new task branches, commits, PRs or merges. Tracker files remain local and should be included in the first new task PR.
+
+
+- Owner override accepted: provider is confirmed enabled, deadline unverified is nonblocking. PR #30 merged normally at 90dbaa5. Task 1 branch test-tooling created from updated story-4 in ../minigames-batch1; Vitest and V8 coverage provider installed with five meaningful validation tests.
+
+- Task 1 commits: 77e4222 (tooling/config/tracker), 686612c (validation tests). Installed browser tooling outside repository; captured actual test execution output. All required available checks passed.
+
+- PR #31 merged at 99331af. Post-commit branch diff detected CRLF whitespace in tracker lines; the command chain incorrectly continued to merge. Corrected tracker whitespace in Task 2 and switched to sequential exit-code-gated verification. This was a workflow error; no application source issue. Task 2 started from updated story-4.
+
+- Task 2: PR #32 merged at fa60e1b; commits 74fbd7b, 7920e2d. All six checks passed, 15 tests, 4.07% statements. Generated coverage lint warnings fixed with explicit ignore; LF attributes fix Windows checkout formatting. Screenshot uploaded to https://github.com/user-attachments/assets/72ed9f32-c758-4aed-935a-6601837cdbed.
+- Supporting deployment branch deploy-story-4 adds Story 4 trigger and Node 24 matching installed package requirements; Vite base and SPA 404 behavior retained.
+
+- Supporting deployment PR #33 merged at 9faa334; Pages run 38114331752 succeeded for story-4. Environment now permits story-4. Task 3 implemented palette selection and mounted-view commenter map; 21 tests and all checks passed.
+
+- Task 3 PR #34 merged at 12a654e; local browser fixtures were required because real API comment lists were empty. Public Story 4 deep link verified.
+- Task 4 session manager, lifecycle checks, reusable protected-action guard and Game Details suspension implemented in four incremental commits. Added jsdom only for DOM integration tests. Fixed Vitest mock callback typing after TypeScript check; all checks then passed, 49 tests, statements 12.38%. Browser checks passed for restore/no renewal, blocked expiration, single modal, URL/DOM preservation, cancellation, corrupt storage and unrelated-key preservation.
+
+- Task 4 PR #35 merged at c7da49f; Pages run 38114750048 succeeded.
+- Task 5 connected existing validated forms to modular Firebase; added all-control pending lock, duplicate prevention, dismissal/navigation locks, safe errors, loading and success/error Snackbar. Tests passed: 65, statements 28.34%. Real browser Firebase registration, displayName update, wrong-password failure and successful retry login verified. Temporary test account deleted after verification; no credentials retained. Story 3 smoke checks passed again.
+
+- Task 5 PR #36 merged at dab8dfe; Pages run 38115001254 succeeded.
+- Task 6 implemented safe profile renderer, Unicode-aware initials and missing/broken image fallback; integrated session subscription in header/mobile menu without logout. Browser verified 375/768/1920, settled menu transitions, photo success/failure, markup as text, generic avatar, expiration Guest reset, no horizontal overflow. HMR module identity affected the initial fixture injection; browser harness now writes only profile fixtures to namespaced storage and invokes the real focus validation event.
+- Final relevant Story 3 regression browser checks passed: server-side category/sort/pagination requests, category reset to page 1, Back/reload synchronization, Details error/retry/Escape, carousel movement and not-found view. No page errors. All checks passed: 9 suites / 84 tests; statements 33.03%.
+
+- Task 6 PR #37 confirmed MERGED into story-4 at ed28a8306b920b49363395c79430821bf593acb6. Six new task PRs merged; 108 points self-assessed. Hard stop reached: no seventh implementation branch or task.
+- Final Pages run 38115314350 SUCCESS at ed28a83; actual public responsive profile/menu/photo/expiry checks passed. Public screenshots attached to PR #37. Repeated real Firebase registration/login verified completed header integration; temporary test account deleted.
+- Wrote REVIEW.md with all six task PRs, full commit histories, merge confirmations, screenshots, verification results, deferred work and manual review instructions. Final post-merge records remain local/uncommitted; no new branch or implementation commit created.
+
+## Batch 2 started 11.10.2026
+- Owner confirmed Batch 1 registration/profile/refresh/session-expiration checks. Preserved original workspace's four source edits; reused existing story-4 worktree with local Batch 1 tracker/review records intact. Pulled latest story-4 at ed28a83, then created logout-guest-mode. Read all six official specs. Comment contract is 1–500 trimmed characters (not 1500).
+
+- Logout implemented in desktop/mobile profile controls; session end clears only its key, publishes Guest Mode immediately and handles serialized Firebase cleanup errors. Game favorite/comment-like flags reset in place; native Details close cleanup now preserves suspended Auth state. Verified 87 passing tests, 33.35% statements; all required commands passed. Browser verified desktop/mobile, pending and explicitly injected Firebase failure, public Details remaining open and unrelated-key preservation.
+
+- PR #38 merged at 845c4ce. Auth guard branch created from updated story-4; valid users blocked for UI/direct/history entry via replaceState. Preserved unknown query/hash and checked invalid/expired recovery before guarding. All checks passed: 93 tests, 34.90% statements. Browser direct/UI/Forward guard and Guest Back/Forward Details/Auth restoration passed.
+
+- PR #39 merged at af700b4. Favorites implemented with personalized GET, exact guarded POST, pending lock, confirmed response state/count, read-only reconciliation after unknown outcomes, stale-session rejection. Fixed erasableSyntaxOnly class syntax and inactive feedback display; all checks passed (105 tests, 39.59%). Browser real add/remove returned 200 and restored isolated identity favorite to false; injected 400 and lost response verified recovery, Guest/expiration sent no POST.
+- PR #40 confirmed merged at 846a68f. Comment submission now validates 1-500 trimmed characters, locks input/send, supports Enter/Shift+Enter, retains drafts on failures, and refreshes personalized latest-three comments after confirmed 201. Added textContent rendering and server-total checks. Browser real creation passed; backend strips tags, so harness assertion was corrected without changing app behavior. Three isolated verification comments remain on Cozy Sudoku. All checks passed: 124 tests / 15 suites, 45% statements. Story 3 regression checks passed with no page errors.
+- PR #41 merged at aba9c4d. Comment likes now use personalized initial state, exact guarded UUID toggle, pending indicator/lock, confirmed state/count, and read-only reconciliation after unknown results. Old controllers disposed before list refresh; late responses cannot restore expired state. All checks passed: 133 tests / 16 suites, 47.21% statements. Browser real like/unlike 200/200 restored original state/count; personalized reload, injected 403/aborted recovery, Guest/expired no POST and late-response expiration verified. Story 3 regression passed.
+- PR #42 confirmed merged at c56835c. Final authorized branch passing-tests adds CI checks for lint/format/build and both complete-suite commands plus coverage artifact. All local checks passed: 16 suites, 133 tests, zero failures; 47.21% statements. Genuine execution output screenshots captured from actual subprocess stdout/stderr. Repeated real Firebase registration/displayName update, wrong-password failure and successful login passed; temporary account deleted. No coverage exclusions or dummy tests added.
+- Task 6 PR #43 confirmed MERGED into story-4 at 0d1090cb440315108c384ec77b0f59495bb19e52. Six authorized Batch 2 tasks complete (115 points self-assessed). Hard stop: no further implementation branch or task. Clean-install PR CI 38123193612 and final push CI 38123297038 succeeded; both commands passed 133 tests. Pages run 38123297013 succeeded at final merge. Public JavaScript matches its actual deployment artifact byte-for-byte; local Windows bundle hash differs from Linux CI build, so direct local-hash assumption was replaced by artifact verification. Public 375/768/1920 composer cap/scroll, guard query/hash, logout storage isolation, Guest/expired no mutation, Auth/Details restoration and Library deep link passed, no page errors. Final screenshots uploaded to PR #43. PR #28 remains OPEN.
+- Wrote BATCH2_REVIEW.md with all six PRs, full commit/merge SHAs, uploaded evidence URLs, CI/deployment, regressions, limitations and manual review checks. Verified original Batch 1 PROGRESS/EVIDENCE/REVIEW content retained before synchronizing final local records. Original four source edits left untouched.
+
+## Batch 3 started 11.10.2026
+- Re-read official OAuth and coverage specs. Verified PRs #38-#43 MERGED into story-4 with recorded merge SHAs; remote/local baseline 0d1090cb440315108c384ec77b0f59495bb19e52. Original source edits and other worktrees preserved. Local Batch 2 final tracker/report files retained for inclusion in the first Batch 3 PR. npm test and npm run test:coverage both pass 133 tests; statements 47.21%. Created google-oauth from updated story-4. Public Firebase project config HTTP 200 lists localhost/Firebase domains but not abnzrdev.github.io.
+- OAuth implemented with existing Google buttons and shared request lock/recovery; SDK profile creates the same fixed app session. Genuine tests cover provider contract, token omission, profile/photo/header, both forms, pending input/action/dismissal/history locks, cancel/failure/retry and expiration/logout. Fixed test mock typing and corrected test initialization/fake-clock setup without weakening assertions. All checks pass: 154 tests, 48.42% statements. Real localhost popup creation/cancellation verified; success screenshot uses explicit mocked boundary and is not production OAuth. Console redirects to Google sign-in; no authorized Console/CLI connection available. Public provider probe returned 400 OPERATION_NOT_ALLOWED (identity provider configuration not found); public domain absent. Frontend complete, task externally blocked and must remain unmerged.
+- OAuth PR #44 created OPEN DRAFT with seven verified uploaded image links; mandatory provider/domain/real sign-in remain blocked. CI 38125658088 SUCCESS (154 tests on OAuth branch). Per explicit independent-work exception, stopped OAuth implementation and created test-coverage-target from story-4 0d1090c; no OAuth source copied. Preserved/reconciled Batch 2 local records and both Batch 3 task statuses. Coverage baseline reconfirmed 133 tests / 47.21%.
+- Added genuine API contracts, Library filters/sort/pagination/history/stale response/retry, carousel autoplay/gestures/loop/cleanup, Game Details loading/error/empty/restoration/session/abort, Leaderboard, Snackbar and full native app bootstrap/routing/session tests. Corrected controlled async loading assertion and page-1 URL normalization expectation without weakening behavior checks. No application logic changed or excluded. Coverage progressed 71.93% then 82.47%, threshold 80 added, final 93.88% (1736/1849); statement denominator unchanged. Both commands pass 188 tests / 23 suites. Full file table shown. All lint/format/build/tests/coverage/diff checks pass. Story 3 browser regression passes, no page errors.
+
+
+## Batch 3 final verification — 11.10.2026
+Coverage PR #45 confirmed MERGED into story-4 at 339627026af6fba1f4332fda29a01d1b8880310b. 188 tests / 23 suites pass, 93.88% statements; all mandatory checks pass. Pages run 38126742045 and final CI 38126742059 SUCCESS. Served JS matches deployed artifact byte-for-byte. OAuth PR #44 remains OPEN DRAFT, UNMERGED; normal base sync 18e16c1f6fbc130ac72f9059fc48b4af5f560318 passes 209 tests / 94.22%, CI 38126893973 SUCCESS. Google provider/domain and real authorization remain mandatory external blockers. Final report BATCH-3-REVIEW.md records results and evidence. No final cross-check created; #28 remains open. Final local records intentionally uncommitted; no direct story-4 commit.
+
+
+## Google configuration follow-up — 11.10.2026
+Owner reported configuration completed. Independent client project GET now lists abnzrdev.github.io; Google createAuthUri returns HTTP 200/providerId google.com. Actual Firebase signInWithPopup reaches accounts.google.com/v3/signin/identifier for minigames-rsschool.firebaseapp.com. Provider/domain blockers RESOLVED. Real completed Google authorization remains UNVERIFIED because available automation browser has no authenticated Google account. No credentials requested. Mandatory merge gate remains; PR #44 OPEN DRAFT/unmerged. Fresh lint, format, build, npm test, coverage and diff checks pass: 209 tests / 94.22% statements.
+
+
+## Owner sign-in confirmation and PR preparation — 11.10.2026
+Owner confirms real Google sign-in succeeded and will attach the successful authorization image. Recorded as owner-confirmed, not independently authenticated by agent. PR #44 title/body refreshed with all seven official acceptance criteria, verified existing images, 209 passing tests / 94.22% coverage and truthful undeployed OAuth status. Marked ready for review; remains OPEN/UNMERGED pending owner screenshot/final review. Configuration blockers resolved. No merge performed per latest request.
+
+
+## Final handoff authorization — 11.10.2026
+Owner supplied successful Google sign-in screenshot in PR #44: https://github.com/user-attachments/assets/103d002f-3769-43e1-b995-5624d399e510. Agent inspected authenticated profile/header screenshot; real authorization remains owner-confirmed, not agent-account authentication. Provider/domain independently verified. Screenshot/authorization merge gates resolved. Owner now explicitly authorizes final cleanup and creating story-4 -> story-3 cross-check PR, superseding earlier NOT CREATED instruction. Cross-check must remain open/unmerged; #28 also remains open.
+
+
+## Completed Story 4 handoff — 11.10.2026
+OAuth #44 MERGED at 5ae497547607907fb4266853907fed8f10403362 with inspected owner screenshot and independent provider/domain configuration verification. Fresh checks pass: 209 tests / 94.22% statements; CI 38128825280 SUCCESS. Final cross-check https://github.com/abnzrdev/minigames/pull/46 created as story-4 -> story-3, remains OPEN/UNMERGED. #28 remains OPEN. Current OAuth blockers resolved; prior blocked chronology retained below/in history. Original four source edits preserved. Final deployment verification recorded in cross-check PR after deployment finishes.

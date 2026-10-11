@@ -14,6 +14,9 @@ import { renderLibraryHero } from './components/LibraryHero';
 import { renderNotFound } from './components/NotFound';
 import { initAuthDialog } from './utils/authDialog';
 import { currentPage, initNavigation, subscribeRoute, type AppPage } from './utils/navigation';
+// Initialize Firebase Authentication when MiniGames starts.
+import './config/firebase';
+import { initAppSession } from './utils/session';
 
 function renderHomePage(): HTMLElement {
   const main = document.createElement('main');
@@ -44,6 +47,7 @@ function pageView(page: AppPage): HTMLElement {
 
 const app = document.getElementById('app');
 if (app) {
+  initAppSession();
   initNavigation();
   const content = document.createElement('div');
   content.id = 'page-content';

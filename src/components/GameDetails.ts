@@ -3,8 +3,11 @@ import starIcon from '../assets/games/star.svg';
 import { fetchGameDetails, gameAssetUrl, type GameDetails, type GameRecord } from '../api/games';
 import { showSnackbar } from './Snackbar';
 import { escapeHtml } from '../utils/escapeHtml';
+import { initializeCommentComposer } from './CommentComposer';
 import { loadGameComments } from './GameComments';
 import { currentRoute, subscribeRoute, updateRoute, type RouteState } from '../utils/navigation';
+import { initializeFavoriteControl } from './FavoriteControl';
+import { appSession } from '../utils/session';
 
 function formatLikesCount(count: number): string {
   if (count < 1000) {
@@ -217,7 +220,7 @@ function createGameDetailsHtml(game: GameDetails): string {
               alt=""
             />
 
-            ${formatLikesCount(game.likesCount)}
+            <span data-game-likes>${formatLikesCount(game.likesCount)}</span>
           </span>
         </div>
       </div>
@@ -312,7 +315,9 @@ let activeSlug = '';
 let recoveringFromError = false;
 let requestController: AbortController | null = null;
 let closeTimer = 0;
-let cleanupComments: (() => void) | null = null;
+let cleanupComments: ReturnType<typeof loadGameComments> | null = null;
+let cleanupComposer: (() => void) | null = null;
+let cleanupFavorite: (() => void) | null = null;
 
 async function loadGameDetails(dialog: HTMLDialogElement, slug: string): Promise<void> {
   const card = dialog.querySelector<HTMLElement>('.game-details__card');
@@ -322,6 +327,8 @@ async function loadGameDetails(dialog: HTMLDialogElement, slug: string): Promise
   }
 
   const currentRequest = ++requestVersion;
+  cleanupFavorite?.();
+  cleanupComposer?.();
   cleanupComments?.();
   cleanupComments = null;
   requestController?.abort();
@@ -330,9 +337,14 @@ async function loadGameDetails(dialog: HTMLDialogElement, slug: string): Promise
   card.innerHTML = createLoadingHtml();
 
   try {
-    const game = await fetchGameDetails(slug, undefined, requestController.signal);
+    const userEmail = appSession.check()?.email;
+    const game = await fetchGameDetails(slug, userEmail, requestController.signal);
 
     if (currentRequest !== requestVersion || !dialog.open) {
+      return;
+    }
+    if (userEmail !== appSession.check()?.email) {
+      void loadGameDetails(dialog, slug);
       return;
     }
 
@@ -342,10 +354,13 @@ async function loadGameDetails(dialog: HTMLDialogElement, slug: string): Promise
     }
 
     card.innerHTML = createGameDetailsHtml(game);
+    cleanupFavorite = initializeFavoriteControl(card, slug, game);
 
     const comments = card.querySelector<HTMLElement>('.game-details__comments');
     if (comments) {
-      cleanupComments = loadGameComments(comments, slug);
+      const view = loadGameComments(comments, slug);
+      cleanupComments = view;
+      cleanupComposer = initializeCommentComposer(card, slug, view.refresh);
     }
 
     if (recoveringFromError) {
@@ -424,7 +439,55 @@ export function initGameDetails(): void {
   const close = (): void => {
     updateRoute({ game: null });
   };
+  let suspendedSlug: string | null = null;
+  let sessionIdentity = appSession.check()?.authenticatedAt;
+  let refreshOnRestore = false;
+  appSession.subscribe((session) => {
+    const changed = sessionIdentity !== session?.authenticatedAt;
+    sessionIdentity = session?.authenticatedAt;
+    if (session) {
+      if (changed && activeSlug) {
+        if (suspendedSlug) refreshOnRestore = true;
+        else if (dialog.open) void loadGameDetails(dialog, activeSlug);
+      }
+      return;
+    }
+    const favorite = dialog.querySelector<HTMLButtonElement>('.game-details__favorite');
+    favorite?.classList.remove('game-details__favorite--active');
+    favorite?.setAttribute('aria-pressed', 'false');
+    const label = favorite?.querySelector('span');
+    if (label) label.textContent = 'Add to Favorites';
+    dialog.querySelectorAll('.game-details__like').forEach((like) => {
+      like.classList.remove('game-details__like--active');
+      like.setAttribute('aria-pressed', 'false');
+    });
+  });
   const synchronize = (route: RouteState): void => {
+    if (route.auth && route.game && route.game === activeSlug) {
+      // Keep loaded content, comment colors and scroll position while Auth temporarily owns the modal.
+      suspendedSlug = route.game;
+      window.clearTimeout(closeTimer);
+      dialog.classList.remove('game-details--closing');
+      dialog.close();
+      document.body.classList.remove('game-details-open');
+      return;
+    }
+    if (route.auth) return;
+    if (route.game && suspendedSlug === route.game) {
+      suspendedSlug = null;
+      dialog.showModal();
+      document.body.classList.add('game-details-open');
+      if (refreshOnRestore) {
+        refreshOnRestore = false;
+        void loadGameDetails(dialog, route.game);
+      }
+      return;
+    }
+    if (suspendedSlug) {
+      suspendedSlug = null;
+      cleanupComments?.();
+      requestController?.abort();
+    }
     if (route.game) {
       if (
         route.game !== activeSlug ||
@@ -484,22 +547,6 @@ export function initGameDetails(): void {
       return;
     }
 
-    const favoriteButton = target.closest<HTMLButtonElement>('.game-details__favorite');
-
-    if (favoriteButton) {
-      const active = favoriteButton.classList.toggle('game-details__favorite--active');
-
-      favoriteButton.setAttribute('aria-pressed', String(active));
-
-      const label = favoriteButton.querySelector('span');
-
-      if (label) {
-        label.textContent = active ? 'Remove from Favorites' : 'Add to Favorites';
-      }
-
-      return;
-    }
-
     if (event.target === dialog) {
       close();
     }
@@ -517,27 +564,13 @@ export function initGameDetails(): void {
     }
   });
 
-  dialog.addEventListener('input', (event) => {
-    const target = event.target;
-
-    if (!(target instanceof HTMLTextAreaElement)) {
-      return;
-    }
-
-    target.style.height = 'auto';
-    target.style.height = `${target.scrollHeight}px`;
-  });
-
-  dialog.addEventListener('submit', (event) => {
-    if (
-      event.target instanceof HTMLFormElement &&
-      event.target.matches('.game-details__composer')
-    ) {
-      event.preventDefault();
-    }
-  });
-
   dialog.addEventListener('close', () => {
+    // Auth temporarily closes this native dialog; its loaded public content must survive.
+    if (suspendedSlug) return;
+    cleanupFavorite?.();
+    cleanupFavorite = null;
+    cleanupComposer?.();
+    cleanupComposer = null;
     cleanupComments?.();
     cleanupComments = null;
     requestVersion += 1;

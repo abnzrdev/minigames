@@ -3,14 +3,17 @@ import { escapeHtml } from '../utils/escapeHtml';
 import { relativeTime } from '../utils/relativeTime';
 import favoriteIcon from '../assets/games/favorite.svg';
 import { showSnackbar } from './Snackbar';
+import { commenterInitial, createCommentAvatarColors } from '../utils/commentAvatar';
+import { initializeCommentLike } from './CommentLikeControl';
+import { appSession } from '../utils/session';
 
-function commentMarkup(comment: GameComment): string {
+function commentMarkup(comment: GameComment, color: string): string {
   return `
     <div class="game-details__comment">
       <div class="game-details__comment-head">
         <div class="game-details__person">
-          <span class="game-details__avatar game-details__avatar--blue" aria-hidden="true">
-            ${escapeHtml(comment.authorName.charAt(0))}
+          <span class="game-details__avatar ${color}" aria-hidden="true">
+            ${escapeHtml(commenterInitial(comment.authorName))}
           </span>
           <span class="game-details__name">${escapeHtml(comment.authorName)}</span>
         </div>
@@ -18,22 +21,30 @@ function commentMarkup(comment: GameComment): string {
           ${relativeTime(comment.createdAt)}
         </time>
       </div>
-      <p class="game-details__comment-text">${escapeHtml(comment.text)}</p>
-      <span class="game-details__like" aria-label="${comment.likesCount} likes">
+      <p class="game-details__comment-text"></p>
+      <button type="button" class="game-details__like" aria-label="Like comment">
         <img src="${favoriteIcon}" width="16" height="16" alt="" />
-        <span>${comment.likesCount}</span>
-      </span>
+        <span data-comment-likes>${comment.likesCount}</span>
+      </button>
     </div>
   `;
 }
 
-export function loadGameComments(section: HTMLElement, slug: string): () => void {
+export function loadGameComments(
+  section: HTMLElement,
+  slug: string
+): (() => void) & { refresh: () => Promise<void> } {
+  const colorFor = createCommentAvatarColors();
   let controller: AbortController | null = null;
   let version = 0;
   let recovering = false;
+  let cleanupLikes: Array<() => void> = [];
+  let email = appSession.check()?.email;
 
   async function load(): Promise<void> {
     const current = ++version;
+    cleanupLikes.forEach((cleanup) => cleanup());
+    cleanupLikes = [];
     controller?.abort();
     controller = new AbortController();
     section.innerHTML = `
@@ -45,14 +56,27 @@ export function loadGameComments(section: HTMLElement, slug: string): () => void
       </div>
     `;
     try {
-      const result = await fetchGameComments(slug, controller.signal);
+      const requestEmail = appSession.check()?.email;
+      const result = await fetchGameComments(slug, controller.signal, requestEmail);
       if (current !== version || !section.isConnected) return;
+      if (requestEmail !== appSession.check()?.email) {
+        void load();
+        return;
+      }
       section.innerHTML = `
         <h3 class="game-details__section-title">Comments (${result.meta.totalComments})</h3>
         <div class="game-details__comment-list">
-          ${result.data.length ? result.data.map(commentMarkup).join('') : '<div class="game-details__state"><p>No comments yet.</p></div>'}
+          ${result.data.length ? result.data.map((comment) => commentMarkup(comment, colorFor(comment.authorName))).join('') : '<div class="game-details__state"><p>No comments yet.</p></div>'}
         </div>
       `;
+      section
+        .querySelectorAll<HTMLElement>('.game-details__comment-text')
+        .forEach((element, index) => {
+          element.textContent = result.data[index].text;
+        });
+      section.querySelectorAll<HTMLElement>('.game-details__comment').forEach((row, index) => {
+        cleanupLikes.push(initializeCommentLike(row, result.data[index], load));
+      });
       if (recovering) {
         showSnackbar('Comments loaded successfully.', 'success');
         recovering = false;
@@ -73,9 +97,20 @@ export function loadGameComments(section: HTMLElement, slug: string): () => void
         ?.addEventListener('click', () => void load(), { once: true });
     }
   }
+  const unsubscribe = appSession.subscribe((session) => {
+    if (email !== session?.email) {
+      email = session?.email;
+      void load();
+    }
+  });
   void load();
-  return () => {
-    version += 1;
-    controller?.abort();
-  };
+  return Object.assign(
+    () => {
+      unsubscribe();
+      cleanupLikes.forEach((cleanup) => cleanup());
+      version += 1;
+      controller?.abort();
+    },
+    { refresh: load }
+  );
 }
