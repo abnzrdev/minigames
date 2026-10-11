@@ -54,6 +54,7 @@ export function createAppSessionManager(dependencies: SessionDependencies) {
   let timer: ReturnType<typeof setTimeout> | undefined;
   let cleanup = Promise.resolve();
   let rejectedRaw: string | null = null;
+  let cleanupSucceeded = true;
 
   function publish(session: AppSession | null): void {
     clearTimeout(timer);
@@ -74,7 +75,13 @@ export function createAppSessionManager(dependencies: SessionDependencies) {
       // Storage can be blocked by the browser; memory still immediately enters Guest Mode.
     }
     publish(null);
-    cleanup = cleanup.then(() => dependencies.signOut()).catch(() => dependencies.onCleanupError());
+    cleanupSucceeded = true;
+    cleanup = cleanup
+      .then(() => dependencies.signOut())
+      .catch(() => {
+        cleanupSucceeded = false;
+        dependencies.onCleanupError();
+      });
     if (expired) dependencies.onExpiration();
     return null;
   }
@@ -126,6 +133,16 @@ export function createAppSessionManager(dependencies: SessionDependencies) {
   return {
     check,
     authenticate,
+    async end(): Promise<boolean> {
+      try {
+        rejectedRaw = dependencies.storage.getItem(APP_SESSION_KEY);
+      } catch {
+        // Even inaccessible storage cannot keep the in-memory session authenticated.
+      }
+      rejectSession(false);
+      await cleanup;
+      return cleanupSucceeded;
+    },
     waitForCleanup: () => cleanup,
     subscribe(listener: (session: AppSession | null) => void): () => void {
       listeners.add(listener);
