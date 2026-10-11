@@ -182,6 +182,29 @@ $auth-cta-shadow: 0 $size-05 $color-on-primary;
     gap: $size-1;
   }
 
+  // Highlight the field when TypeScript detects an invalid value.
+  &__field--invalid {
+    .auth-dialog__control {
+      border-color: $color-error;
+
+      &:focus-within {
+        outline-color: $color-error;
+      }
+    }
+  }
+
+  // Show clear validation feedback below the corresponding input.
+  &__error {
+    color: $color-error;
+    font-size: $font-body-small;
+    line-height: $line-height-normal;
+
+    // Hidden messages must not occupy space in the layout.
+    &[hidden] {
+      display: none;
+    }
+  }
+
   &__label {
     font-size: $font-label-large;
     font-weight: $font-weight-bold;
@@ -272,13 +295,22 @@ $auth-cta-shadow: 0 $size-05 $color-on-primary;
     border: $size-auth-dialog-stroke solid $color-on-primary;
     box-shadow: $auth-cta-shadow;
 
-    &:hover {
+    // Only enabled buttons should react to mouse interactions.
+    &:not(:disabled):hover {
       background-color: $color-primary-high;
     }
 
-    &:active {
+    &:not(:disabled):active {
       transform: translateY($size-025);
       box-shadow: none;
+    }
+
+    // Give invalid forms a clear, non-interactive button appearance.
+    &:disabled {
+      background-color: $color-outline-variant;
+      color: $color-on-bg;
+      box-shadow: none;
+      cursor: not-allowed;
     }
   }
 
