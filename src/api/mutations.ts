@@ -12,7 +12,8 @@ export class MutationFailure extends Error {
 export async function postSessionMutation(
   path: string,
   fields: Record<string, string> = {},
-  expected?: AppSession
+  expected?: AppSession,
+  expectedStatus = 200
 ): Promise<unknown> {
   const session = appSession.check();
   if (
@@ -39,6 +40,9 @@ export async function postSessionMutation(
           : 'unknown',
         `Request failed (${response.status}).`
       );
+    }
+    if (response.status !== expectedStatus) {
+      throw new MutationFailure('unknown', 'Server result could not be confirmed.');
     }
     const result: unknown = await response.json();
     if (!result || typeof result !== 'object' || !('data' in result)) {

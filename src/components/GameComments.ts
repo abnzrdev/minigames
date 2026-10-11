@@ -4,6 +4,7 @@ import { relativeTime } from '../utils/relativeTime';
 import favoriteIcon from '../assets/games/favorite.svg';
 import { showSnackbar } from './Snackbar';
 import { commenterInitial, createCommentAvatarColors } from '../utils/commentAvatar';
+import { appSession } from '../utils/session';
 
 function commentMarkup(comment: GameComment, color: string): string {
   return `
@@ -19,7 +20,7 @@ function commentMarkup(comment: GameComment, color: string): string {
           ${relativeTime(comment.createdAt)}
         </time>
       </div>
-      <p class="game-details__comment-text">${escapeHtml(comment.text)}</p>
+      <p class="game-details__comment-text"></p>
       <span class="game-details__like" aria-label="${comment.likesCount} likes">
         <img src="${favoriteIcon}" width="16" height="16" alt="" />
         <span>${comment.likesCount}</span>
@@ -28,11 +29,15 @@ function commentMarkup(comment: GameComment, color: string): string {
   `;
 }
 
-export function loadGameComments(section: HTMLElement, slug: string): () => void {
+export function loadGameComments(
+  section: HTMLElement,
+  slug: string
+): (() => void) & { refresh: () => Promise<void> } {
   const colorFor = createCommentAvatarColors();
   let controller: AbortController | null = null;
   let version = 0;
   let recovering = false;
+  let email = appSession.check()?.email;
 
   async function load(): Promise<void> {
     const current = ++version;
@@ -47,14 +52,24 @@ export function loadGameComments(section: HTMLElement, slug: string): () => void
       </div>
     `;
     try {
-      const result = await fetchGameComments(slug, controller.signal);
+      const requestEmail = appSession.check()?.email;
+      const result = await fetchGameComments(slug, controller.signal, requestEmail);
       if (current !== version || !section.isConnected) return;
+      if (requestEmail !== appSession.check()?.email) {
+        void load();
+        return;
+      }
       section.innerHTML = `
         <h3 class="game-details__section-title">Comments (${result.meta.totalComments})</h3>
         <div class="game-details__comment-list">
           ${result.data.length ? result.data.map((comment) => commentMarkup(comment, colorFor(comment.authorName))).join('') : '<div class="game-details__state"><p>No comments yet.</p></div>'}
         </div>
       `;
+      section
+        .querySelectorAll<HTMLElement>('.game-details__comment-text')
+        .forEach((element, index) => {
+          element.textContent = result.data[index].text;
+        });
       if (recovering) {
         showSnackbar('Comments loaded successfully.', 'success');
         recovering = false;
@@ -75,9 +90,19 @@ export function loadGameComments(section: HTMLElement, slug: string): () => void
         ?.addEventListener('click', () => void load(), { once: true });
     }
   }
+  const unsubscribe = appSession.subscribe((session) => {
+    if (email !== session?.email) {
+      email = session?.email;
+      void load();
+    }
+  });
   void load();
-  return () => {
-    version += 1;
-    controller?.abort();
-  };
+  return Object.assign(
+    () => {
+      unsubscribe();
+      version += 1;
+      controller?.abort();
+    },
+    { refresh: load }
+  );
 }
