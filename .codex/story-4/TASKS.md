@@ -23,11 +23,11 @@ Prerequisite: PR #30 MERGED at 90dbaa5. Provider enabled status confirmed by own
 ## RSS-QS-4-2-3 (3 points)
 
 - Official specification: https://github.com/rolling-scopes-school/qualifying-stage/blob/main/tasks/minigames/tasks/story-4/RSS-QS-4-2-3-comment-avatar-styling.md
-- Status: NOT_STARTED
-- Branch: `comment-avatar` (not created)
+- Status: IN_PROGRESS
+- Branch: `comment-avatar`
 - Dependencies: RSS-QS-4-4-2 PR merged
 - Acceptance criteria: Random avatar-random tokens; stable mounted commenter colors; uppercase trimmed initial.
-- Tests: not run; screenshots: none; commits: none; PR: none; merge: none.
+- Tests: 3 suites / 21 passed, statements 4.94%; screenshot evidence/comment-avatar.png pending capture; commits 37ebbfb, 6889a3b; PR pending
 
 ## RSS-QS-4-3-2 (20 points)
 

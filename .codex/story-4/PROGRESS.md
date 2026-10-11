@@ -20,3 +20,5 @@
 
 - Task 2: PR #32 merged at fa60e1b; commits 74fbd7b, 7920e2d. All six checks passed, 15 tests, 4.07% statements. Generated coverage lint warnings fixed with explicit ignore; LF attributes fix Windows checkout formatting. Screenshot uploaded to https://github.com/user-attachments/assets/72ed9f32-c758-4aed-935a-6601837cdbed.
 - Supporting deployment branch deploy-story-4 adds Story 4 trigger and Node 24 matching installed package requirements; Vite base and SPA 404 behavior retained.
+
+- Supporting deployment PR #33 merged at 9faa334; Pages run 38114331752 succeeded for story-4. Environment now permits story-4. Task 3 implemented palette selection and mounted-view commenter map; 21 tests and all checks passed.
