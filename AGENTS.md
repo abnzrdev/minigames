@@ -1,6 +1,5 @@
-# Story 4 Batch 3
+# Story 4 review handoff
 
-Read .codex/story-4/TASKS.md, PROGRESS.md, EVIDENCE.md, BLOCKERS.md and review reports before continuing. Preserve historical records and unrelated worktrees/edits.
-Implement only Google OAuth and genuine 80% aggregate statement coverage, each in its own branch/PR from story-4. Use normal verified merges. If OAuth is externally blocked, leave its PR open and continue independent coverage from story-4.
-Never create/merge final Story 4 cross-check or merge PR #28. Do not submit to RS App. Stop after these two tasks and report incomplete criteria truthfully.
+Read .codex/story-4/TASKS.md, PROGRESS.md, EVIDENCE.md, BLOCKERS.md and review reports. Preserve existing history and unrelated worktrees/edits.
+All 16 Story 4 tasks are merged. Final cross-check https://github.com/abnzrdev/minigames/pull/46 is authorized and open as story-4 -> story-3. Never merge this cross-check or Story 3 #28. Do not submit to RS App or implement new features without authorization.
 Use TypeScript/native DOM/SCSS tokens/Firebase modular SDK/Vitest. No explicit any, console.log, alert/confirm or fake tests/evidence.
