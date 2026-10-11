@@ -5,6 +5,7 @@ import { showSnackbar } from './Snackbar';
 import { escapeHtml } from '../utils/escapeHtml';
 import { loadGameComments } from './GameComments';
 import { currentRoute, subscribeRoute, updateRoute, type RouteState } from '../utils/navigation';
+import { ensureActiveSession } from '../utils/protectedAction';
 
 function formatLikesCount(count: number): string {
   if (count < 1000) {
@@ -424,7 +425,29 @@ export function initGameDetails(): void {
   const close = (): void => {
     updateRoute({ game: null });
   };
+  let suspendedSlug: string | null = null;
   const synchronize = (route: RouteState): void => {
+    if (route.auth && route.game && route.game === activeSlug) {
+      // Keep loaded content, comment colors and scroll position while Auth temporarily owns the modal.
+      suspendedSlug = route.game;
+      window.clearTimeout(closeTimer);
+      dialog.classList.remove('game-details--closing');
+      dialog.close();
+      document.body.classList.remove('game-details-open');
+      return;
+    }
+    if (route.auth) return;
+    if (route.game && suspendedSlug === route.game) {
+      suspendedSlug = null;
+      dialog.showModal();
+      document.body.classList.add('game-details-open');
+      return;
+    }
+    if (suspendedSlug) {
+      suspendedSlug = null;
+      cleanupComments?.();
+      requestController?.abort();
+    }
     if (route.game) {
       if (
         route.game !== activeSlug ||
@@ -487,6 +510,7 @@ export function initGameDetails(): void {
     const favoriteButton = target.closest<HTMLButtonElement>('.game-details__favorite');
 
     if (favoriteButton) {
+      if (!ensureActiveSession()) return;
       const active = favoriteButton.classList.toggle('game-details__favorite--active');
 
       favoriteButton.setAttribute('aria-pressed', String(active));

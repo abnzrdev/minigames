@@ -29,3 +29,8 @@
 - evidence/comment-avatar.png: actual running app with explicitly labeled browser comment fixtures. Real API returned empty lists for six inspected games; no comments were submitted. Fixture response injected only by local Playwright route interception. Repeated Alice comments share color, initials checked against rendered names.
 - evidence/story4-deployment.png: public Library/Auth deep link on deployed Story 4. Pages run 38114331752 served commit 9faa334.
 - lint, format, build, test, coverage and diff checks passed: 21 tests, statements 4.94%.
+
+## Task 4
+- Local app screenshots: evidence/session-expiration.png (expired-session Auth plus Snackbar), evidence/session-guest-restored.png (same Game Details restored in Guest Mode). An isolated profile fixture was created through the app-session API; no real Firebase login is claimed for Task 4.
+- Browser automation modified only the custom session timestamp, verified no reload renewal and preserved details DOM; corrupt JSON safely cleared. Unit tests mock storage and Firebase signOut.
+- All required checks passed: 5 suites / 49 tests; statements 12.38%.

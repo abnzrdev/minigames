@@ -98,9 +98,9 @@ function applyAuthTab(tab: AuthDialogTab): void {
   }
 }
 
-export function openAuthDialog(tab: AuthDialogTab = 'login'): void {
+export function openAuthDialog(tab: AuthDialogTab = 'login', preserveGame = false): void {
   closeMobileMenu();
-  updateRoute({ auth: tab, game: null });
+  updateRoute({ auth: tab, game: preserveGame ? currentRoute().game : null });
 }
 
 function showAuthDialog(tab: AuthDialogTab): void {
@@ -183,7 +183,7 @@ export function initAuthDialog(): void {
     button.addEventListener('click', () => {
       const tab = button.dataset.authTab;
       if (tab === 'login' || tab === 'register') {
-        openAuthDialog(tab);
+        openAuthDialog(tab, Boolean(currentRoute().game));
       }
     });
   });
@@ -192,7 +192,7 @@ export function initAuthDialog(): void {
     link.addEventListener('click', () => {
       const tab = link.dataset.authSwitch;
       if (tab === 'login' || tab === 'register') {
-        openAuthDialog(tab);
+        openAuthDialog(tab, Boolean(currentRoute().game));
       }
     });
   });
@@ -227,7 +227,14 @@ export function initAuthDialog(): void {
         showAuthDialog(route.auth);
       }
     } else if (dialog.open) {
-      closeAuthDialogWithAnimation(dialog);
+      if (route.game) {
+        window.clearTimeout(closeTimer);
+        dialog.classList.remove(DIALOG_CLOSING_CLASS);
+        dialog.close();
+        document.body.classList.remove(BODY_DIALOG_OPEN_CLASS);
+      } else {
+        closeAuthDialogWithAnimation(dialog);
+      }
     }
     activeMode = route.auth;
   };

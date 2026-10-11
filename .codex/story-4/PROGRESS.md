@@ -22,3 +22,6 @@
 - Supporting deployment branch deploy-story-4 adds Story 4 trigger and Node 24 matching installed package requirements; Vite base and SPA 404 behavior retained.
 
 - Supporting deployment PR #33 merged at 9faa334; Pages run 38114331752 succeeded for story-4. Environment now permits story-4. Task 3 implemented palette selection and mounted-view commenter map; 21 tests and all checks passed.
+
+- Task 3 PR #34 merged at 12a654e; local browser fixtures were required because real API comment lists were empty. Public Story 4 deep link verified.
+- Task 4 session manager, lifecycle checks, reusable protected-action guard and Game Details suspension implemented in four incremental commits. Added jsdom only for DOM integration tests. Fixed Vitest mock callback typing after TypeScript check; all checks then passed, 49 tests, statements 12.38%. Browser checks passed for restore/no renewal, blocked expiration, single modal, URL/DOM preservation, cancellation, corrupt storage and unrelated-key preservation.

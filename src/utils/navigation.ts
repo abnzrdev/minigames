@@ -1,6 +1,7 @@
 import type { CategorySlug } from '../api/categories';
 import type { GameSort } from '../api/games';
 import { closeMobileMenu } from './authDialog';
+import { appSession } from './session';
 
 export type AppPage = 'home' | 'library' | 'not-found';
 export type AuthMode = 'login' | 'register';
@@ -45,7 +46,7 @@ export function currentRoute(): RouteState {
     sort: page === 'library' && sorts.includes(sort) ? sort : 'rating-desc',
     libraryPage:
       page === 'library' && Number.isSafeInteger(libraryPage) && libraryPage > 0 ? libraryPage : 1,
-    game: mode ? null : url.searchParams.get('game')?.trim() || null,
+    game: url.searchParams.get('game')?.trim() || null,
     auth: mode,
   };
 }
@@ -74,6 +75,7 @@ export function subscribeRoute(listener: (route: RouteState) => void): () => voi
 }
 
 export function updateRoute(change: Partial<RouteState>, replace = false): void {
+  appSession.check();
   const url = routeUrl({
     ...currentRoute(),
     ...change,
@@ -91,6 +93,7 @@ export function updateRoute(change: Partial<RouteState>, replace = false): void 
 export function initNavigation(): void {
   history.replaceState(null, '', routeUrl(currentRoute()));
   window.addEventListener('popstate', () => {
+    appSession.check();
     history.replaceState(null, '', routeUrl(currentRoute()));
     closeMobileMenu();
     publish();
