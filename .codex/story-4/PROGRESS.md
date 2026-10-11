@@ -14,4 +14,6 @@
 
 - Owner override accepted: provider is confirmed enabled, deadline unverified is nonblocking. PR #30 merged normally at 90dbaa5. Task 1 branch test-tooling created from updated story-4 in ../minigames-batch1; Vitest and V8 coverage provider installed with five meaningful validation tests.
 
-- Task 1 commits: 77e4222 (tooling/config/tracker), 626bef1 (validation tests). Installed browser tooling outside repository; captured actual test execution output. All required available checks passed.
+- Task 1 commits: 77e4222 (tooling/config/tracker), 686612c (validation tests). Installed browser tooling outside repository; captured actual test execution output. All required available checks passed.
+
+- PR #31 merged at 99331af. Post-commit branch diff detected CRLF whitespace in tracker lines; the command chain incorrectly continued to merge. Corrected tracker whitespace in Task 2 and switched to sequential exit-code-gated verification. This was a workflow error; no application source issue. Task 2 started from updated story-4.

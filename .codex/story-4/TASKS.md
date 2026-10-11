@@ -5,16 +5,16 @@ Prerequisite: PR #30 MERGED at 90dbaa5. Provider enabled status confirmed by own
 ## RSS-QS-4-4-1 (20 points)
 
 - Official specification: https://github.com/rolling-scopes-school/qualifying-stage/blob/main/tasks/minigames/tasks/story-4/RSS-QS-4-4-1-unit-testing-tooling.md
-- Status: IN_PROGRESS
-- Branch: `test-tooling` (not created)
+- Status: MERGED
+- Branch: `test-tooling`
 - Dependencies: Firebase PR #30 merged
 - Acceptance criteria: Framework devDependencies; TypeScript discovery; DOM only if needed; meaningful tests.
-- Tests: not run; screenshots: none; commits: none; PR: none; merge: none.
+- Tests: 1 suite / 5 tests passed; screenshot: evidence/test-tooling.png; commits: 77e4222, 686612c; PR: https://github.com/abnzrdev/minigames/pull/31; merge: 99331af (GitHub MERGED).
 
 ## RSS-QS-4-4-2 (15 points)
 
 - Official specification: https://github.com/rolling-scopes-school/qualifying-stage/blob/main/tasks/minigames/tasks/story-4/RSS-QS-4-4-2-test-coverage-scripts.md
-- Status: NOT_STARTED
+- Status: IN_PROGRESS
 - Branch: `test-coverage-scripts` (not created)
 - Dependencies: RSS-QS-4-4-1 PR merged
 - Acceptance criteria: Test and coverage scripts; terminal summary; all application logic; commented exclusions.
@@ -67,4 +67,3 @@ Prerequisite: PR #30 MERGED at 90dbaa5. Provider enabled status confirmed by own
 - RSS-QS-4-4-3: Final successful test execution task.
 - RSS-QS-4-4-4: Final coverage target.
 - Story 4 final cross-check submission. Never merge story-level cross-check PRs, including #28.
-

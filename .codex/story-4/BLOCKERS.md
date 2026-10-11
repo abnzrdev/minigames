@@ -1,4 +1,4 @@
-﻿# Blockers and limitations
+# Blockers and limitations
 
 No active prerequisite blockers. PR #30 merged at 90dbaa5.
 Email/Password authentication enabled — confirmed by project owner; Firebase Console provider state not independently inspected by the agent.
