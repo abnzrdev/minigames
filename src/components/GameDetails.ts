@@ -6,6 +6,7 @@ import { escapeHtml } from '../utils/escapeHtml';
 import { loadGameComments } from './GameComments';
 import { currentRoute, subscribeRoute, updateRoute, type RouteState } from '../utils/navigation';
 import { ensureActiveSession } from '../utils/protectedAction';
+import { appSession } from '../utils/session';
 
 function formatLikesCount(count: number): string {
   if (count < 1000) {
@@ -426,6 +427,18 @@ export function initGameDetails(): void {
     updateRoute({ game: null });
   };
   let suspendedSlug: string | null = null;
+  appSession.subscribe((session) => {
+    if (session) return;
+    const favorite = dialog.querySelector<HTMLButtonElement>('.game-details__favorite');
+    favorite?.classList.remove('game-details__favorite--active');
+    favorite?.setAttribute('aria-pressed', 'false');
+    const label = favorite?.querySelector('span');
+    if (label) label.textContent = 'Add to Favorites';
+    dialog.querySelectorAll('.game-details__like').forEach((like) => {
+      like.classList.remove('game-details__like--active');
+      like.setAttribute('aria-pressed', 'false');
+    });
+  });
   const synchronize = (route: RouteState): void => {
     if (route.auth && route.game && route.game === activeSlug) {
       // Keep loaded content, comment colors and scroll position while Auth temporarily owns the modal.
@@ -562,6 +575,8 @@ export function initGameDetails(): void {
   });
 
   dialog.addEventListener('close', () => {
+    // Auth temporarily closes this native dialog; its loaded public content must survive.
+    if (suspendedSlug) return;
     cleanupComments?.();
     cleanupComments = null;
     requestVersion += 1;
