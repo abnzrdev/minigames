@@ -29,6 +29,15 @@ $color-avatar-3: #bce3ff;
 $color-avatar-4: #ffc6ff;
 $color-avatar-5: #e8dff5;
 
+// The avatar-random palette reuses the existing design-token avatar backgrounds.
+$avatar-random: (
+  $color-avatar-1,
+  $color-avatar-2,
+  $color-avatar-3,
+  $color-avatar-4,
+  $color-avatar-5
+);
+
 // Spacing & Size Tokens
 $size-025: 2px;
 $size-05: 4px;

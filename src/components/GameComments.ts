@@ -3,14 +3,15 @@ import { escapeHtml } from '../utils/escapeHtml';
 import { relativeTime } from '../utils/relativeTime';
 import favoriteIcon from '../assets/games/favorite.svg';
 import { showSnackbar } from './Snackbar';
+import { commenterInitial, createCommentAvatarColors } from '../utils/commentAvatar';
 
-function commentMarkup(comment: GameComment): string {
+function commentMarkup(comment: GameComment, color: string): string {
   return `
     <div class="game-details__comment">
       <div class="game-details__comment-head">
         <div class="game-details__person">
-          <span class="game-details__avatar game-details__avatar--blue" aria-hidden="true">
-            ${escapeHtml(comment.authorName.charAt(0))}
+          <span class="game-details__avatar ${color}" aria-hidden="true">
+            ${escapeHtml(commenterInitial(comment.authorName))}
           </span>
           <span class="game-details__name">${escapeHtml(comment.authorName)}</span>
         </div>
@@ -28,6 +29,7 @@ function commentMarkup(comment: GameComment): string {
 }
 
 export function loadGameComments(section: HTMLElement, slug: string): () => void {
+  const colorFor = createCommentAvatarColors();
   let controller: AbortController | null = null;
   let version = 0;
   let recovering = false;
@@ -50,7 +52,7 @@ export function loadGameComments(section: HTMLElement, slug: string): () => void
       section.innerHTML = `
         <h3 class="game-details__section-title">Comments (${result.meta.totalComments})</h3>
         <div class="game-details__comment-list">
-          ${result.data.length ? result.data.map(commentMarkup).join('') : '<div class="game-details__state"><p>No comments yet.</p></div>'}
+          ${result.data.length ? result.data.map((comment) => commentMarkup(comment, colorFor(comment.authorName))).join('') : '<div class="game-details__state"><p>No comments yet.</p></div>'}
         </div>
       `;
       if (recovering) {
