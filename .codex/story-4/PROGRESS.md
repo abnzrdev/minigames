@@ -17,3 +17,6 @@
 - Task 1 commits: 77e4222 (tooling/config/tracker), 686612c (validation tests). Installed browser tooling outside repository; captured actual test execution output. All required available checks passed.
 
 - PR #31 merged at 99331af. Post-commit branch diff detected CRLF whitespace in tracker lines; the command chain incorrectly continued to merge. Corrected tracker whitespace in Task 2 and switched to sequential exit-code-gated verification. This was a workflow error; no application source issue. Task 2 started from updated story-4.
+
+- Task 2: PR #32 merged at fa60e1b; commits 74fbd7b, 7920e2d. All six checks passed, 15 tests, 4.07% statements. Generated coverage lint warnings fixed with explicit ignore; LF attributes fix Windows checkout formatting. Screenshot uploaded to https://github.com/user-attachments/assets/72ed9f32-c758-4aed-935a-6601837cdbed.
+- Supporting deployment branch deploy-story-4 adds Story 4 trigger and Node 24 matching installed package requirements; Vite base and SPA 404 behavior retained.
