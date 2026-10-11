@@ -40,3 +40,9 @@
 - Real network: accounts:signUp 200, accounts:lookup 200, accounts:update 200, accounts:signInWithPassword 400 (wrong password), accounts:signInWithPassword 200, accounts:lookup 200. Operation/status only; no token or password recorded.
 - Browser validated pending Escape lock, username update, failure unlock/retry and successful session creation. Unit tests also cover duplicate submissions, all inputs/actions, close/backdrop/Escape locks, registration profile failure and prior-signOut ordering.
 - lint, format:check, build, test, coverage and diff checks passed: 7 suites / 65 tests; statements 28.34%. Story 3 Home/Auth validation/Escape/Library smoke passed without page errors.
+
+## Task 6
+- Genuine local screenshots: evidence/header-375.png, header-768.png, header-1920.png; mobile menus header-menu-375.png and header-menu-768.png; header-photo.png and header-broken-photo.png. Isolated localStorage profile fixtures, not claimed as Firebase photos. Loaded photo uses an existing official game image fixture.
+- Responsive capture waits for real menu transitions to settle. Name/initial/photo/fallback states and no overflow verified at all required widths.
+- All required commands passed: 9 suites / 84 tests; statements 33.03%, branches 34.95%, functions 32.19%, lines 32.60%.
+- Story 3 regression screenshot: evidence/story3-library-regression.png. Browser recorded real server query strings for page=2, category=puzzle and sort=name-desc; verified Back/reload, Details error/retry/Escape, carousel navigation and not-found. Error scenario used an explicitly injected HTTP 500 then real API retry.

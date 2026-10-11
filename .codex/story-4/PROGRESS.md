@@ -28,3 +28,7 @@
 
 - Task 4 PR #35 merged at c7da49f; Pages run 38114750048 succeeded.
 - Task 5 connected existing validated forms to modular Firebase; added all-control pending lock, duplicate prevention, dismissal/navigation locks, safe errors, loading and success/error Snackbar. Tests passed: 65, statements 28.34%. Real browser Firebase registration, displayName update, wrong-password failure and successful retry login verified. Temporary test account deleted after verification; no credentials retained. Story 3 smoke checks passed again.
+
+- Task 5 PR #36 merged at dab8dfe; Pages run 38115001254 succeeded.
+- Task 6 implemented safe profile renderer, Unicode-aware initials and missing/broken image fallback; integrated session subscription in header/mobile menu without logout. Browser verified 375/768/1920, settled menu transitions, photo success/failure, markup as text, generic avatar, expiration Guest reset, no horizontal overflow. HMR module identity affected the initial fixture injection; browser harness now writes only profile fixtures to namespaced storage and invokes the real focus validation event.
+- Final relevant Story 3 regression browser checks passed: server-side category/sort/pagination requests, category reset to page 1, Back/reload synchronization, Details error/retry/Escape, carousel movement and not-found view. No page errors. All checks passed: 9 suites / 84 tests; statements 33.03%.

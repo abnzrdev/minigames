@@ -41,20 +41,20 @@ Prerequisite: PR #30 MERGED at 90dbaa5. Provider enabled status confirmed by own
 ## RSS-QS-4-1-2 (20 points)
 
 - Official specification: https://github.com/rolling-scopes-school/qualifying-stage/blob/main/tasks/minigames/tasks/story-4/RSS-QS-4-1-2-auth-registration-api.md
-- Status: IN_PROGRESS
+- Status: MERGED
 - Branch: `email-password-auth`
 - Dependencies: RSS-QS-4-3-2 PR merged
 - Acceptance criteria: Firebase login/register; displayName; duplicate prevention; pending input/action/close locks; recovery; session success; required feedback.
-- Tests: 65 tests passed, 28.34% statements; screenshots evidence/auth-pending.png, auth-error.png, auth-registration-success.png, auth-login-success.png; commits f0c569a, b6e2ce5, 8b6cea5, f844cb6; PR pending
+- Tests: 65 tests passed, 28.34% statements; evidence screenshots attached to PR; commits f0c569a, b6e2ce5, 8b6cea5, f844cb6, df42572; PR https://github.com/abnzrdev/minigames/pull/36; merge dab8dfe (GitHub MERGED)
 
 ## RSS-QS-4-3-1 (30 points)
 
 - Official specification: https://github.com/rolling-scopes-school/qualifying-stage/blob/main/tasks/minigames/tasks/story-4/RSS-QS-4-3-1-authenticated-header-profile.md
-- Status: NOT_STARTED
-- Branch: `authenticated-header` (not created)
+- Status: IN_PROGRESS
+- Branch: `authenticated-header`
 - Dependencies: RSS-QS-4-1-2 PR merged
 - Acceptance criteria: Header/mobile profile; safe name fallbacks; photo failure fallback; Unicode initials; 375/768/1920 checks.
-- Tests: not run; screenshots: none; commits: none; PR: none; merge: none.
+- Tests: 84 tests passed, 33.03% statements; screenshots evidence/header-375.png, header-768.png, header-1920.png, header-menu-375.png, header-menu-768.png, header-photo.png, header-broken-photo.png; commits 8d5d4eb, a5228cd, ac156d7; PR pending
 
 ## DEFERRED — NOT AUTHORIZED IN THIS BATCH
 
@@ -67,3 +67,8 @@ Prerequisite: PR #30 MERGED at 90dbaa5. Provider enabled status confirmed by own
 - RSS-QS-4-4-3: Final successful test execution task.
 - RSS-QS-4-4-4: Final coverage target.
 - Story 4 final cross-check submission. Never merge story-level cross-check PRs, including #28.
+
+## Already completed before this batch
+
+- RSS-QS-4-1-1: Auth Forms Real-time Validation, PR #29 MERGED (30 points). Not reimplemented.
+- RSS-QS-4-1-3: Firebase setup, PR #30 MERGED at 90dbaa5 (50 points). Existing prerequisite reviewed; not counted in new batch total.
