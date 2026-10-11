@@ -65,3 +65,8 @@
 ## Batch 2 Task 1 — logout
 - Actual local screenshots: logout-details.png, logout-mobile.png, logout-guest.png, logout-pending.png, logout-error.png. Profile storage fixture; failure screenshot uses explicitly injected Firebase signOut rejection at the session boundary. Production source is unmodified by the browser harness.
 - 87 tests passed, coverage 33.35%; lint/format/build/tests/coverage/diff checks passed.
+
+## Batch 2 Task 2 — Auth URL guard
+- Genuine local screenshots: auth-guard-direct.png, auth-guard-history.png, auth-guard-expired.png. Isolated valid/expired profile storage fixtures.
+- Browser verified path/query/hash preservation, no extra history entry, one active dialog, valid user guard and expired Guest Back/Forward/Details restoration.
+- All required checks passed: 10 suites / 93 tests; statements 34.90%.
