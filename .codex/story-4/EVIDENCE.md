@@ -15,3 +15,7 @@
 - Public URL https://abnzrdev.github.io/minigames/ returned HTTP 200. Latest successful Pages action: story-3 at 3b1c4ea851cb5fdcfab97dad7335769b96cbcc71; Story 4 is not deployed.
 - Runtime browser and Story 3 interaction regression checks: not performed; prerequisite remains blocked.
 
+
+## Task 1
+- npx vitest run: 1 suite, 5 tests passed. Genuine captured process output: evidence/test-tooling.txt and browser screenshot evidence/test-tooling.png (execution-output view, not simulated terminal).
+- npm run lint, npm run format:check, npm run build, git diff --check: passed. Vite development server started successfully.

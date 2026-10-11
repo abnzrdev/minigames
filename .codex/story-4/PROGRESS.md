@@ -13,3 +13,5 @@
 
 
 - Owner override accepted: provider is confirmed enabled, deadline unverified is nonblocking. PR #30 merged normally at 90dbaa5. Task 1 branch test-tooling created from updated story-4 in ../minigames-batch1; Vitest and V8 coverage provider installed with five meaningful validation tests.
+
+- Task 1 commits: 77e4222 (tooling/config/tracker), 626bef1 (validation tests). Installed browser tooling outside repository; captured actual test execution output. All required available checks passed.
