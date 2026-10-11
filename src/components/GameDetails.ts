@@ -340,6 +340,10 @@ async function loadGameDetails(dialog: HTMLDialogElement, slug: string): Promise
     if (currentRequest !== requestVersion || !dialog.open) {
       return;
     }
+    if (userEmail !== appSession.check()?.email) {
+      void loadGameDetails(dialog, slug);
+      return;
+    }
 
     if (!game?.slug || !game.name || !game.specs || !game.fullDescription) {
       card.innerHTML = createEmptyHtml();

@@ -2,11 +2,10 @@ import { appSession } from '../utils/session';
 import type { AppSession } from '../utils/appSession';
 
 export class MutationFailure extends Error {
-  constructor(
-    public readonly kind: 'unauthorized' | 'rejected' | 'unknown',
-    message: string
-  ) {
+  readonly kind: 'unauthorized' | 'rejected' | 'unknown';
+  constructor(kind: 'unauthorized' | 'rejected' | 'unknown', message: string) {
     super(message);
+    this.kind = kind;
   }
 }
 
