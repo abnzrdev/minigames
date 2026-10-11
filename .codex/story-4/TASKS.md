@@ -32,20 +32,20 @@ Prerequisite: PR #30 MERGED at 90dbaa5. Provider enabled status confirmed by own
 ## RSS-QS-4-3-2 (20 points)
 
 - Official specification: https://github.com/rolling-scopes-school/qualifying-stage/blob/main/tasks/minigames/tasks/story-4/RSS-QS-4-3-2-session-persistence-expiration.md
-- Status: IN_PROGRESS
+- Status: MERGED
 - Branch: `session-persistence`
 - Dependencies: RSS-QS-4-2-3 PR merged
 - Acceptance criteria: Five-minute fixed session; namespaced storage; profile validation; restore without renewal; signOut and Guest reset; one expiration Snackbar; navigation/protected-action checks; dialog restoration.
-- Tests: 49 tests passed, 12.38% statements; screenshots evidence/session-expiration.png, evidence/session-guest-restored.png; commits 0a5decc, 2d3f7df, f93635b, 611db03; PR pending
+- Tests: 49 tests passed, 12.38% statements; evidence https://github.com/user-attachments/assets/5453b1dc-a4b6-4512-9c13-8655ee9d9f8e and https://github.com/user-attachments/assets/6db154f9-f218-439c-b394-406f6c3c8460; commits 0a5decc, 2d3f7df, f93635b, 611db03, aa2b883; PR https://github.com/abnzrdev/minigames/pull/35; merge c7da49f (GitHub MERGED)
 
 ## RSS-QS-4-1-2 (20 points)
 
 - Official specification: https://github.com/rolling-scopes-school/qualifying-stage/blob/main/tasks/minigames/tasks/story-4/RSS-QS-4-1-2-auth-registration-api.md
-- Status: NOT_STARTED
-- Branch: `email-password-auth` (not created)
+- Status: IN_PROGRESS
+- Branch: `email-password-auth`
 - Dependencies: RSS-QS-4-3-2 PR merged
 - Acceptance criteria: Firebase login/register; displayName; duplicate prevention; pending input/action/close locks; recovery; session success; required feedback.
-- Tests: not run; screenshots: none; commits: none; PR: none; merge: none.
+- Tests: 65 tests passed, 28.34% statements; screenshots evidence/auth-pending.png, auth-error.png, auth-registration-success.png, auth-login-success.png; commits f0c569a, b6e2ce5, 8b6cea5, f844cb6; PR pending
 
 ## RSS-QS-4-3-1 (30 points)
 

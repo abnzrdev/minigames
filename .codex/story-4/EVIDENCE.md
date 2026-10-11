@@ -34,3 +34,9 @@
 - Local app screenshots: evidence/session-expiration.png (expired-session Auth plus Snackbar), evidence/session-guest-restored.png (same Game Details restored in Guest Mode). An isolated profile fixture was created through the app-session API; no real Firebase login is claimed for Task 4.
 - Browser automation modified only the custom session timestamp, verified no reload renewal and preserved details DOM; corrupt JSON safely cleared. Unit tests mock storage and Firebase signOut.
 - All required checks passed: 5 suites / 49 tests; statements 12.38%.
+
+## Task 5
+- Actual local Firebase screenshots: evidence/auth-pending.png, auth-registration-success.png, auth-error.png, auth-login-success.png. Passwords masked. Isolated test account deleted afterward.
+- Real network: accounts:signUp 200, accounts:lookup 200, accounts:update 200, accounts:signInWithPassword 400 (wrong password), accounts:signInWithPassword 200, accounts:lookup 200. Operation/status only; no token or password recorded.
+- Browser validated pending Escape lock, username update, failure unlock/retry and successful session creation. Unit tests also cover duplicate submissions, all inputs/actions, close/backdrop/Escape locks, registration profile failure and prior-signOut ordering.
+- lint, format:check, build, test, coverage and diff checks passed: 7 suites / 65 tests; statements 28.34%. Story 3 Home/Auth validation/Escape/Library smoke passed without page errors.

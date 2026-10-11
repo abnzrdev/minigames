@@ -4,6 +4,7 @@ import mailIcon from '../assets/auth/mail.svg';
 import personIcon from '../assets/auth/person.svg';
 import visibilityOffIcon from '../assets/auth/visibility-off.svg';
 import visibilityIcon from '../assets/auth/visibility.svg';
+import { initializeAuthenticationFlow } from '../utils/authFlow';
 import {
   validateEmail,
   validateUsername,
@@ -76,20 +77,20 @@ function getValidationError(input: HTMLInputElement, form: HTMLFormElement): str
   }
 }
 
-function initializeFormValidation(form: HTMLFormElement): void {
+function initializeFormValidation(form: HTMLFormElement): () => boolean {
   const inputs = form.querySelectorAll<HTMLInputElement>('input');
   const submitButton = form.querySelector<HTMLButtonElement>('.auth-dialog__submit');
 
-  if (!submitButton) return;
+  if (!submitButton) return () => false;
 
   // We display our own inline errors instead of browser popups.
   form.noValidate = true;
 
   // Update the submit button based on every field in this form.
   function updateSubmitState(): void {
-    submitButton!.disabled = Array.from(inputs).some(
-      (input) => getValidationError(input, form) !== null
-    );
+    submitButton!.disabled =
+      form.closest<HTMLDialogElement>('dialog')?.dataset.pending === 'true' ||
+      Array.from(inputs).some((input) => getValidationError(input, form) !== null);
   }
 
   // Show or clear the error belonging to one input.
@@ -130,6 +131,11 @@ function initializeFormValidation(form: HTMLFormElement): void {
 
   // The form starts invalid because required fields are empty.
   updateSubmitState();
+  return () => {
+    inputs.forEach(showFieldError);
+    updateSubmitState();
+    return Array.from(inputs).every((input) => getValidationError(input, form) === null);
+  };
 }
 
 export function renderAuthDialog(): HTMLDialogElement {
@@ -216,13 +222,11 @@ export function renderAuthDialog(): HTMLDialogElement {
     </div>
   `;
 
+  const validators = new Map<HTMLFormElement, () => boolean>();
   dialog.querySelectorAll<HTMLFormElement>('.auth-dialog__form').forEach((form) => {
-    initializeFormValidation(form);
-
-    form.addEventListener('submit', (event) => {
-      event.preventDefault();
-    });
+    validators.set(form, initializeFormValidation(form));
   });
+  initializeAuthenticationFlow(dialog, (form) => validators.get(form)?.() ?? false);
 
   dialog.querySelectorAll<HTMLButtonElement>('.auth-dialog__reveal').forEach((button) => {
     button.addEventListener('click', () => {

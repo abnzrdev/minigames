@@ -205,6 +205,22 @@ $auth-cta-shadow: 0 $size-05 $color-on-primary;
     }
   }
 
+  &__request-status {
+    padding: $size-2;
+    margin: $size-2 0;
+    border-radius: $corner-medium;
+    background-color: $color-surface;
+    font-size: $font-body-small;
+
+    &[hidden] {
+      display: none;
+    }
+
+    &--error {
+      color: $color-error;
+    }
+  }
+
   &__label {
     font-size: $font-label-large;
     font-weight: $font-weight-bold;
