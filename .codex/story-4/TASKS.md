@@ -14,11 +14,11 @@ Prerequisite: PR #30 MERGED at 90dbaa5. Provider enabled status confirmed by own
 ## RSS-QS-4-4-2 (15 points)
 
 - Official specification: https://github.com/rolling-scopes-school/qualifying-stage/blob/main/tasks/minigames/tasks/story-4/RSS-QS-4-4-2-test-coverage-scripts.md
-- Status: IN_PROGRESS
-- Branch: `test-coverage-scripts` (not created)
+- Status: MERGED
+- Branch: `test-coverage-scripts`
 - Dependencies: RSS-QS-4-4-1 PR merged
 - Acceptance criteria: Test and coverage scripts; terminal summary; all application logic; commented exclusions.
-- Tests: not run; screenshots: none; commits: none; PR: none; merge: none.
+- Tests: 2 suites / 15 passed, statements 4.07%; screenshot: evidence/test-coverage-scripts.png; commits: 74fbd7b, 7920e2d; PR: https://github.com/abnzrdev/minigames/pull/32; merge: fa60e1b (GitHub MERGED).
 
 ## RSS-QS-4-2-3 (3 points)
 
