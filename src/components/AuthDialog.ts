@@ -4,6 +4,13 @@ import mailIcon from '../assets/auth/mail.svg';
 import personIcon from '../assets/auth/person.svg';
 import visibilityOffIcon from '../assets/auth/visibility-off.svg';
 import visibilityIcon from '../assets/auth/visibility.svg';
+import {
+  validateEmail,
+  validateUsername,
+  validateLoginPassword,
+  validateRegisterPassword,
+  validateConfirmPassword,
+} from '../utils/authValidation';
 
 function field(
   label: string,
@@ -14,14 +21,115 @@ function field(
   autocomplete: string
 ): string {
   return `
-    <label class="auth-dialog__field">
-      <span class="auth-dialog__label">${label}</span>
-      <span class="auth-dialog__control">
-        <img src="${icon}" width="20" height="20" alt="" />
-        <input type="${type}" name="${name}" placeholder="${placeholder}" autocomplete="${autocomplete}" required />
-      </span>
-    </label>
-  `;
+  <label class="auth-dialog__field">
+    <span class="auth-dialog__label">${label}</span>
+
+    <span class="auth-dialog__control">
+      <img src="${icon}" width="20" height="20" alt="" />
+      <input
+        type="${type}"
+        name="${name}"
+        placeholder="${placeholder}"
+        autocomplete="${autocomplete}"
+        aria-describedby="${name}-error"
+        aria-invalid="false"
+        required
+      />
+    </span>
+
+    <!-- Each input needs its own message for real-time validation. -->
+    <span
+      id="${name}-error"
+      class="auth-dialog__error"
+      aria-live="polite"
+      hidden
+    ></span>
+  </label>
+`;
+}
+
+// Choose the correct validation rule for each input.
+// Return null when valid or an error message when invalid.
+function getValidationError(input: HTMLInputElement, form: HTMLFormElement): string | null {
+  switch (input.name) {
+    case 'login-email':
+    case 'register-email':
+      return validateEmail(input.value);
+
+    case 'register-username':
+      return validateUsername(input.value);
+
+    case 'login-password':
+      return validateLoginPassword(input.value);
+
+    case 'register-password':
+      return validateRegisterPassword(input.value);
+
+    case 'register-password-confirm': {
+      const password = form.querySelector<HTMLInputElement>('[name="register-password"]');
+
+      return validateConfirmPassword(input.value, password?.value ?? '');
+    }
+
+    default:
+      return null;
+  }
+}
+
+function initializeFormValidation(form: HTMLFormElement): void {
+  const inputs = form.querySelectorAll<HTMLInputElement>('input');
+  const submitButton = form.querySelector<HTMLButtonElement>('.auth-dialog__submit');
+
+  if (!submitButton) return;
+
+  // We display our own inline errors instead of browser popups.
+  form.noValidate = true;
+
+  // Update the submit button based on every field in this form.
+  function updateSubmitState(): void {
+    submitButton!.disabled = Array.from(inputs).some(
+      (input) => getValidationError(input, form) !== null
+    );
+  }
+
+  // Show or clear the error belonging to one input.
+  function showFieldError(input: HTMLInputElement): void {
+    const message = getValidationError(input, form);
+    const field = input.closest('.auth-dialog__field');
+    const errorElement = field?.querySelector<HTMLElement>('.auth-dialog__error');
+
+    input.setAttribute('aria-invalid', String(message !== null));
+    field?.classList.toggle('auth-dialog__field--invalid', message !== null);
+
+    if (errorElement) {
+      errorElement.textContent = message ?? '';
+      errorElement.hidden = message === null;
+    }
+  }
+
+  // Validate as the user types or leaves an input.
+  inputs.forEach((input) => {
+    const validate = (): void => {
+      showFieldError(input);
+
+      // Changing the password must recheck confirmation.
+      if (input.name === 'register-password') {
+        const confirm = form.querySelector<HTMLInputElement>('[name="register-password-confirm"]');
+
+        if (confirm && confirm.value) {
+          showFieldError(confirm);
+        }
+      }
+
+      updateSubmitState();
+    };
+
+    input.addEventListener('input', validate);
+    input.addEventListener('blur', validate);
+  });
+
+  // The form starts invalid because required fields are empty.
+  updateSubmitState();
 }
 
 export function renderAuthDialog(): HTMLDialogElement {
@@ -51,12 +159,19 @@ export function renderAuthDialog(): HTMLDialogElement {
               <span class="auth-dialog__label">Password</span>
               <span class="auth-dialog__control">
                 <img src="${lockIcon}" width="20" height="20" alt="" />
-                <input type="password" name="login-password" placeholder="••••••••" autocomplete="current-password" required />
+                <!-- Connect the password input to its validation message. -->
+                <input type="password" name="login-password" placeholder="••••••••" autocomplete="current-password" aria-describedby="login-password-error-message" aria-invalid="false" required />
                 <button type="button" class="auth-dialog__reveal" aria-label="Show password" aria-pressed="false">
                   <img class="auth-dialog__reveal-on" src="${visibilityIcon}" width="20" height="20" alt="" />
                   <img class="auth-dialog__reveal-off" src="${visibilityOffIcon}" width="20" height="20" alt="" hidden />
                 </button>
               </span>
+              <span
+                id="login-password-error-message"
+                class="auth-dialog__error"
+                aria-live="polite"
+                hidden
+              ></span>
             </label>
             <div class="auth-dialog__links">
               <button type="button" class="auth-dialog__forgot">Forgot Password?</button>
@@ -80,9 +195,9 @@ export function renderAuthDialog(): HTMLDialogElement {
             <p class="auth-dialog__subtitle">Join MiniGames to track your score &amp; streak.</p>
           </div>
           <form class="auth-dialog__form">
-            ${field('Username', 'register-username', 'text', 'e.g. CozyGamer_99', personIcon, 'username')}
+            ${field('Username', 'register-username', 'text', 'e.g. CozyGamer99', personIcon, 'username')}
             ${field('Email Address', 'register-email', 'email', 'your.email@domain.com', mailIcon, 'email')}
-            ${field('Password', 'register-password', 'password', 'Min. 8 characters', lockIcon, 'new-password')}
+            ${field('Password', 'register-password', 'password', 'Min. 6 characters', lockIcon, 'new-password')}
             ${field('Confirm Password', 'register-password-confirm', 'password', 'Repeat your password', lockIcon, 'new-password')}
             <button type="submit" class="auth-dialog__submit">Create Account</button>
             <div class="auth-dialog__divider" aria-hidden="true"><span></span>or<span></span></div>
@@ -102,6 +217,8 @@ export function renderAuthDialog(): HTMLDialogElement {
   `;
 
   dialog.querySelectorAll<HTMLFormElement>('.auth-dialog__form').forEach((form) => {
+    initializeFormValidation(form);
+
     form.addEventListener('submit', (event) => {
       event.preventDefault();
     });
