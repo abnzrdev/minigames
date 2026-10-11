@@ -377,6 +377,14 @@
     margin-bottom: $size-2;
   }
 
+  &__composer[hidden] {
+    display: none;
+  }
+
+  &__send:disabled {
+    cursor: default;
+  }
+
   &__composer-field {
     flex: 1;
     min-width: 0;
@@ -482,6 +490,8 @@
   }
 
   &__comment-text {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
     margin: 0;
     font-size: $font-body-small;
     line-height: $line-height-normal;

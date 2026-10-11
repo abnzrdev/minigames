@@ -3,6 +3,7 @@ import starIcon from '../assets/games/star.svg';
 import { fetchGameDetails, gameAssetUrl, type GameDetails, type GameRecord } from '../api/games';
 import { showSnackbar } from './Snackbar';
 import { escapeHtml } from '../utils/escapeHtml';
+import { initializeCommentComposer } from './CommentComposer';
 import { loadGameComments } from './GameComments';
 import { currentRoute, subscribeRoute, updateRoute, type RouteState } from '../utils/navigation';
 import { initializeFavoriteControl } from './FavoriteControl';
@@ -314,7 +315,8 @@ let activeSlug = '';
 let recoveringFromError = false;
 let requestController: AbortController | null = null;
 let closeTimer = 0;
-let cleanupComments: (() => void) | null = null;
+let cleanupComments: ReturnType<typeof loadGameComments> | null = null;
+let cleanupComposer: (() => void) | null = null;
 let cleanupFavorite: (() => void) | null = null;
 
 async function loadGameDetails(dialog: HTMLDialogElement, slug: string): Promise<void> {
@@ -326,6 +328,7 @@ async function loadGameDetails(dialog: HTMLDialogElement, slug: string): Promise
 
   const currentRequest = ++requestVersion;
   cleanupFavorite?.();
+  cleanupComposer?.();
   cleanupComments?.();
   cleanupComments = null;
   requestController?.abort();
@@ -355,7 +358,9 @@ async function loadGameDetails(dialog: HTMLDialogElement, slug: string): Promise
 
     const comments = card.querySelector<HTMLElement>('.game-details__comments');
     if (comments) {
-      cleanupComments = loadGameComments(comments, slug);
+      const view = loadGameComments(comments, slug);
+      cleanupComments = view;
+      cleanupComposer = initializeCommentComposer(card, slug, view.refresh);
     }
 
     if (recoveringFromError) {
@@ -559,31 +564,13 @@ export function initGameDetails(): void {
     }
   });
 
-  dialog.addEventListener('input', (event) => {
-    const target = event.target;
-
-    if (!(target instanceof HTMLTextAreaElement)) {
-      return;
-    }
-
-    target.style.height = 'auto';
-    target.style.height = `${target.scrollHeight}px`;
-  });
-
-  dialog.addEventListener('submit', (event) => {
-    if (
-      event.target instanceof HTMLFormElement &&
-      event.target.matches('.game-details__composer')
-    ) {
-      event.preventDefault();
-    }
-  });
-
   dialog.addEventListener('close', () => {
     // Auth temporarily closes this native dialog; its loaded public content must survive.
     if (suspendedSlug) return;
     cleanupFavorite?.();
     cleanupFavorite = null;
+    cleanupComposer?.();
+    cleanupComposer = null;
     cleanupComments?.();
     cleanupComments = null;
     requestVersion += 1;
