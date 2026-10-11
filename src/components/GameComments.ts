@@ -4,6 +4,7 @@ import { relativeTime } from '../utils/relativeTime';
 import favoriteIcon from '../assets/games/favorite.svg';
 import { showSnackbar } from './Snackbar';
 import { commenterInitial, createCommentAvatarColors } from '../utils/commentAvatar';
+import { initializeCommentLike } from './CommentLikeControl';
 import { appSession } from '../utils/session';
 
 function commentMarkup(comment: GameComment, color: string): string {
@@ -21,10 +22,10 @@ function commentMarkup(comment: GameComment, color: string): string {
         </time>
       </div>
       <p class="game-details__comment-text"></p>
-      <span class="game-details__like" aria-label="${comment.likesCount} likes">
+      <button type="button" class="game-details__like" aria-label="Like comment">
         <img src="${favoriteIcon}" width="16" height="16" alt="" />
-        <span>${comment.likesCount}</span>
-      </span>
+        <span data-comment-likes>${comment.likesCount}</span>
+      </button>
     </div>
   `;
 }
@@ -37,10 +38,13 @@ export function loadGameComments(
   let controller: AbortController | null = null;
   let version = 0;
   let recovering = false;
+  let cleanupLikes: Array<() => void> = [];
   let email = appSession.check()?.email;
 
   async function load(): Promise<void> {
     const current = ++version;
+    cleanupLikes.forEach((cleanup) => cleanup());
+    cleanupLikes = [];
     controller?.abort();
     controller = new AbortController();
     section.innerHTML = `
@@ -70,6 +74,9 @@ export function loadGameComments(
         .forEach((element, index) => {
           element.textContent = result.data[index].text;
         });
+      section.querySelectorAll<HTMLElement>('.game-details__comment').forEach((row, index) => {
+        cleanupLikes.push(initializeCommentLike(row, result.data[index], load));
+      });
       if (recovering) {
         showSnackbar('Comments loaded successfully.', 'success');
         recovering = false;
@@ -100,6 +107,7 @@ export function loadGameComments(
   return Object.assign(
     () => {
       unsubscribe();
+      cleanupLikes.forEach((cleanup) => cleanup());
       version += 1;
       controller?.abort();
     },

@@ -1,4 +1,4 @@
-import { MutationFailure, postSessionMutation } from './mutations';
+import { MutationFailure, postSessionMutation, readToggleResult } from './mutations';
 import type { AppSession } from '../utils/appSession';
 import { commentAuthorName, validateCommentText } from '../utils/commentValidation';
 
@@ -9,6 +9,7 @@ export interface GameComment {
   authorName: string;
   text: string;
   likesCount: number;
+  isLikedByCurrentUser?: boolean;
   createdAt: string;
 }
 
@@ -59,4 +60,16 @@ export async function submitComment(
     throw new MutationFailure('unknown', 'Comment result could not be confirmed.');
   }
   return data as GameComment;
+}
+
+export async function toggleCommentLike(
+  commentId: string,
+  session: AppSession
+): Promise<{ active: boolean; likesCount: number }> {
+  const data = await postSessionMutation(
+    `/api/comments/${encodeURIComponent(commentId)}/like`,
+    {},
+    session
+  );
+  return readToggleResult(data, 'isLikedByCurrentUser');
 }
