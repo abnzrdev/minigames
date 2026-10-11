@@ -2,6 +2,8 @@ import brandLogo from '../assets/games/Brand Logo.svg';
 import hamburgerIcon from '../assets/games/Hamburger Button.svg';
 import { bindPageLinks, currentPage, type AppPage } from '../utils/navigation';
 import { closeMobileMenu, openAuthDialog, toggleMobileMenu } from '../utils/authDialog';
+import { appSession } from '../utils/session';
+import { renderHeaderProfile } from './HeaderProfile';
 
 const NAV_LINKS: { label: string; target: AppPage; nav?: AppPage }[] = [
   { label: 'Home', target: 'home', nav: 'home' },
@@ -128,6 +130,23 @@ export function renderHeader(): HTMLElement {
   menuLoginBtn?.addEventListener('click', () => openAuthDialog('login'));
   signupBtn?.addEventListener('click', () => openAuthDialog('register'));
   menuSignupBtn?.addEventListener('click', () => openAuthDialog('register'));
+
+  const toolbar = header.querySelector<HTMLElement>('.header__toolbar');
+  const menuAuth = header.querySelector<HTMLElement>('.header__auth--menu');
+  const actions = header.querySelector<HTMLElement>('.header__actions');
+  const nav = header.querySelector<HTMLElement>('.header__nav');
+  appSession.subscribe((profile) => {
+    header.querySelectorAll('.header__profile').forEach((element) => element.remove());
+    if (toolbar) toolbar.hidden = profile !== null;
+    if (menuAuth) menuAuth.hidden = profile !== null;
+    if (!profile) return;
+    const barProfile = renderHeaderProfile(profile);
+    barProfile.classList.add('header__profile--bar');
+    actions?.prepend(barProfile);
+    const menuProfile = renderHeaderProfile(profile);
+    menuProfile.classList.add('header__profile--menu');
+    nav?.append(menuProfile);
+  });
 
   return header;
 }
