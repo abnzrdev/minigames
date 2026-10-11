@@ -7,6 +7,10 @@ const DIALOG_CLOSING_CLASS = 'auth-dialog--closing';
 export type AuthDialogTab = 'login' | 'register';
 let closeTimer = 0;
 
+export function isAuthPending(): boolean {
+  return document.getElementById('auth-dialog')?.dataset.pending === 'true';
+}
+
 /**
  * Restore both authentication forms to their initial state.
  * A mode switch must clear values, errors, and validation status.
@@ -99,6 +103,7 @@ function applyAuthTab(tab: AuthDialogTab): void {
 }
 
 export function openAuthDialog(tab: AuthDialogTab = 'login', preserveGame = false): void {
+  if (isAuthPending()) return;
   closeMobileMenu();
   updateRoute({ auth: tab, game: preserveGame ? currentRoute().game : null });
 }
@@ -198,17 +203,19 @@ export function initAuthDialog(): void {
   });
 
   closeBtn?.addEventListener('click', () => {
+    if (isAuthPending()) return;
     updateRoute({ auth: null });
   });
 
   dialog.addEventListener('click', (event) => {
-    if (event.target === dialog) {
+    if (event.target === dialog && !isAuthPending()) {
       updateRoute({ auth: null });
     }
   });
 
   dialog.addEventListener('cancel', (event) => {
     event.preventDefault();
+    if (isAuthPending()) return;
     updateRoute({ auth: null });
   });
 

@@ -1,6 +1,6 @@
 import type { CategorySlug } from '../api/categories';
 import type { GameSort } from '../api/games';
-import { closeMobileMenu } from './authDialog';
+import { closeMobileMenu, isAuthPending } from './authDialog';
 import { appSession } from './session';
 
 export type AppPage = 'home' | 'library' | 'not-found';
@@ -21,6 +21,7 @@ const categories: CategorySlug[] = ['all', 'puzzle', 'card', 'match', 'farm', 's
 const sorts: GameSort[] = ['rating-desc', 'rating-asc', 'name-asc', 'name-desc'];
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const listeners = new Set<(route: RouteState) => void>();
+let lastPublishedUrl = '';
 
 export function currentRoute(): RouteState {
   const url = new URL(window.location.href);
@@ -65,6 +66,7 @@ function routeUrl(route: RouteState): string {
 }
 
 function publish(): void {
+  lastPublishedUrl = `${location.pathname}${location.search}`;
   const route = currentRoute();
   listeners.forEach((listener) => listener(route));
 }
@@ -75,6 +77,7 @@ export function subscribeRoute(listener: (route: RouteState) => void): () => voi
 }
 
 export function updateRoute(change: Partial<RouteState>, replace = false): void {
+  if (isAuthPending()) return;
   appSession.check();
   const url = routeUrl({
     ...currentRoute(),
@@ -92,7 +95,13 @@ export function updateRoute(change: Partial<RouteState>, replace = false): void 
 
 export function initNavigation(): void {
   history.replaceState(null, '', routeUrl(currentRoute()));
+  lastPublishedUrl = `${location.pathname}${location.search}`;
   window.addEventListener('popstate', () => {
+    // Native Back must also keep pending authentication visible. This lock lasts only for the request.
+    if (isAuthPending()) {
+      history.replaceState(null, '', lastPublishedUrl);
+      return;
+    }
     appSession.check();
     history.replaceState(null, '', routeUrl(currentRoute()));
     closeMobileMenu();
