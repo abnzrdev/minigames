@@ -35,7 +35,7 @@ $header-height-tablet: $size-9;
   }
 
   &__profile--bar &__profile-name {
-    @media (max-width: ($breakpoint-tablet - 1px)) {
+    @media (max-width: ($breakpoint-tablet - $size-hairline)) {
       display: none;
     }
   }
