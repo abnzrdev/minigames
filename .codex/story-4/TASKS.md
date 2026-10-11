@@ -126,13 +126,13 @@ Prerequisite: PR #30 MERGED at 90dbaa5. Provider enabled status confirmed by own
 - Branch: google-oauth
 - Dependencies: verified story-4 at 0d1090c; required Google provider/domain configuration and real sign-in before merge.
 - Acceptance: enabled provider; working controls; all-actions/input pending lock; dismissal/navigation lock; shared session/profile/close on success; retry/cancel/error and Snackbar.
-- Tests: 154 passed, 48.42% statements; frontend verified, real OAuth unverified; commits 99e9cf8, cb3ba8c, f4aec5d; screenshots captured; provider/domain/Console blocker; PR pending; unmerged
+- Tests: Frontend verified on updated story-4 base: 209 tests / 24 suites, 94.22% statements (1763/1871); initial commits 99e9cf8, cb3ba8c, f4aec5d, 2898602; base sync commit pending; PR https://github.com/abnzrdev/minigames/pull/44 OPEN DRAFT; real Google/provider/domain unverified; unmerged
 
 ## RSS-QS-4-4-4 (80 points)
 
 - Official specification: https://github.com/rolling-scopes-school/qualifying-stage/blob/main/tasks/minigames/tasks/story-4/RSS-QS-4-4-4-code-coverage-target.md
-- Status: NOT_STARTED
+- Status: MERGED
 - Branch: test-coverage-target
 - Dependencies: OAuth PR resolved or explicitly externally blocked; independent tests can proceed from story-4.
 - Acceptance: actual aggregate statements >=80%; meaningful observable behavior; mocked external services; no denominator manipulation; threshold enforced after genuine coverage reached.
-- Tests: baseline 133 passed, 47.21% statements; final coverage/commits/PR/merge/evidence pending.
+- Tests: 188 passed, 93.88% statements (1736/1849), threshold 80; commits 01bd13b, ec1558a, 4e9733d, 845be8a, cdfe808, 5734bf9, f79542a; PR https://github.com/abnzrdev/minigames/pull/45; merge 339627026af6fba1f4332fda29a01d1b8880310b GitHub MERGED; CI 38126570626 and 38126742059 SUCCESS; Pages 38126742045 SUCCESS

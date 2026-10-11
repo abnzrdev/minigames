@@ -96,3 +96,10 @@
 - Genuine baseline process output: evidence/batch3-baseline.png and .txt (133 passing tests, 47.21% statements).
 - Public client configuration inspection: evidence/google-project-config.json; HTTP 200, authorizedDomains localhost, minigames-rsschool.firebaseapp.com, minigames-rsschool.web.app. abnzrdev.github.io missing. Provider status not inferred from Email/Password.
 - OAuth actual screenshots: google-control.png, google-pending-real.png, google-canceled-real.png (real SDK popup and cancellation); google-console-access.png (Console authentication required). google-pending-mocked.png, google-failure-mocked.png, google-success-mocked.png show explicitly mocked boundary behavior, never labeled real Google authorization. Browser JSON and public project/provider probe JSON remain in ignored evidence/. Provider probe: HTTP 400 OPERATION_NOT_ALLOWED, identity provider configuration not found.
+
+## Batch 3 coverage target evidence
+- Genuine process output screenshots/logs: coverage-target-baseline.png/.txt (47.21%, 133 tests); coverage-target-tests.png/.txt (188 tests); coverage-target-final.png/.txt (93.88%, 23 suites / 188 tests, all included files shown). Coverage JSON audit in evidence/coverage-exclusion-audit.json.
+- Baseline/final statement denominator identical: 1849. Include src/**/*.ts unchanged; only tests/declarations excluded, with existing rationale comments. New aggregate statement threshold 80 enforced. OAuth code remains separately unmerged and is not represented as part of the deployed-branch coverage metric.
+- OAuth PR #44 CI SUCCESS: https://github.com/abnzrdev/minigames/actions/runs/38125658088. Actual screenshot links are in PR; production Google success unverified.
+- Coverage PR #45 CI actual filtered job-output screenshot coverage-target-ci.png uploaded; https://github.com/abnzrdev/minigames/actions/runs/38126570626 SUCCESS. Final story-4 verification 38126742059 and Pages 38126742045 SUCCESS at 339627026af6fba1f4332fda29a01d1b8880310b.
+- Updated unmerged OAuth branch passes the newly merged threshold: 209 tests, 94.22% statements. Public/deployed branch remains 188 tests, 93.88%; do not conflate these metrics.
