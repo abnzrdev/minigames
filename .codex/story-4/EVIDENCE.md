@@ -75,3 +75,6 @@
 - Genuine screenshots: favorite-pending.png, favorite-success.png, favorite-rejected.png, favorite-unknown.png, favorite-expired.png.
 - Isolated profile identity tested against real backend: favorite POST 200 add and 200 remove, restoring original false state. Error scenarios explicitly intercepted as 400 and aborted response. Read-only recovery never sent another POST; Guest/expired actions sent none.
 - Required checks passed: 12 suites / 105 tests; statements 39.59%.
+## Batch 2 Task 4 ? comment submission
+- Actual local screenshots in .codex/story-4/evidence/: comment-invalid.png, comment-pending.png, comment-success.png, comment-error.png, comment-unknown.png, comment-expired.png. Browser storage profile fixture; real backend POST 201 and personalized latest-three GET 200. Explicit 400 and aborted-response fixtures cover failure recovery. No automatic POST retry; Guest/expiration produced no protected request.
+- Verified Enter/Shift+Enter, 501-character rejection, disabled pending controls, empty-after-success, server total 3 and three latest rows, safe textContent rendering, draft preservation, Guest hiding. All required checks passed: 124 tests, 45% statements. Story 3 browser regression passed.
