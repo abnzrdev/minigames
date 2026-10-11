@@ -1,5 +1,5 @@
 ﻿import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { fetchGameComments, submitComment } from './comments';
+import { fetchGameComments, submitComment, toggleCommentLike } from './comments';
 import { commentAuthorName, validateCommentText } from '../utils/commentValidation';
 const state = vi.hoisted(() => ({
   session: { displayName: 'Alice', email: 'a+b@example.com', authenticatedAt: 1 } as {
@@ -71,5 +71,33 @@ describe('comment API and validation', () => {
     expect(commentAuthorName({ ...profile, displayName: '', email: 'x@example.com' })).toBe(
       'Player'
     );
+  });
+  it('encodes the comment UUID and accepts only confirmed toggle state/count', async () => {
+    fetchMock.mockResolvedValueOnce(
+      new Response(JSON.stringify({ data: { isLikedByCurrentUser: true, likesCount: 31 } }))
+    );
+    await expect(toggleCommentLike('a/b', profile)).resolves.toEqual({
+      active: true,
+      likesCount: 31,
+    });
+    expect(fetchMock.mock.calls[0][0]).toContain('/api/comments/a%2Fb/like');
+    expect(fetchMock.mock.calls[0][1]).toMatchObject({
+      method: 'POST',
+      body: JSON.stringify({ userEmail: profile.email }),
+    });
+    fetchMock.mockResolvedValueOnce(
+      new Response(JSON.stringify({ data: { isLikedByCurrentUser: 'true', likesCount: -1 } }))
+    );
+    await expect(toggleCommentLike('id', profile)).rejects.toMatchObject({ kind: 'unknown' });
+  });
+  it('does not dispatch a comment like after the session expires', async () => {
+    state.session = null;
+    await expect(toggleCommentLike('id', profile)).rejects.toMatchObject({ kind: 'unauthorized' });
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+  it('does not replay an ambiguous comment toggle', async () => {
+    fetchMock.mockRejectedValue(Error('lost response'));
+    await expect(toggleCommentLike('id', profile)).rejects.toMatchObject({ kind: 'unknown' });
+    expect(fetchMock).toHaveBeenCalledOnce();
   });
 });

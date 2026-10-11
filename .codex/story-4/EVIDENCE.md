@@ -78,3 +78,7 @@
 ## Batch 2 Task 4 ? comment submission
 - Actual local screenshots in .codex/story-4/evidence/: comment-invalid.png, comment-pending.png, comment-success.png, comment-error.png, comment-unknown.png, comment-expired.png. Browser storage profile fixture; real backend POST 201 and personalized latest-three GET 200. Explicit 400 and aborted-response fixtures cover failure recovery. No automatic POST retry; Guest/expiration produced no protected request.
 - Verified Enter/Shift+Enter, 501-character rejection, disabled pending controls, empty-after-success, server total 3 and three latest rows, safe textContent rendering, draft preservation, Guest hiding. All required checks passed: 124 tests, 45% statements. Story 3 browser regression passed.
+## Batch 2 Task 5 ? comment likes
+- Genuine local screenshots: like-pending.png, like-success.png, like-rejected.png, like-unknown.png, like-expired.png, like-guest.png in .codex/story-4/evidence/. Uploaded with task PR.
+- Real backend like/unlike returned 200/200; isolated profile identity was restored to original false/count. Personalized reload returned active state. Explicit browser 403/aborted and late-response fixtures tested recovery without repeated toggle or expired UI resurrection. Guest/expired protected requests: zero.
+- All required checks passed: 16 suites / 133 tests; 47.21% statements. Story 3 regression passed, no page errors.
