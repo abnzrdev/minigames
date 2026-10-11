@@ -101,3 +101,40 @@
 - Genuine process output screenshots/logs: coverage-target-baseline.png/.txt (47.21%, 133 tests); coverage-target-tests.png/.txt (188 tests); coverage-target-final.png/.txt (93.88%, 23 suites / 188 tests, all included files shown). Coverage JSON audit in evidence/coverage-exclusion-audit.json.
 - Baseline/final statement denominator identical: 1849. Include src/**/*.ts unchanged; only tests/declarations excluded, with existing rationale comments. New aggregate statement threshold 80 enforced. OAuth code remains separately unmerged and is not represented as part of the deployed-branch coverage metric.
 - OAuth PR #44 CI SUCCESS: https://github.com/abnzrdev/minigames/actions/runs/38125658088. Actual screenshot links are in PR; production Google success unverified.
+
+
+## Batch 3 final verification — 11.10.2026
+Coverage PR #45 confirmed MERGED into story-4 at 339627026af6fba1f4332fda29a01d1b8880310b. 188 tests / 23 suites pass, 93.88% statements; all mandatory checks pass. Pages run 38126742045 and final CI 38126742059 SUCCESS. Served JS matches deployed artifact byte-for-byte. OAuth PR #44 remains OPEN DRAFT, UNMERGED; normal base sync 18e16c1f6fbc130ac72f9059fc48b4af5f560318 passes 209 tests / 94.22%, CI 38126893973 SUCCESS. Google provider/domain and real authorization remain mandatory external blockers. Final report BATCH-3-REVIEW.md records results and evidence. No final cross-check created; #28 remains open. Final local records intentionally uncommitted; no direct story-4 commit.
+
+OAuth #44 evidence (mocked images explicitly labeled):
+- [google-control](https://github.com/user-attachments/assets/372f6abe-3fe3-4c6a-908b-73aa9a47111b)
+- [google-pending-real](https://github.com/user-attachments/assets/70d983d1-2059-4466-be67-2acf7019bce1)
+- [google-canceled-real](https://github.com/user-attachments/assets/7754ae0c-8b49-4012-9e89-b4e10831689b)
+- [google-console-access](https://github.com/user-attachments/assets/93220726-85c1-47f0-9db1-f42f8563d120)
+- [google-pending-mocked](https://github.com/user-attachments/assets/81e71a55-cad3-4f63-9382-11d146997a92)
+- [google-failure-mocked](https://github.com/user-attachments/assets/bbee9e0a-cb4a-4df6-9ead-b65211270aee)
+- [google-success-mocked](https://github.com/user-attachments/assets/f2b81a97-4b7d-48c1-bf9d-f905c5c711eb)
+- [google-updated-coverage](https://github.com/user-attachments/assets/020a398b-47eb-402c-b834-6957af16aa01)
+
+Coverage #45 and actual public responsive evidence:
+- [coverage-target-baseline](https://github.com/user-attachments/assets/5f215a4b-7423-4823-91a3-fade256809c7)
+- [coverage-target-tests](https://github.com/user-attachments/assets/bad8b862-0694-40ed-89a6-31ce0f1042b4)
+- [coverage-target-final](https://github.com/user-attachments/assets/41ae23d5-7cca-48b7-b593-2cb9d66e2280)
+- [coverage-target-ci](https://github.com/user-attachments/assets/ec46e80c-22b4-48d0-a2db-4e24d4998286)
+- [batch3-public-375](https://github.com/user-attachments/assets/e319929f-5827-4abc-866a-7acdf800fd0c)
+- [batch3-public-768](https://github.com/user-attachments/assets/ae7b0d8d-0b93-481d-99b2-5bac50d6c589)
+- [batch3-public-1920](https://github.com/user-attachments/assets/00af011f-f56f-4966-b938-355c8ec363bb)
+- [batch3-public-guest](https://github.com/user-attachments/assets/d2a09527-b5e8-4d3a-9e6c-cb9b60a84db0)
+- [batch3-public-expired](https://github.com/user-attachments/assets/40b48a30-2be6-4544-b1eb-58bd0b3eefdb)
+
+
+## Google configuration follow-up — 11.10.2026
+Owner reported configuration completed. Independent client project GET now lists abnzrdev.github.io; Google createAuthUri returns HTTP 200/providerId google.com. Actual Firebase signInWithPopup reaches accounts.google.com/v3/signin/identifier for minigames-rsschool.firebaseapp.com. Provider/domain blockers RESOLVED. Real completed Google authorization remains UNVERIFIED because available automation browser has no authenticated Google account. No credentials requested. Mandatory merge gate remains; PR #44 OPEN DRAFT/unmerged. Fresh lint, format, build, npm test, coverage and diff checks pass: 209 tests / 94.22% statements.
+
+
+## Owner sign-in confirmation and PR preparation — 11.10.2026
+Owner confirms real Google sign-in succeeded and will attach the successful authorization image. Recorded as owner-confirmed, not independently authenticated by agent. PR #44 title/body refreshed with all seven official acceptance criteria, verified existing images, 209 passing tests / 94.22% coverage and truthful undeployed OAuth status. Marked ready for review; remains OPEN/UNMERGED pending owner screenshot/final review. Configuration blockers resolved. No merge performed per latest request.
+
+
+## Final handoff authorization — 11.10.2026
+Owner supplied successful Google sign-in screenshot in PR #44: https://github.com/user-attachments/assets/103d002f-3769-43e1-b995-5624d399e510. Agent inspected authenticated profile/header screenshot; real authorization remains owner-confirmed, not agent-account authentication. Provider/domain independently verified. Screenshot/authorization merge gates resolved. Owner now explicitly authorizes final cleanup and creating story-4 -> story-3 cross-check PR, superseding earlier NOT CREATED instruction. Cross-check must remain open/unmerged; #28 also remains open.

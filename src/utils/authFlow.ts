@@ -1,3 +1,4 @@
+import { authenticateGoogle, googleAuthenticationErrorMessage } from './googleAuth';
 import { authenticateEmailPassword, authenticationErrorMessage } from './emailPasswordAuth';
 import { currentRoute, updateRoute } from './navigation';
 import { showSnackbar } from '../components/Snackbar';
@@ -40,8 +41,33 @@ export function initializeAuthenticationFlow(
     disabledStates.clear();
   }
 
+  async function request(
+    authenticate: () => Promise<unknown>,
+    successMessage: string,
+    errorMessage: (error: unknown) => string,
+    recover: () => void = () => {}
+  ): Promise<void> {
+    if (pending) return;
+    lock();
+    try {
+      await authenticate();
+      unlock();
+      status.hidden = true;
+      // Preserve Game Details when Auth temporarily replaced a protected action.
+      updateRoute({ auth: null, game: currentRoute().game });
+      showSnackbar(successMessage, 'success');
+    } catch (error) {
+      unlock();
+      recover();
+      status.hidden = false;
+      status.classList.add('auth-dialog__request-status--error');
+      status.textContent = errorMessage(error);
+      showSnackbar(status.textContent, 'error');
+    }
+  }
+
   dialog.querySelectorAll<HTMLFormElement>('.auth-dialog__form').forEach((form) => {
-    form.addEventListener('submit', async (event) => {
+    form.addEventListener('submit', (event) => {
       event.preventDefault();
       if (pending || !validate(form)) return;
       const mode = form.closest('#auth-panel-register') ? 'register' : 'login';
@@ -52,25 +78,19 @@ export function initializeAuthenticationFlow(
         password: value(`${mode}-password`),
         ...(mode === 'register' ? { username: value('register-username') } : {}),
       };
-      lock();
-      try {
-        await authenticateEmailPassword(mode, credentials);
-        unlock();
-        status.hidden = true;
-        // The game query is retained when this dialog replaced an expired protected action.
-        updateRoute({ auth: null, game: currentRoute().game });
-        showSnackbar(
-          mode === 'register' ? 'Account created successfully.' : 'Logged in successfully.',
-          'success'
-        );
-      } catch (error) {
-        unlock();
-        validate(form);
-        status.hidden = false;
-        status.classList.add('auth-dialog__request-status--error');
-        status.textContent = authenticationErrorMessage(error);
-        showSnackbar(status.textContent, 'error');
-      }
+      void request(
+        () => authenticateEmailPassword(mode, credentials),
+        mode === 'register' ? 'Account created successfully.' : 'Logged in successfully.',
+        authenticationErrorMessage,
+        () => {
+          validate(form);
+        }
+      );
+    });
+  });
+  dialog.querySelectorAll<HTMLButtonElement>('.auth-dialog__google').forEach((button) => {
+    button.addEventListener('click', () => {
+      void request(authenticateGoogle, 'Signed in with Google.', googleAuthenticationErrorMessage);
     });
   });
 
