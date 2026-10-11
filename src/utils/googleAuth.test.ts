@@ -20,7 +20,7 @@ import { authenticateGoogle, googleAuthenticationErrorMessage } from './googleAu
 describe('Google Firebase boundary', () => {
   beforeEach(() => {
     vi.resetAllMocks();
-    mocks.cleanup.mockResolvedValue();
+    mocks.cleanup.mockResolvedValue(undefined);
   });
   it('uses the existing Auth/provider and stores only profile fields, never credentials/tokens', async () => {
     mocks.popup.mockResolvedValue({
