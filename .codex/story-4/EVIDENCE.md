@@ -85,3 +85,19 @@
 ## Batch 2 Task 6 - passing tests
 - Actual process-output screenshots: .codex/story-4/evidence/passing-tests.png and passing-tests-coverage.png, with corresponding .txt logs. These display captured command stdout/stderr, timestamps and exit codes; they are not simulated terminal output. Both commands exited 0, all 133 tests / 16 suites passed. Coverage: statements 47.21%, branches 49.94%, functions 43.24%, lines 46.94%.
 - All six required verification commands passed. Additional real Firebase regression: signUp/update/signIn 200, wrong-password signIn 400, recovery 200; isolated test account deleted. Original Batch 1 authentication evidence files were refreshed locally but Task 6 evidence is test output. CI verification pending PR creation.
+## Final Batch 2 deployment and CI
+- PR CI: https://github.com/abnzrdev/minigames/actions/runs/38123193612; final push CI: https://github.com/abnzrdev/minigames/actions/runs/38123297038. Both SUCCESS. Actual filtered CI output screenshot passing-tests-ci.png uploaded to PR #43.
+- Pages: https://github.com/abnzrdev/minigames/actions/runs/38123297013 SUCCESS at 0d1090cb440315108c384ec77b0f59495bb19e52. Downloaded artifact in ignored evidence/final-pages-artifact; public /minigames/assets/index-CQE-xXpV.js matches artifact SHA-256 exactly.
+- Genuine public screenshots batch2-public-375.png, batch2-public-768.png, batch2-public-1920.png, batch2-public-guest.png, batch2-public-expired.png uploaded to PR #43. Public profile storage fixtures used, no fabricated Firebase pages or credentials.
+- Public verified responsive composer max-height/internal scrolling, no horizontal overflow, active-user Auth guard preserving query/hash, logout removes only app key, expired likes send no POST, Guest composer hidden, Details restored after Auth close, Library deep link works, no page errors. Exact uploaded screenshot URLs and per-task histories are in BATCH2_REVIEW.md.
+- Batch 2 artifacts and original process logs remain at C:/Users/abnzr/minigames/minigames-batch1/.codex/story-4/evidence/. Uploaded GitHub images and exact per-task full histories are linked in BATCH2_REVIEW.md; local source images are excluded from production and commits.
+
+## Batch 3 initial evidence
+- Genuine baseline process output: evidence/batch3-baseline.png and .txt (133 passing tests, 47.21% statements).
+- Public client configuration inspection: evidence/google-project-config.json; HTTP 200, authorizedDomains localhost, minigames-rsschool.firebaseapp.com, minigames-rsschool.web.app. abnzrdev.github.io missing. Provider status not inferred from Email/Password.
+- OAuth actual screenshots: google-control.png, google-pending-real.png, google-canceled-real.png (real SDK popup and cancellation); google-console-access.png (Console authentication required). google-pending-mocked.png, google-failure-mocked.png, google-success-mocked.png show explicitly mocked boundary behavior, never labeled real Google authorization. Browser JSON and public project/provider probe JSON remain in ignored evidence/. Provider probe: HTTP 400 OPERATION_NOT_ALLOWED, identity provider configuration not found.
+
+## Batch 3 coverage target evidence
+- Genuine process output screenshots/logs: coverage-target-baseline.png/.txt (47.21%, 133 tests); coverage-target-tests.png/.txt (188 tests); coverage-target-final.png/.txt (93.88%, 23 suites / 188 tests, all included files shown). Coverage JSON audit in evidence/coverage-exclusion-audit.json.
+- Baseline/final statement denominator identical: 1849. Include src/**/*.ts unchanged; only tests/declarations excluded, with existing rationale comments. New aggregate statement threshold 80 enforced. OAuth code remains separately unmerged and is not represented as part of the deployed-branch coverage metric.
+- OAuth PR #44 CI SUCCESS: https://github.com/abnzrdev/minigames/actions/runs/38125658088. Actual screenshot links are in PR; production Google success unverified.
