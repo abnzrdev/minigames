@@ -12,7 +12,11 @@ vi.mock('../config/firebase', () => ({
   auth: { currentUser: { email: 'firebase-only@example.com' } },
 }));
 vi.mock('../components/Snackbar', () => ({ showSnackbar: mocks.snackbar }));
-vi.mock('./authDialog', () => ({ openAuthDialog: mocks.openAuth, closeMobileMenu: vi.fn() }));
+vi.mock('./authDialog', () => ({
+  openAuthDialog: mocks.openAuth,
+  closeMobileMenu: vi.fn(),
+  isAuthPending: () => false,
+}));
 
 describe('session browser integration', () => {
   let session: typeof import('./session');
